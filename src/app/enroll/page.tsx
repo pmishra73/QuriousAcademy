@@ -1,0 +1,336 @@
+"use client";
+import { Suspense, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { courses } from "@/lib/courses";
+import { variants } from "@/lib/variants";
+import Link from "next/link";
+
+// Extend window for Razorpay
+declare global {
+  interface Window {
+    Razorpay: new (options: RazorpayOptions) => RazorpayInstance;
+  }
+}
+interface RazorpayOptions {
+  key: string;
+  amount: number;
+  currency: string;
+  name: string;
+  description: string;
+  order_id: string;
+  prefill: { name: string; email: string; contact: string };
+  theme: { color: string };
+  handler: (response: { razorpay_payment_id: string; razorpay_order_id: string; razorpay_signature: string }) => void;
+  modal: { ondismiss: () => void };
+}
+interface RazorpayInstance { open(): void; }
+
+function useRazorpay() {
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    if (document.getElementById("razorpay-script")) { setLoaded(true); return; }
+    const script = document.createElement("script");
+    script.id = "razorpay-script";
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => setLoaded(true);
+    document.body.appendChild(script);
+  }, []);
+  return loaded;
+}
+
+function EnrollForm() {
+  const params = useSearchParams();
+  const courseId = params.get("course") || "";
+  const razorpayReady = useRazorpay();
+
+  // Find in both variants and old courses
+  const variant = variants.find((v) => v.id === courseId);
+  const oldCourse = courses.find((c) => c.id === courseId);
+  const courseTitle = variant?.title ?? oldCourse?.title ?? "";
+  const coursePrice = variant?.price ?? oldCourse?.price ?? 0;
+  const courseDuration = variant?.duration ?? oldCourse?.duration ?? "";
+  const courseInstructor = variant?.instructor ?? oldCourse?.instructor ?? "";
+  const courseBadge = variant?.icon ?? oldCourse?.badge ?? "📘";
+
+  const [form, setForm] = useState({ name: "", email: "", phone: "", courseId });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errMsg, setErrMsg] = useState("");
+
+  const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+    setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  const inp: React.CSSProperties = {
+    width: "100%", background: "var(--surface-2)", border: "1px solid var(--border)",
+    color: "var(--foreground)", borderRadius: 8, padding: "12px 14px",
+    fontSize: 14, outline: "none", fontFamily: "inherit",
+  };
+  const lbl: React.CSSProperties = {
+    fontSize: 12, color: "var(--text-muted)", display: "block",
+    marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.06em",
+  };
+
+  const handlePayment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name || !form.email || !form.phone) {
+      setErrMsg("Please fill in all fields before proceeding to payment.");
+      return;
+    }
+    if (!razorpayReady) {
+      setErrMsg("Payment gateway is loading. Please try again in a moment.");
+      return;
+    }
+    setErrMsg("");
+    setStatus("loading");
+
+    try {
+      // Step 1: Create order
+      const orderRes = await fetch("/api/payment/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ courseId: form.courseId }),
+      });
+
+      if (!orderRes.ok) throw new Error("Failed to create order");
+      const order = await orderRes.json();
+      setStatus("idle");
+
+      // Step 2: Open Razorpay checkout
+      const rzp = new window.Razorpay({
+        key: order.keyId,
+        amount: order.amount,
+        currency: order.currency,
+        name: "Qurious Academy",
+        description: order.courseName,
+        order_id: order.orderId,
+        prefill: { name: form.name, email: form.email, contact: form.phone },
+        theme: { color: "#5b7cfa" },
+        handler: async (response) => {
+          setStatus("loading");
+          // Step 3: Verify payment server-side
+          const verifyRes = await fetch("/api/payment/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              ...response,
+              studentName: form.name,
+              studentEmail: form.email,
+              studentPhone: form.phone,
+              courseId: form.courseId,
+            }),
+          });
+
+          if (verifyRes.ok) {
+            setStatus("success");
+          } else {
+            setStatus("error");
+            setErrMsg("Payment received but verification failed. Please contact us with your payment ID: " + response.razorpay_payment_id);
+          }
+        },
+        modal: {
+          ondismiss: () => setStatus("idle"),
+        },
+      });
+
+      rzp.open();
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+      setErrMsg("Something went wrong. Please try again or contact hello@quriousacademy.com");
+    }
+  };
+
+  if (status === "success") {
+    return (
+      <div style={{ textAlign: "center", padding: "80px 24px" }}>
+        <div style={{
+          width: 72, height: 72, borderRadius: "50%",
+          background: "rgba(52,211,153,0.12)", border: "1px solid rgba(52,211,153,0.3)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 32, margin: "0 auto 24px",
+        }}>✓</div>
+        <h2 style={{ fontSize: 32, marginBottom: 12 }}>You're enrolled!</h2>
+        <p style={{ color: "var(--text-dim)", fontSize: 16, lineHeight: 1.7, maxWidth: 460, margin: "0 auto 12px" }}>
+          Payment confirmed. We've sent a confirmation to <strong>{form.email}</strong> with the class joining details.
+        </p>
+        <p style={{ color: "var(--text-muted)", fontSize: 14, marginBottom: 36 }}>
+          Expect the joining link within a few hours.
+        </p>
+        <Link href="/courses" style={{
+          background: "var(--primary)", color: "white", padding: "12px 28px",
+          borderRadius: 8, fontWeight: 500, fontSize: 14,
+        }}>
+          Browse more courses →
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ maxWidth: 960, margin: "0 auto", padding: "48px 24px 80px" }}>
+      <Link href={courseId ? `/courses` : "/courses"} style={{ fontSize: 13, color: "var(--text-muted)", display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 36 }}>
+        ← Back to Courses
+      </Link>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 48, alignItems: "start" }}>
+        {/* Form */}
+        <div>
+          <div className="tag" style={{ display: "inline-flex", marginBottom: 20 }}>Enrollment</div>
+          <h1 style={{ fontSize: "clamp(28px,4vw,42px)", marginBottom: 12 }}>Complete your enrollment</h1>
+          <p style={{ color: "var(--text-dim)", fontSize: 15, marginBottom: 36, lineHeight: 1.7 }}>
+            Fill in your details below. You'll be taken to a secure Razorpay checkout to complete payment.
+          </p>
+
+          <form onSubmit={handlePayment} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              <div>
+                <label style={lbl}>Full Name *</label>
+                <input style={inp} value={form.name} onChange={set("name")} placeholder="Your full name" required />
+              </div>
+              <div>
+                <label style={lbl}>Phone Number *</label>
+                <input style={inp} type="tel" value={form.phone} onChange={set("phone")} placeholder="+91 98765 43210" required />
+              </div>
+            </div>
+
+            <div>
+              <label style={lbl}>Email Address *</label>
+              <input style={inp} type="email" value={form.email} onChange={set("email")} placeholder="you@example.com" required />
+              <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 6 }}>
+                Confirmation and class joining link will be sent here.
+              </p>
+            </div>
+
+            <div>
+              <label style={lbl}>Course</label>
+              <select
+                style={{ ...inp, background: "var(--surface-2)" }}
+                value={form.courseId}
+                onChange={set("courseId")}
+                required
+              >
+                <option value="">Select a course</option>
+                <optgroup label="Masterclasses">
+                  {variants.filter(v => v.type === "masterclass").map(v => (
+                    <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="Intensive Cohorts">
+                  {variants.filter(v => v.type === "cohort").map(v => (
+                    <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="Sprint Courses">
+                  {variants.filter(v => v.type === "sprint").map(v => (
+                    <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="Full Courses">
+                  {variants.filter(v => v.type === "standard").map(v => (
+                    <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="Deep Dives (90+ days)">
+                  {variants.filter(v => v.type === "deep-dive").map(v => (
+                    <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
+                  ))}
+                </optgroup>
+              </select>
+            </div>
+
+            {errMsg && (
+              <div style={{
+                fontSize: 13, color: "#f97316", padding: "12px 16px",
+                background: "rgba(249,115,22,0.08)", borderRadius: 8,
+                border: "1px solid rgba(249,115,22,0.2)", lineHeight: 1.6,
+              }}>
+                {errMsg}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              style={{
+                marginTop: 4, background: "var(--primary)", color: "white",
+                padding: "15px", borderRadius: 8, fontWeight: 600, fontSize: 15,
+                cursor: status === "loading" ? "not-allowed" : "pointer",
+                border: "none", fontFamily: "inherit",
+                opacity: status === "loading" ? 0.7 : 1,
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+              }}
+            >
+              {status === "loading" ? (
+                <>
+                  <span style={{ width: 16, height: 16, border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "white", borderRadius: "50%", display: "inline-block", animation: "spin 0.7s linear infinite" }} />
+                  Processing...
+                </>
+              ) : (
+                `Pay ₹${(variants.find(v => v.id === form.courseId)?.price ?? courses.find(c => c.id === form.courseId)?.price ?? 0).toLocaleString("en-IN")} with Razorpay →`
+              )}
+            </button>
+
+            <div style={{ display: "flex", alignItems: "center", gap: 12, justifyContent: "center" }}>
+              <span style={{ fontSize: 12, color: "var(--text-muted)" }}>Secured by</span>
+              <span style={{ fontSize: 13, fontWeight: 600, color: "#528FF0" }}>Razorpay</span>
+              <span style={{ fontSize: 12, color: "var(--text-muted)" }}>· UPI · Cards · Net Banking · Wallets</span>
+            </div>
+          </form>
+        </div>
+
+        {/* Order summary */}
+        <div style={{ position: "sticky", top: 80 }}>
+          {form.courseId ? (
+            <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: 24 }}>
+              <div style={{ fontSize: 32, marginBottom: 14 }}>{courseBadge}</div>
+              <h3 style={{ fontSize: 18, marginBottom: 6 }}>{courseTitle}</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, margin: "16px 0", paddingBottom: 16, borderBottom: "1px solid var(--border)" }}>
+                {[
+                  ["Instructor", courseInstructor],
+                  ["Duration", courseDuration],
+                ].filter(([, v]) => v).map(([k, v]) => (
+                  <div key={k} style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
+                    <span style={{ color: "var(--text-muted)" }}>{k}</span>
+                    <span style={{ fontWeight: 500 }}>{v}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span style={{ fontSize: 13, color: "var(--text-muted)" }}>Total</span>
+                <span style={{ fontSize: 26, fontWeight: 700 }}>₹{coursePrice.toLocaleString("en-IN")}</span>
+              </div>
+            </div>
+          ) : (
+            <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: 24, color: "var(--text-muted)", fontSize: 14 }}>
+              Select a course above to see the summary.
+            </div>
+          )}
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 16 }}>
+            {[
+              { icon: "🔒", text: "256-bit SSL encrypted payment" },
+              { icon: "✓", text: "Instant confirmation email" },
+              { icon: "↩", text: "Refund within 48 hrs of first class if unsatisfied" },
+            ].map((f) => (
+              <div key={f.text} style={{ display: "flex", gap: 10, alignItems: "flex-start", fontSize: 13, color: "var(--text-muted)" }}>
+                <span>{f.icon}</span>
+                <span>{f.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+      `}</style>
+    </div>
+  );
+}
+
+export default function EnrollPage() {
+  return (
+    <Suspense fallback={<div style={{ padding: 80, textAlign: "center", color: "var(--text-muted)" }}>Loading...</div>}>
+      <EnrollForm />
+    </Suspense>
+  );
+}

@@ -1,0 +1,403 @@
+{
+  "variants": [
+    {
+      "id": "python-masterclass",
+      "subject": "python",
+      "subjectLabel": "Python Programming",
+      "icon": "🐍",
+      "type": "masterclass",
+      "title": "Python in 3 Hours",
+      "tagline": "The essential 20% that does 80% of the work",
+      "price": 499,
+      "currency": "INR",
+      "duration": "3 hours",
+      "level": "Beginner",
+      "instructor": "Arjun Mehta",
+      "schedule": {
+        "rule": "monthly-first-saturday",
+        "time": "10:00 AM IST"
+      },
+      "content": {
+        "overview": "A rapid, high-signal session covering the Python concepts that actually matter in practice. No fluff. By the end you'll be writing real scripts.",
+        "sessions": [
+          {
+            "session": "Hour 1",
+            "title": "The Python Mental Model",
+            "topics": ["Variables & data types", "Control flow (if/for/while)", "Functions", "The REPL and writing your first script"]
+          },
+          {
+            "session": "Hour 2",
+            "title": "Working with Data",
+            "topics": ["Lists, dicts, sets", "List comprehensions", "File I/O", "Error handling basics"]
+          },
+          {
+            "session": "Hour 3",
+            "title": "Real-World Python",
+            "topics": ["Using pip and libraries", "Working with JSON APIs", "Writing a mini automation script", "Where to go next"]
+          }
+        ],
+        "prerequisites": "None — just a laptop and curiosity",
+        "outcomes": [
+          "Write Python scripts confidently",
+          "Understand how data flows through a program",
+          "Use third-party libraries",
+          "Know exactly what to learn next"
+        ],
+        "includes": ["Session recording", "Code files", "Cheat sheet PDF", "Learner's Certificate"],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "python-cohort",
+      "subject": "python",
+      "subjectLabel": "Python Programming",
+      "icon": "🐍",
+      "type": "cohort",
+      "title": "Python Weekend Intensive",
+      "tagline": "Go from zero to building projects in a single weekend",
+      "price": 2999,
+      "currency": "INR",
+      "duration": "2 days · 16 hours",
+      "level": "Beginner",
+      "instructor": "Arjun Mehta",
+      "schedule": {
+        "rule": "biweekly-weekends",
+        "time": "9:00 AM – 5:00 PM IST"
+      },
+      "content": {
+        "overview": "An immersive two-day cohort that takes you from absolute basics to building three real Python projects. Small group, live instruction, immediate feedback.",
+        "sessions": [
+          {
+            "session": "Day 1 — Morning",
+            "title": "Foundations",
+            "topics": ["Setup & Python basics", "Variables, operators, data types", "Control flow & loops", "Functions & scope"]
+          },
+          {
+            "session": "Day 1 — Afternoon",
+            "title": "Data Structures",
+            "topics": ["Lists, tuples, dicts, sets", "List comprehensions", "Nested structures", "Project 1: Data parser"]
+          },
+          {
+            "session": "Day 2 — Morning",
+            "title": "Intermediate Python",
+            "topics": ["OOP concepts", "File I/O", "Error handling", "Modules & pip"]
+          },
+          {
+            "session": "Day 2 — Afternoon",
+            "title": "Applied Projects",
+            "topics": ["Working with APIs", "Project 2: Weather app", "Project 3: Automation script", "Code review & next steps"]
+          }
+        ],
+        "prerequisites": "No programming experience needed",
+        "outcomes": [
+          "Build and ship 3 Python projects",
+          "Understand OOP and write clean code",
+          "Work with real APIs and data",
+          "Have a clear path to continue learning"
+        ],
+        "includes": ["Both day recordings", "All project code", "Resource list", "Doubt support for 2 weeks", "Learner's Certificate"],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "python-deep-dive",
+      "subject": "python",
+      "subjectLabel": "Python Programming",
+      "icon": "🐍",
+      "type": "deep-dive",
+      "title": "Python Mastery — 90 Days",
+      "tagline": "From beginner to job-ready Python developer",
+      "price": 7999,
+      "currency": "INR",
+      "duration": "90 days",
+      "level": "Beginner to Advanced",
+      "instructor": "Arjun Mehta",
+      "schedule": {
+        "rule": "weekly-monday",
+        "time": "Sat & Sun · 10:00 AM – 12:00 PM IST"
+      },
+      "content": {
+        "overview": "A comprehensive 90-day program built for people who want to go from zero to genuinely job-ready. Weekly live sessions, assignments, code reviews, and a capstone project.",
+        "sessions": [
+          {
+            "session": "Month 1",
+            "title": "Core Python",
+            "topics": ["Python fundamentals", "Data structures in depth", "Functions & decorators", "OOP", "Error handling & logging", "Testing basics"]
+          },
+          {
+            "session": "Month 2",
+            "title": "Applied Python",
+            "topics": ["File & database I/O", "APIs & web scraping", "Data analysis with Pandas", "Automation scripts", "Virtual environments", "Packaging"]
+          },
+          {
+            "session": "Month 3",
+            "title": "Professional Python",
+            "topics": ["Algorithm design", "Git & version control", "Flask/FastAPI basics", "Deployment fundamentals", "Capstone project", "Portfolio & career prep"]
+          }
+        ],
+        "prerequisites": "None — but commitment to 8–10 hrs/week",
+        "outcomes": [
+          "Write production-quality Python",
+          "Build and deploy web APIs",
+          "Work with data using Pandas",
+          "Ship a capstone project for your portfolio",
+          "Be interview-ready for junior Python roles"
+        ],
+        "includes": ["Weekly live sessions", "All recordings", "Code reviews", "1 doubt session/week", "Capstone project guidance", "Learner's Certificate", "Alumni network access"],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "ai-masterclass",
+      "subject": "ai",
+      "subjectLabel": "Artificial Intelligence",
+      "icon": "🤖",
+      "type": "masterclass",
+      "title": "AI Demystified in 3 Hours",
+      "tagline": "What AI actually is — and how it actually works",
+      "price": 499,
+      "currency": "INR",
+      "duration": "3 hours",
+      "level": "Beginner",
+      "instructor": "Siddharth Rao",
+      "schedule": {
+        "rule": "monthly-first-saturday",
+        "time": "2:00 PM IST"
+      },
+      "content": {
+        "overview": "Strip away the hype. Understand how machine learning, neural networks, and LLMs actually work — without needing a PhD. Live demos, real intuition.",
+        "sessions": [
+          {
+            "session": "Hour 1",
+            "title": "What Machines Actually Learn",
+            "topics": ["What is ML really", "Training, features, labels", "Linear models explained visually", "Why deep learning works"]
+          },
+          {
+            "session": "Hour 2",
+            "title": "Neural Networks & LLMs",
+            "topics": ["How a neural network learns", "Backpropagation intuitively", "What a transformer does", "How ChatGPT works under the hood"]
+          },
+          {
+            "session": "Hour 3",
+            "title": "AI in Practice",
+            "topics": ["Building with APIs (hands-on)", "Prompt engineering principles", "Where AI fails & why", "What to build next"]
+          }
+        ],
+        "prerequisites": "Curiosity only. No math or coding required.",
+        "outcomes": [
+          "Explain how LLMs work to anyone",
+          "Understand the limits of current AI",
+          "Use AI APIs to build something real",
+          "Know the right path to learn AI deeper"
+        ],
+        "includes": ["Recording", "Resource list", "Learner's Certificate"],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "ai-deep-dive",
+      "subject": "ai",
+      "subjectLabel": "Artificial Intelligence",
+      "icon": "🤖",
+      "type": "deep-dive",
+      "title": "AI & ML — Full Program",
+      "tagline": "From fundamentals to building and deploying real models",
+      "price": 9999,
+      "currency": "INR",
+      "duration": "12 weeks",
+      "level": "Intermediate",
+      "instructor": "Siddharth Rao",
+      "schedule": {
+        "rule": "weekly-monday",
+        "time": "Sat · 2:00 PM – 5:00 PM IST"
+      },
+      "content": {
+        "overview": "A rigorous 12-week program for people serious about working in AI. Code-first, math-where-necessary, project-driven throughout.",
+        "sessions": [
+          {
+            "session": "Weeks 1–3",
+            "title": "ML Foundations",
+            "topics": ["Statistics & probability for ML", "Linear & logistic regression", "Feature engineering", "Model evaluation & overfitting"]
+          },
+          {
+            "session": "Weeks 4–6",
+            "title": "Core Algorithms",
+            "topics": ["Decision trees & Random forests", "SVMs", "Clustering", "Dimensionality reduction"]
+          },
+          {
+            "session": "Weeks 7–9",
+            "title": "Deep Learning",
+            "topics": ["Neural networks from scratch", "PyTorch basics", "CNNs & RNNs", "Transfer learning"]
+          },
+          {
+            "session": "Weeks 10–12",
+            "title": "Applied AI",
+            "topics": ["LLM APIs & fine-tuning", "Model deployment (FastAPI + Docker)", "Capstone project", "Portfolio & interview prep"]
+          }
+        ],
+        "prerequisites": "Python basics, basic maths (algebra level)",
+        "outcomes": [
+          "Train and evaluate ML models end-to-end",
+          "Build neural networks with PyTorch",
+          "Deploy models to production",
+          "Ship a real AI project"
+        ],
+        "includes": ["Weekly live sessions", "All recordings", "Weekly assignments", "Code reviews", "Capstone guidance", "Learner's Certificate"],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "calculus-masterclass",
+      "subject": "maths",
+      "subjectLabel": "Mathematics",
+      "icon": "∫",
+      "type": "masterclass",
+      "title": "Calculus in 3 Hours",
+      "tagline": "Derivatives and integrals — actually understood",
+      "price": 399,
+      "currency": "INR",
+      "duration": "3 hours",
+      "level": "Intermediate",
+      "instructor": "Dr. Priya Nair",
+      "schedule": {
+        "rule": "monthly-first-saturday",
+        "time": "11:00 AM IST"
+      },
+      "content": {
+        "overview": "A focused deep-dive into the two big ideas in calculus — derivatives and integrals — built around geometric intuition first, formulas second.",
+        "sessions": [
+          { "session": "Hour 1", "title": "Derivatives", "topics": ["What a derivative really means", "Rules & shortcuts", "Chain rule visually", "Applications"] },
+          { "session": "Hour 2", "title": "Integrals", "topics": ["Integration as area", "Antiderivatives", "Definite integrals", "Fundamental theorem"] },
+          { "session": "Hour 3", "title": "Applications", "topics": ["Optimization problems", "Related rates", "Where calculus shows up in ML", "Problem session"] }
+        ],
+        "prerequisites": "Basic algebra and functions",
+        "outcomes": ["Differentiate any standard function", "Evaluate definite integrals", "Apply calculus to real problems"],
+        "includes": ["Recording", "Problem set PDF", "Learner's Certificate"],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "maths-cohort",
+      "subject": "maths",
+      "subjectLabel": "Mathematics",
+      "icon": "∫",
+      "type": "cohort",
+      "title": "Maths Weekend Bootcamp",
+      "tagline": "Calculus + Linear Algebra in a single power weekend",
+      "price": 2499,
+      "currency": "INR",
+      "duration": "2 days · 14 hours",
+      "level": "Intermediate",
+      "instructor": "Dr. Priya Nair",
+      "schedule": {
+        "rule": "biweekly-weekends",
+        "time": "9:00 AM – 4:00 PM IST"
+      },
+      "content": {
+        "overview": "The maths you need for engineering and data science — taught in two intense, focused days. Calculus on Day 1, Linear Algebra on Day 2.",
+        "sessions": [
+          { "session": "Day 1", "title": "Calculus", "topics": ["Limits & derivatives", "Integration", "Multivariable calculus intro", "Optimization"] },
+          { "session": "Day 2", "title": "Linear Algebra", "topics": ["Vectors & matrices", "Matrix operations", "Eigenvalues", "Applications in ML"] }
+        ],
+        "prerequisites": "12th grade maths or equivalent",
+        "outcomes": ["Solid calculus foundations", "Linear algebra for data science", "Solve university-level problems confidently"],
+        "includes": ["Both day recordings", "Problem sets", "Solutions manual", "Learner's Certificate"],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "webdev-sprint",
+      "subject": "technology",
+      "subjectLabel": "Web Development",
+      "icon": "💻",
+      "type": "sprint",
+      "title": "Build Your First Website — 3 Weeks",
+      "tagline": "HTML, CSS, and JavaScript — from blank page to deployed site",
+      "price": 1999,
+      "currency": "INR",
+      "duration": "3 weeks",
+      "level": "Beginner",
+      "instructor": "Riya Kapoor",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Mon, Wed, Fri",
+        "time": "7:00 PM – 8:30 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "Three focused weeks to go from nothing to a live, deployed personal website. Learn the building blocks of the web with hands-on projects.",
+        "sessions": [
+          { "session": "Week 1", "title": "HTML & CSS", "topics": ["HTML structure", "CSS styling", "Flexbox & Grid", "Responsive design"] },
+          { "session": "Week 2", "title": "JavaScript Basics", "topics": ["Variables & functions", "DOM manipulation", "Events", "Fetch API"] },
+          { "session": "Week 3", "title": "Build & Deploy", "topics": ["Project: portfolio site", "GitHub basics", "Deploy with Vercel", "Code review"] }
+        ],
+        "prerequisites": "None",
+        "outcomes": ["Build a responsive website from scratch", "Understand HTML/CSS/JS fundamentals", "Deploy a live site"],
+        "includes": ["6 live sessions", "Recordings", "Starter code", "Learner's Certificate"],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "physics-cohort",
+      "subject": "science",
+      "subjectLabel": "Physics",
+      "icon": "⚛",
+      "type": "cohort",
+      "title": "Classical Mechanics Weekend",
+      "tagline": "Newton to energy conservation — one focused weekend",
+      "price": 1999,
+      "currency": "INR",
+      "duration": "2 days · 12 hours",
+      "level": "Beginner",
+      "instructor": "Prof. Kavita Sharma",
+      "schedule": {
+        "rule": "biweekly-weekends",
+        "time": "9:00 AM – 3:00 PM IST"
+      },
+      "content": {
+        "overview": "A rigorous but accessible weekend covering the core of classical mechanics. Built around physical intuition first — equations second.",
+        "sessions": [
+          { "session": "Day 1", "title": "Motion & Forces", "topics": ["Kinematics", "Newton's laws", "Friction & normal force", "Problem-solving method"] },
+          { "session": "Day 2", "title": "Energy & Momentum", "topics": ["Work & energy", "Conservation of energy", "Momentum & collisions", "Rotational basics"] }
+        ],
+        "prerequisites": "Basic algebra and 11th grade physics helpful",
+        "outcomes": ["Solve mechanics problems from first principles", "Build physical intuition", "Prepared for university physics"],
+        "includes": ["Recordings", "Problem sets with solutions", "Learner's Certificate"],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "dsa-standard",
+      "subject": "programming",
+      "subjectLabel": "Data Structures & Algorithms",
+      "icon": "◇",
+      "type": "standard",
+      "title": "DSA for Interviews — 6 Weeks",
+      "tagline": "Everything you need to crack coding interviews",
+      "price": 4999,
+      "currency": "INR",
+      "duration": "6 weeks",
+      "level": "Intermediate",
+      "instructor": "Arjun Mehta",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Tue, Thu, Sat",
+        "time": "8:00 PM – 9:30 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "A focused 6-week course covering every data structure and algorithm pattern that appears in technical interviews at product companies.",
+        "sessions": [
+          { "session": "Week 1–2", "title": "Arrays, Strings & Hashing", "topics": ["Two pointers", "Sliding window", "Hash maps", "Prefix sums"] },
+          { "session": "Week 3", "title": "Trees & Graphs", "topics": ["Binary trees", "BST", "DFS/BFS", "Graph representations"] },
+          { "session": "Week 4", "title": "Recursion & Dynamic Programming", "topics": ["Recursion patterns", "Memoization", "Bottom-up DP", "Classic DP problems"] },
+          { "session": "Week 5–6", "title": "Advanced & Mock Interviews", "topics": ["Heaps & tries", "Greedy", "Backtracking", "3 mock interviews with feedback"] }
+        ],
+        "prerequisites": "Python or any programming language basics",
+        "outcomes": ["Solve medium LeetCode problems consistently", "Recognise and apply 15+ patterns", "Perform under interview conditions"],
+        "includes": ["Live sessions + recordings", "Problem list (100 curated)", "Mock interviews", "Learner's Certificate"],
+        "certificate": "learner"
+      }
+    }
+  ]
+}
