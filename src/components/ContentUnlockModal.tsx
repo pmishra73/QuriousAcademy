@@ -5,7 +5,7 @@ import type { CourseVariant } from "@/lib/variants";
 import { typeConfig } from "@/lib/variants";
 
 function CourseIcon({ name, size = 36 }: { name: string; size?: number }) {
-  const Icon = (LucideIcons as Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>>)[name];
+  const Icon = (LucideIcons as unknown as Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>>)[name];
   if (!Icon) return <span style={{ fontSize: size }}>{name}</span>;
   return <Icon size={size} strokeWidth={1.5} />;
 }
