@@ -140,6 +140,7 @@ export default function CoursesPage() {
   const [activeSubject, setActiveSubject] = useState("all");
   const [activeType, setActiveType] = useState("all");
   const [unlockTarget, setUnlockTarget] = useState<CourseVariant | null>(null);
+  const [hoveredType, setHoveredType] = useState<string | null>(null);
 
   const subjects = ["all", ...Array.from(new Set(variants.map((v) => v.subject)))];
   const subjectLabels: Record<string, string> = {
@@ -194,7 +195,10 @@ export default function CoursesPage() {
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
             <span style={{ fontSize: 11, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.07em", marginRight: 4, flexShrink: 0 }}>Type</span>
             {classTypeOptions.map((opt) => (
-              <div key={opt.value} className="type-tooltip-wrap" style={{ position: "relative" }}>
+              <div key={opt.value} style={{ position: "relative" }}
+                onMouseEnter={() => opt.value !== "all" && setHoveredType(opt.value)}
+                onMouseLeave={() => setHoveredType(null)}
+              >
                 <button onClick={() => setActiveType(opt.value)} style={{
                   padding: "5px 14px", borderRadius: 100, fontSize: 12, fontWeight: 500,
                   cursor: "pointer", border: "1px solid",
@@ -205,16 +209,16 @@ export default function CoursesPage() {
                 }}>
                   {opt.label}
                 </button>
-                {opt.value !== "all" && (
-                  <div className="type-tooltip" style={{
+                {hoveredType === opt.value && (
+                  <div style={{
                     position: "absolute", top: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)",
                     background: "var(--surface)", border: "1px solid var(--border)",
-                    borderRadius: 8, padding: "10px 14px", width: 220, fontSize: 12,
-                    color: "var(--text-dim)", lineHeight: 1.6, zIndex: 200,
+                    borderRadius: 10, padding: "12px 16px", width: 230, fontSize: 12,
+                    color: "var(--text-dim)", lineHeight: 1.65, zIndex: 200,
                     pointerEvents: "none", whiteSpace: "normal",
-                    boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
+                    boxShadow: "0 12px 32px rgba(0,0,0,0.4)",
                   }}>
-                    <span style={{ fontWeight: 600, color: "var(--foreground)", display: "block", marginBottom: 4 }}>{opt.label}</span>
+                    <span style={{ fontWeight: 600, color: "var(--foreground)", display: "block", marginBottom: 5 }}>{opt.label}</span>
                     {opt.description}
                   </div>
                 )}
