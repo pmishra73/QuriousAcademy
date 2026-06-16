@@ -127,11 +127,13 @@ function VariantCard({ v, onUnlock }: { v: CourseVariant; onUnlock: (v: CourseVa
   );
 }
 
-const classTypeOptions = [
-  { value: "all", label: "All Types" },
-  { value: "masterclass", label: "MasterClass" },
-  { value: "cohort", label: "Cohort" },
-  { value: "deep-dive", label: "Deep Dive" },
+const classTypeOptions: { value: string; label: string; description: string }[] = [
+  { value: "all", label: "All Types", description: "Show every format" },
+  { value: "masterclass", label: "MasterClass", description: "A focused 3–4 hour live session on one big idea. Best when you want expert clarity fast, without a long commitment." },
+  { value: "cohort", label: "Cohort", description: "A 2-day intensive with a small group. Structured curriculum, live instruction, and peer energy — ideal for building a solid foundation quickly." },
+  { value: "deep-dive", label: "Deep Dive", description: "A 6–12 week comprehensive programme. Weekly live sessions, assignments, and real projects. For those who want lasting mastery." },
+  { value: "sprint", label: "Sprint", description: "A 4-week accelerated course. Daily momentum, rapid skill-building, and a deployable project at the end. Built for focus." },
+  { value: "standard", label: "Full Course", description: "A self-paced recorded course with structured modules. Go at your own speed with lifetime access and instructor Q&A support." },
 ];
 
 export default function CoursesPage() {
@@ -192,16 +194,31 @@ export default function CoursesPage() {
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
             <span style={{ fontSize: 11, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.07em", marginRight: 4, flexShrink: 0 }}>Type</span>
             {classTypeOptions.map((opt) => (
-              <button key={opt.value} onClick={() => setActiveType(opt.value)} style={{
-                padding: "5px 14px", borderRadius: 100, fontSize: 12, fontWeight: 500,
-                cursor: "pointer", border: "1px solid",
-                borderColor: activeType === opt.value ? "var(--primary)" : "var(--border)",
-                background: activeType === opt.value ? "rgba(91,124,250,0.12)" : "var(--surface-2)",
-                color: activeType === opt.value ? "var(--primary)" : "var(--text-dim)",
-                transition: "all 0.15s", fontFamily: "inherit",
-              }}>
-                {opt.label}
-              </button>
+              <div key={opt.value} className="type-tooltip-wrap" style={{ position: "relative" }}>
+                <button onClick={() => setActiveType(opt.value)} style={{
+                  padding: "5px 14px", borderRadius: 100, fontSize: 12, fontWeight: 500,
+                  cursor: "pointer", border: "1px solid",
+                  borderColor: activeType === opt.value ? "var(--primary)" : "var(--border)",
+                  background: activeType === opt.value ? "rgba(91,124,250,0.12)" : "var(--surface-2)",
+                  color: activeType === opt.value ? "var(--primary)" : "var(--text-dim)",
+                  transition: "all 0.15s", fontFamily: "inherit",
+                }}>
+                  {opt.label}
+                </button>
+                {opt.value !== "all" && (
+                  <div className="type-tooltip" style={{
+                    position: "absolute", top: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)",
+                    background: "var(--surface)", border: "1px solid var(--border)",
+                    borderRadius: 8, padding: "10px 14px", width: 220, fontSize: 12,
+                    color: "var(--text-dim)", lineHeight: 1.6, zIndex: 200,
+                    pointerEvents: "none", whiteSpace: "normal",
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
+                  }}>
+                    <span style={{ fontWeight: 600, color: "var(--foreground)", display: "block", marginBottom: 4 }}>{opt.label}</span>
+                    {opt.description}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>
@@ -296,6 +313,26 @@ export default function CoursesPage() {
             </div>
           </section>
         )}
+      </div>
+
+      {/* Format legend */}
+      <div style={{ padding: "0 24px 80px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div style={{ borderTop: "1px solid var(--border)", paddingTop: 48 }}>
+            <p style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", marginBottom: 20 }}>Format guide</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
+              {classTypeOptions.filter(o => o.value !== "all").map((opt) => (
+                <div key={opt.value} style={{
+                  background: "var(--surface)", border: "1px solid var(--border)",
+                  borderRadius: 10, padding: "16px 18px",
+                }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 6 }}>{opt.label}</div>
+                  <div style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.65 }}>{opt.description}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Modal */}
