@@ -53,8 +53,38 @@ function EnrollForm() {
   const courseBadge = variant?.icon ?? oldCourse?.badge ?? "📘";
 
   const [form, setForm] = useState({ name: "", email: "", phone: "", courseId });
+  const [coupon, setCoupon] = useState("");
+  const [couponState, setCouponState] = useState<"idle" | "checking" | "valid" | "invalid">("idle");
+  const [couponMsg, setCouponMsg] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errMsg, setErrMsg] = useState("");
+
+  const discountedPrice = couponState === "valid"
+    ? Math.round((variants.find(v => v.id === form.courseId)?.price ?? courses.find(c => c.id === form.courseId)?.price ?? 0) * 0.9)
+    : null;
+
+  const applyCoupon = async () => {
+    if (!coupon.trim()) return;
+    setCouponState("checking");
+    try {
+      const res = await fetch("/api/coupon/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: coupon.trim() }),
+      });
+      const data = await res.json();
+      if (data.valid) {
+        setCouponState("valid");
+        setCouponMsg("Coupon applied — 10% off!");
+      } else {
+        setCouponState("invalid");
+        setCouponMsg(data.reason ?? "Invalid coupon");
+      }
+    } catch {
+      setCouponState("invalid");
+      setCouponMsg("Could not verify coupon. Try again.");
+    }
+  };
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -87,7 +117,7 @@ function EnrollForm() {
       const orderRes = await fetch("/api/payment/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ courseId: form.courseId }),
+        body: JSON.stringify({ courseId: form.courseId, couponCode: couponState === "valid" ? coupon.trim() : "" }),
       });
 
       if (!orderRes.ok) throw new Error("Failed to create order");
@@ -116,6 +146,8 @@ function EnrollForm() {
               studentEmail: form.email,
               studentPhone: form.phone,
               courseId: form.courseId,
+              couponCode: couponState === "valid" ? coupon.trim() : "",
+              finalAmount: order.finalAmount,
             }),
           });
 
@@ -200,6 +232,42 @@ function EnrollForm() {
               </p>
             </div>
 
+            {/* Coupon field */}
+            <div>
+              <label style={lbl}>Coupon Code</label>
+              <div style={{ display: "flex", gap: 8 }}>
+                <input
+                  style={{ ...inp, flex: 1, textTransform: "uppercase", letterSpacing: "0.08em" }}
+                  value={coupon}
+                  onChange={(e) => { setCoupon(e.target.value.toUpperCase()); setCouponState("idle"); setCouponMsg(""); }}
+                  placeholder="QA-XXXXXX"
+                />
+                <button
+                  type="button"
+                  onClick={applyCoupon}
+                  disabled={!coupon.trim() || couponState === "checking"}
+                  style={{
+                    padding: "12px 18px", borderRadius: 8, fontSize: 13, fontWeight: 600,
+                    border: "1px solid var(--border)", background: "var(--surface-2)",
+                    color: "var(--text-dim)", cursor: coupon.trim() ? "pointer" : "not-allowed",
+                    fontFamily: "inherit", whiteSpace: "nowrap",
+                  }}
+                >
+                  {couponState === "checking" ? "Checking…" : "Apply"}
+                </button>
+              </div>
+              {couponMsg && (
+                <p style={{ fontSize: 12, marginTop: 6, color: couponState === "valid" ? "#34d399" : "#f97316" }}>
+                  {couponState === "valid" ? "✓ " : "✗ "}{couponMsg}
+                </p>
+              )}
+              {couponState === "idle" && !couponMsg && (
+                <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 6 }}>
+                  Got a coupon from a course unlock? Enter it here for 10% off.
+                </p>
+              )}
+            </div>
+
             <div>
               <label style={lbl}>Course</label>
               <select
@@ -265,7 +333,7 @@ function EnrollForm() {
                   Processing...
                 </>
               ) : (
-                `Pay ₹${(variants.find(v => v.id === form.courseId)?.price ?? courses.find(c => c.id === form.courseId)?.price ?? 0).toLocaleString("en-IN")} with Razorpay →`
+                `Pay ₹${(discountedPrice ?? variants.find(v => v.id === form.courseId)?.price ?? courses.find(c => c.id === form.courseId)?.price ?? 0).toLocaleString("en-IN")} with Razorpay →`
               )}
             </button>
 
@@ -296,7 +364,19 @@ function EnrollForm() {
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <span style={{ fontSize: 13, color: "var(--text-muted)" }}>Total</span>
-                <span style={{ fontSize: 26, fontWeight: 700 }}>₹{coursePrice.toLocaleString("en-IN")}</span>
+                <div style={{ textAlign: "right" }}>
+                  {discountedPrice && (
+                    <div style={{ fontSize: 13, color: "var(--text-muted)", textDecoration: "line-through" }}>
+                      ₹{coursePrice.toLocaleString("en-IN")}
+                    </div>
+                  )}
+                  <span style={{ fontSize: 26, fontWeight: 700, color: discountedPrice ? "#34d399" : "var(--foreground)" }}>
+                    ₹{(discountedPrice ?? coursePrice).toLocaleString("en-IN")}
+                  </span>
+                  {discountedPrice && (
+                    <div style={{ fontSize: 11, color: "#34d399", marginTop: 2 }}>10% coupon applied ✓</div>
+                  )}
+                </div>
               </div>
             </div>
           ) : (
