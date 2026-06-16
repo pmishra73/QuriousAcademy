@@ -70,19 +70,17 @@ export default function AboutPage() {
           <a href="https://pmishra73.github.io/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", display: "block" }}>
             <div className="card-hover" style={{
               background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 16,
-              padding: "40px 48px", display: "flex", alignItems: "center", gap: 36,
+              padding: "40px 48px", display: "flex", alignItems: "flex-start", gap: 36,
             }}>
-              <div style={{
-                width: 80, height: 80, borderRadius: "50%", flexShrink: 0,
-                background: "linear-gradient(135deg,var(--primary),var(--violet))",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 32, color: "white", fontWeight: 700,
-              }}>P</div>
+              <img src="/founder.png" alt="Prasant Mishra" style={{
+                width: 96, height: 96, borderRadius: "50%", flexShrink: 0,
+                objectFit: "cover", objectPosition: "center top", border: "2px solid var(--border)",
+              }} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 20, fontWeight: 600, marginBottom: 4, color: "var(--foreground)" }}>Prasant Mishra</div>
                 <div style={{ fontSize: 14, color: "var(--primary)", marginBottom: 16 }}>Founder & Instructor</div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
-                  {["GenAI Solutions Architect", "Programmer & Solutions Architect", "2500+ Students Taught"].map((tag) => (
+                  {["GenAI Solutions Architect", "Programmer & Solutions Architect", "2500+ Students Taught", "15+ Yrs Teaching Experience", "60+ Projects Delivered"].map((tag) => (
                     <span key={tag} style={{
                       fontSize: 11, fontWeight: 600, padding: "4px 12px", borderRadius: 100,
                       background: "rgba(91,124,250,0.08)", color: "var(--primary)",
