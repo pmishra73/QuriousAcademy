@@ -1,6 +1,6 @@
 ---
 title: "The 2025 web development roadmap for beginners"
-date: "2025-04-20"
+date: "2026-04-20"
 category: "Technology"
 readTime: "10 min"
 excerpt: "HTML to full-stack in 6 months — a realistic, opinionated roadmap for getting your first developer job."

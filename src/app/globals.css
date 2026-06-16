@@ -67,9 +67,9 @@
     overflow-x: hidden;
   }
   h1, h2, h3, h4 {
-    font-family: var(--font-dm-serif), 'DM Serif Display', serif;
-    letter-spacing: -0.02em;
-    line-height: 1.15;
+    font-family: var(--font-dm-serif), 'Source Serif 4', Georgia, serif;
+    letter-spacing: 0em;
+    line-height: 1.2;
   }
   ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-track { background: var(--background); }
@@ -182,7 +182,7 @@
   color: var(--foreground);
   margin: 2.5em 0 0.75em;
   line-height: 1.3;
-  font-family: var(--font-dm-serif);
+  font-family: var(--font-dm-serif), 'Source Serif 4', Georgia, serif;
   font-weight: 400;
 }
 .prose h3 {

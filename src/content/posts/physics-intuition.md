@@ -1,6 +1,6 @@
 ---
 title: "Building physical intuition before tackling equations"
-date: "2025-05-06"
+date: "2026-05-06"
 category: "Science"
 readTime: "7 min"
 excerpt: "The biggest mistake physics students make is diving into equations before building intuition. Here's a better approach."

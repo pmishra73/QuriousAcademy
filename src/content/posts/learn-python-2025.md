@@ -1,6 +1,6 @@
 ---
 title: "How to actually learn Python in 2025"
-date: "2025-05-28"
+date: "2026-05-28"
 category: "Programming"
 readTime: "6 min"
 excerpt: "Most Python tutorials send you straight to syntax. Here's what to do instead — and why building projects is the fastest path to fluency."

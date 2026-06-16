@@ -1,6 +1,6 @@
 ---
 title: "Why calculus matters more than ever (and how to learn it)"
-date: "2025-05-20"
+date: "2026-05-20"
 category: "Mathematics"
 readTime: "8 min"
 excerpt: "From ML gradients to physics simulations — calculus is everywhere. A guide to learning it the right way, without drowning in formulas."

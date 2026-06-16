@@ -1,6 +1,6 @@
 ---
 title: "Data structures for absolute beginners — where to start"
-date: "2025-04-28"
+date: "2026-04-28"
 category: "Programming"
 readTime: "9 min"
 excerpt: "Arrays, linked lists, trees, graphs — it's overwhelming. This guide cuts through the noise and tells you exactly what to learn first."
