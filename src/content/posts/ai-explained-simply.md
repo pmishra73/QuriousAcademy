@@ -1,6 +1,6 @@
 ---
 title: "What is machine learning, really? A plain-English explanation"
-date: "2025-05-14"
+date: "2026-05-14"
 category: "AI & ML"
 readTime: "5 min"
 excerpt: "No jargon, no hype. Just a clear explanation of what ML models actually do — and why they're so powerful right now."
