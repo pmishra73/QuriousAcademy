@@ -20,6 +20,7 @@ type Step = "gate" | "content";
 export default function ContentUnlockModal({ variant, onClose }: Props) {
   const [step, setStep] = useState<Step>("gate");
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
+  const [coupon, setCoupon] = useState<string | null>(null);
   const cfg = typeConfig[variant.type];
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -27,13 +28,15 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Reveal content immediately — email fires in background
     setStep("content");
     fetch("/api/unlock-content", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...form, courseId: variant.id, courseTitle: variant.title }),
-    }).catch(() => {/* silent — email is best-effort */});
+    })
+      .then((r) => r.json())
+      .then((data) => { if (data.couponCode) setCoupon(data.couponCode); })
+      .catch(() => {});
   };
 
   const inp: React.CSSProperties = {
@@ -104,8 +107,15 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
               <div style={{ display: "flex", justifyContent: "center", marginBottom: 16, color: cfg.color }}><CourseIcon name={variant.icon} size={40} /></div>
               <h2 style={{ fontSize: 22, marginBottom: 8 }}>Get the full course content</h2>
               <p style={{ fontSize: 14, color: "var(--text-muted)", lineHeight: 1.6 }}>
-                Enter your details to unlock the complete syllabus, session breakdown, and what's covered — instantly.
+                Enter your details to unlock the complete syllabus and session breakdown — instantly.
               </p>
+              <div style={{
+                marginTop: 14, padding: "10px 16px", borderRadius: 8,
+                background: "rgba(52,211,153,0.08)", border: "1px solid rgba(52,211,153,0.2)",
+                fontSize: 13, color: "#34d399", display: "flex", alignItems: "center", gap: 8,
+              }}>
+                🎁 We'll email you a <strong>10% off coupon</strong> — valid at checkout.
+              </div>
             </div>
 
             <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -129,7 +139,7 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
                 Unlock Course Content →
               </button>
               <p style={{ fontSize: 12, color: "var(--text-muted)", textAlign: "center" }}>
-                No spam. We'll only use this to send you relevant course updates.
+                No spam. We'll send your 10% coupon to the email above.
               </p>
             </form>
           </div>
@@ -218,6 +228,31 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
                 ))}
               </div>
             </div>
+
+            {/* Coupon banner */}
+            {coupon ? (
+              <div style={{
+                marginBottom: 20, padding: "14px 18px", borderRadius: 10,
+                background: "rgba(52,211,153,0.07)", border: "1px solid rgba(52,211,153,0.25)",
+                display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10,
+              }}>
+                <div>
+                  <div style={{ fontSize: 12, color: "#34d399", fontWeight: 600, marginBottom: 3 }}>🎁 Your 10% off coupon</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: "0.12em" }}>{coupon}</div>
+                  <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 3 }}>Also sent to {form.email} · one-time use only</div>
+                </div>
+                <button
+                  onClick={() => { navigator.clipboard.writeText(coupon); }}
+                  style={{ fontSize: 12, padding: "7px 14px", background: "rgba(52,211,153,0.12)", color: "#34d399", border: "1px solid rgba(52,211,153,0.25)", borderRadius: 6, cursor: "pointer", fontFamily: "inherit" }}
+                >
+                  Copy code
+                </button>
+              </div>
+            ) : (
+              <div style={{ marginBottom: 20, fontSize: 13, color: "var(--text-muted)", padding: "12px 16px", background: "var(--surface-2)", borderRadius: 8 }}>
+                ⏳ Sending your 10% coupon to {form.email}…
+              </div>
+            )}
 
             {/* CTAs */}
             <div style={{ display: "flex", gap: 12, paddingTop: 20, borderTop: "1px solid var(--border)" }}>

@@ -3,11 +3,16 @@ import crypto from "crypto";
 import { createTransporter, FROM, ADMIN } from "@/lib/mailer";
 import { variants } from "@/lib/variants";
 import { courses } from "@/lib/courses";
+import { markCouponUsed } from "@/lib/sheets";
 
 export async function POST(req: NextRequest) {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, studentName, studentEmail, studentPhone, courseId } = await req.json();
+  const {
+    razorpay_order_id, razorpay_payment_id, razorpay_signature,
+    studentName, studentEmail, studentPhone, courseId,
+    couponCode, finalAmount,
+  } = await req.json();
 
-  // Verify signature
+  // Verify Razorpay signature
   const body = razorpay_order_id + "|" + razorpay_payment_id;
   const expectedSignature = crypto
     .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
@@ -18,17 +23,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Payment verification failed" }, { status: 400 });
   }
 
-  // Look up course details
   const variant = variants.find((v) => v.id === courseId);
   const course = courses.find((c) => c.id === courseId);
   const courseName = variant?.title ?? course?.title ?? courseId;
-  const price = variant?.price ?? course?.price ?? 0;
+  const basePrice = variant?.price ?? course?.price ?? 0;
+  const paidAmount = finalAmount ?? basePrice;
+  const discountApplied = couponCode && paidAmount < basePrice;
 
-  // Send confirmation emails
+  // Mark coupon as used (fire-and-forget)
+  if (couponCode?.trim()) {
+    markCouponUsed(couponCode.trim().toUpperCase()).catch((err) =>
+      console.error("Failed to mark coupon used:", err),
+    );
+  }
+
   const transporter = createTransporter();
 
   try {
-    // Email to admin
     await transporter.sendMail({
       from: FROM,
       to: ADMIN,
@@ -43,7 +54,7 @@ export async function POST(req: NextRequest) {
               ["Email", studentEmail],
               ["Phone", studentPhone],
               ["Course", courseName],
-              ["Amount Paid", `₹${price.toLocaleString("en-IN")}`],
+              ["Amount Paid", `₹${paidAmount.toLocaleString("en-IN")}${discountApplied ? ` (10% off with ${couponCode})` : ""}`],
               ["Payment ID", razorpay_payment_id],
               ["Order ID", razorpay_order_id],
             ].map(([k, v]) => `
@@ -52,14 +63,10 @@ export async function POST(req: NextRequest) {
                 <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.07);font-size:14px;font-weight:500">${v}</td>
               </tr>`).join("")}
           </table>
-          <div style="margin-top:16px;padding:14px;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.2);border-radius:8px;font-size:13px;color:#9ba8c4">
-            Payment verified by Razorpay. Send the student the class joining link at <a href="mailto:${studentEmail}" style="color:#5b7cfa">${studentEmail}</a>
-          </div>
         </div>
       `,
     });
 
-    // Confirmation email to student
     await transporter.sendMail({
       from: FROM,
       to: studentEmail,
@@ -68,7 +75,8 @@ export async function POST(req: NextRequest) {
         <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;padding:32px">
           <h2 style="margin-bottom:8px">Hi ${studentName},</h2>
           <p style="color:#555;line-height:1.7">
-            Your payment of <strong>₹${price.toLocaleString("en-IN")}</strong> for <strong>${courseName}</strong> has been confirmed.
+            Your payment of <strong>₹${paidAmount.toLocaleString("en-IN")}</strong> for <strong>${courseName}</strong> has been confirmed.
+            ${discountApplied ? `<br/><span style="color:#5b7cfa">10% coupon discount was applied.</span>` : ""}
           </p>
           <p style="color:#555;line-height:1.7">
             We'll send you the class joining link, schedule details, and any pre-read material within the next few hours.
@@ -84,7 +92,6 @@ export async function POST(req: NextRequest) {
       `,
     });
   } catch (emailErr) {
-    // Payment is verified — don't fail the response over email issues
     console.error("Email send failed (payment still confirmed):", emailErr);
   }
 
