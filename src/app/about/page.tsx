@@ -26,33 +26,20 @@ export default function AboutPage() {
       </section>
 
       <section style={{ padding: "72px 24px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center" }}>
-          <div>
-            <h2 style={{ fontSize: "clamp(28px,4vw,42px)", marginBottom: 24 }}>Our mission</h2>
-            <p style={{ fontSize: 16, color: "var(--text-dim)", lineHeight: 1.8, marginBottom: 20 }}>
-              We want every student in India to have access to world-class instruction in the subjects that matter
-              most — regardless of where they live or which school they attend.
-            </p>
-            <p style={{ fontSize: 16, color: "var(--text-dim)", lineHeight: 1.8, marginBottom: 20 }}>
-              Programming, mathematics, AI, science, technology — these are the foundations of the modern world.
-              We teach them rigorously, with expert instructors who love their subjects and love teaching.
-            </p>
-            <p style={{ fontSize: 16, color: "var(--text-dim)", lineHeight: 1.8 }}>
-              Qurious Academy is not a platform that scales through automation. It scales through quality — by training
-              excellent instructors and giving them the tools to teach small, focused groups of motivated students.
-            </p>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-            {[
-              { v: "2024", l: "Founded" }, { v: "500+", l: "Students" },
-              { v: "4.9 / 5", l: "Avg rating" }, { v: "100%", l: "Live classes" },
-            ].map((s) => (
-              <div key={s.l} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: "28px 24px", textAlign: "center" }}>
-                <div style={{ fontFamily: "var(--font-dm-serif)", fontSize: 32, background: "linear-gradient(130deg,#5b7cfa,#8b6ff7)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", marginBottom: 8 }}>{s.v}</div>
-                <div style={{ fontSize: 13, color: "var(--text-muted)" }}>{s.l}</div>
-              </div>
-            ))}
-          </div>
+        <div style={{ maxWidth: 800, margin: "0 auto" }}>
+          <h2 style={{ fontSize: "clamp(28px,4vw,42px)", marginBottom: 24 }}>Our mission</h2>
+          <p style={{ fontSize: 16, color: "var(--text-dim)", lineHeight: 1.8, marginBottom: 20 }}>
+            We want every student in India to have access to world-class instruction in the subjects that matter
+            most — regardless of where they live or which school they attend.
+          </p>
+          <p style={{ fontSize: 16, color: "var(--text-dim)", lineHeight: 1.8, marginBottom: 20 }}>
+            Programming, mathematics, AI, science, technology — these are the foundations of the modern world.
+            We teach them rigorously, with expert instructors who love their subjects and love teaching.
+          </p>
+          <p style={{ fontSize: 16, color: "var(--text-dim)", lineHeight: 1.8 }}>
+            Qurious Academy is not a platform that scales through automation. It scales through quality — by training
+            excellent instructors and giving them the tools to teach small, focused groups of motivated students.
+          </p>
         </div>
       </section>
 
@@ -93,9 +80,18 @@ export default function AboutPage() {
               }}>P</div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 20, fontWeight: 600, marginBottom: 4, color: "var(--foreground)" }}>Prasant Mishra</div>
-                <div style={{ fontSize: 14, color: "var(--primary)", marginBottom: 12 }}>Founder & Instructor</div>
+                <div style={{ fontSize: 14, color: "var(--primary)", marginBottom: 16 }}>Founder & Instructor</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
+                  {["GenAI Solutions Architect", "Programmer & Solutions Architect", "2500+ Students Taught"].map((tag) => (
+                    <span key={tag} style={{
+                      fontSize: 11, fontWeight: 600, padding: "4px 12px", borderRadius: 100,
+                      background: "rgba(91,124,250,0.08)", color: "var(--primary)",
+                      border: "1px solid rgba(91,124,250,0.2)", letterSpacing: "0.02em",
+                    }}>{tag}</span>
+                  ))}
+                </div>
                 <p style={{ fontSize: 14, color: "var(--text-dim)", lineHeight: 1.7, margin: 0 }}>
-                  Educator, builder, and the driving force behind Qurious Academy. Passionate about making rigorous, live learning accessible to every curious mind in India.
+                  Prasant brings deep expertise across Mathematics, Physics, Programming, Systems Design, and GenAI Architecture — spanning the full breadth of what Qurious Academy teaches. With 2500+ students taught and hands-on experience building AI-powered systems at scale, he founded this platform to make rigorous, live learning accessible to every curious mind in India.
                 </p>
               </div>
               <div style={{ fontSize: 13, color: "var(--primary)", flexShrink: 0, display: "flex", alignItems: "center", gap: 6 }}>

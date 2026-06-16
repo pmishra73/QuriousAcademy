@@ -1,34 +1,6 @@
 import Link from "next/link";
 import { courses } from "@/lib/courses";
 
-const stats = [
-  { value: "500+", label: "Students taught" },
-  { value: "6", label: "Live courses" },
-  { value: "4.9★", label: "Average rating" },
-  { value: "12", label: "Expert instructors" },
-];
-
-const testimonials = [
-  {
-    name: "Ananya S.",
-    role: "B.Tech Student, NIT Trichy",
-    course: "Python Fundamentals",
-    text: "Qurious Academy's Python course was the clearest programming class I've ever taken. The instructor made every concept click and the small batch size meant I could ask questions freely.",
-  },
-  {
-    name: "Rohan M.",
-    role: "Working Professional, Bengaluru",
-    course: "Intro to AI & ML",
-    text: "I'd been trying to break into ML for two years. After Qurious Academy's AI course, I built and deployed my first model. The hands-on approach is unmatched.",
-  },
-  {
-    name: "Preethi K.",
-    role: "Class 12 Student, Chennai",
-    course: "Classical Mechanics",
-    text: "Prof. Kavita explains physics in a way no textbook does. I went from dreading physics to actually loving it.",
-  },
-];
-
 const categories = [
   { icon: "🐍", label: "Programming", desc: "Python, JavaScript, DSA and more", href: "/courses?cat=programming" },
   { icon: "∫", label: "Mathematics", desc: "Calculus, Discrete Maths, Statistics", href: "/courses?cat=maths" },
@@ -65,17 +37,6 @@ export default function Home() {
               How it works
             </Link>
           </div>
-        </div>
-      </section>
-
-      <section style={{ borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", background: "var(--surface)" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "grid", gridTemplateColumns: "repeat(4,1fr)" }}>
-          {stats.map((s, i) => (
-            <div key={i} style={{ padding: "32px 24px", textAlign: "center", borderRight: i < 3 ? "1px solid var(--border)" : "none" }}>
-              <div style={{ fontFamily: "var(--font-dm-serif)", fontSize: 36, marginBottom: 6, background: "linear-gradient(130deg,#5b7cfa,#8b6ff7)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{s.value}</div>
-              <div style={{ fontSize: 13, color: "var(--text-muted)" }}>{s.label}</div>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -126,30 +87,6 @@ export default function Home() {
                   <div style={{ fontSize: 12, color: "var(--text-muted)" }}>{c.spots - c.enrolled} spots left</div>
                 </div>
               </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section style={{ padding: "80px 24px", background: "var(--surface)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 48 }}>
-            <div className="tag" style={{ display: "inline-flex", marginBottom: 16 }}>Student stories</div>
-            <h2 style={{ fontSize: "clamp(26px,3.5vw,38px)" }}>What our students say</h2>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 20 }}>
-            {testimonials.map((t, i) => (
-              <div key={i} style={{ background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 14, padding: 28 }}>
-                <p style={{ fontSize: 14, color: "var(--text-dim)", lineHeight: 1.75, marginBottom: 24, fontStyle: "italic" }}>"{t.text}"</p>
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,var(--primary),var(--violet))", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 600, color: "white", flexShrink: 0 }}>{t.name[0]}</div>
-                  <div>
-                    <div style={{ fontSize: 14, fontWeight: 500 }}>{t.name}</div>
-                    <div style={{ fontSize: 12, color: "var(--text-muted)" }}>{t.role}</div>
-                  </div>
-                  <div style={{ marginLeft: "auto", fontSize: 11, color: "var(--primary)", background: "rgba(91,124,250,0.08)", padding: "3px 10px", borderRadius: 100, border: "1px solid rgba(91,124,250,0.15)" }}>{t.course}</div>
-                </div>
-              </div>
             ))}
           </div>
         </div>
