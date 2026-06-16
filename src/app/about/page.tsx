@@ -70,12 +70,19 @@ export default function AboutPage() {
           <a href="https://pmishra73.github.io/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", display: "block" }}>
             <div className="card-hover" style={{
               background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 16,
-              padding: "40px 48px", display: "flex", alignItems: "flex-start", gap: 36,
+              padding: "40px 48px", display: "flex", alignItems: "flex-start", gap: 40,
             }}>
-              <img src="/founder.png" alt="Prasant Mishra" style={{
-                width: 96, height: 96, borderRadius: "50%", flexShrink: 0,
-                objectFit: "cover", objectPosition: "center top", border: "2px solid var(--border)",
-              }} />
+              {/* Left col: photo + view profile */}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, flexShrink: 0 }}>
+                <img src="/founder.png" alt="Prasant Mishra" style={{
+                  width: 100, height: 100, borderRadius: "50%",
+                  objectFit: "cover", objectPosition: "center top", border: "2px solid var(--border)",
+                }} />
+                <div style={{ fontSize: 13, color: "var(--primary)", display: "flex", alignItems: "center", gap: 5 }}>
+                  View profile <span style={{ fontSize: 15 }}>↗</span>
+                </div>
+              </div>
+              {/* Right col: all text */}
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 20, fontWeight: 600, marginBottom: 4, color: "var(--foreground)" }}>Prasant Mishra</div>
                 <div style={{ fontSize: 14, color: "var(--primary)", marginBottom: 16 }}>Founder & Instructor</div>
@@ -91,9 +98,6 @@ export default function AboutPage() {
                 <p style={{ fontSize: 14, color: "var(--text-dim)", lineHeight: 1.7, margin: 0 }}>
                   Prasant brings deep expertise across Mathematics, Physics, Programming, Systems Design, and GenAI Architecture — spanning the full breadth of what Qurious Academy teaches. With 2500+ students taught and hands-on experience building AI-powered systems at scale, he founded this platform to make rigorous, live learning accessible to every curious mind in India.
                 </p>
-              </div>
-              <div style={{ fontSize: 13, color: "var(--primary)", flexShrink: 0, display: "flex", alignItems: "center", gap: 6 }}>
-                View profile <span style={{ fontSize: 16 }}>↗</span>
               </div>
             </div>
           </a>
