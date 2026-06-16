@@ -4,7 +4,7 @@
       "id": "python-masterclass",
       "subject": "python",
       "subjectLabel": "Python Programming",
-      "icon": "🐍",
+      "icon": "Code2",
       "type": "masterclass",
       "title": "Python in 3 Hours",
       "tagline": "The essential 20% that does 80% of the work",
@@ -12,28 +12,28 @@
       "currency": "INR",
       "duration": "3 hours",
       "level": "Beginner",
-      "instructor": "Arjun Mehta",
+      "instructor": "Prasant Mishra",
       "schedule": {
         "rule": "monthly-first-saturday",
         "time": "10:00 AM IST"
       },
       "content": {
-        "overview": "A rapid, high-signal session covering the Python concepts that actually matter in practice. No fluff. By the end you'll be writing real scripts.",
+        "overview": "A rapid, high-signal session covering the Python concepts that actually matter in practice. No fluff, no padding. By the end you'll be writing real scripts and know exactly where to go next.",
         "sessions": [
           {
             "session": "Hour 1",
             "title": "The Python Mental Model",
-            "topics": ["Variables & data types", "Control flow (if/for/while)", "Functions", "The REPL and writing your first script"]
+            "topics": ["Variables & data types", "Control flow — if/for/while", "Functions & scope", "The REPL and running your first script"]
           },
           {
             "session": "Hour 2",
             "title": "Working with Data",
-            "topics": ["Lists, dicts, sets", "List comprehensions", "File I/O", "Error handling basics"]
+            "topics": ["Lists, dicts, sets, tuples", "List comprehensions", "File I/O — reading & writing", "Error handling with try/except"]
           },
           {
             "session": "Hour 3",
             "title": "Real-World Python",
-            "topics": ["Using pip and libraries", "Working with JSON APIs", "Writing a mini automation script", "Where to go next"]
+            "topics": ["Installing & using libraries with pip", "Calling a JSON REST API", "Writing a mini automation script", "Where to go next — roadmap"]
           }
         ],
         "prerequisites": "None — just a laptop and curiosity",
@@ -43,7 +43,7 @@
           "Use third-party libraries",
           "Know exactly what to learn next"
         ],
-        "includes": ["Session recording", "Code files", "Cheat sheet PDF", "Learner's Certificate"],
+        "includes": ["Session recording", "All code files", "Cheat sheet PDF", "Curated next-steps resource list", "Learner's Certificate"],
         "certificate": "learner"
       }
     },
@@ -51,7 +51,7 @@
       "id": "python-cohort",
       "subject": "python",
       "subjectLabel": "Python Programming",
-      "icon": "🐍",
+      "icon": "Code2",
       "type": "cohort",
       "title": "Python Weekend Intensive",
       "tagline": "Go from zero to building projects in a single weekend",
@@ -59,43 +59,43 @@
       "currency": "INR",
       "duration": "2 days · 16 hours",
       "level": "Beginner",
-      "instructor": "Arjun Mehta",
+      "instructor": "Prasant Mishra",
       "schedule": {
         "rule": "biweekly-weekends",
         "time": "9:00 AM – 5:00 PM IST"
       },
       "content": {
-        "overview": "An immersive two-day cohort that takes you from absolute basics to building three real Python projects. Small group, live instruction, immediate feedback.",
+        "overview": "An immersive two-day cohort that takes you from absolute basics to building three real Python projects. Small group, live instruction, immediate feedback after every block.",
         "sessions": [
           {
             "session": "Day 1 — Morning",
-            "title": "Foundations",
-            "topics": ["Setup & Python basics", "Variables, operators, data types", "Control flow & loops", "Functions & scope"]
+            "title": "Python Foundations",
+            "topics": ["Setup & environment", "Variables, operators, data types", "Control flow & loops", "Functions & scope"]
           },
           {
             "session": "Day 1 — Afternoon",
             "title": "Data Structures",
-            "topics": ["Lists, tuples, dicts, sets", "List comprehensions", "Nested structures", "Project 1: Data parser"]
+            "topics": ["Lists, tuples, dicts, sets", "List comprehensions", "Nested data structures", "Project 1: Data parser & cleaner"]
           },
           {
             "session": "Day 2 — Morning",
             "title": "Intermediate Python",
-            "topics": ["OOP concepts", "File I/O", "Error handling", "Modules & pip"]
+            "topics": ["Object-Oriented Programming", "File I/O & CSV handling", "Error handling & logging", "Modules, packages & pip"]
           },
           {
             "session": "Day 2 — Afternoon",
             "title": "Applied Projects",
-            "topics": ["Working with APIs", "Project 2: Weather app", "Project 3: Automation script", "Code review & next steps"]
+            "topics": ["Calling REST APIs", "Project 2: Live weather CLI app", "Project 3: File automation script", "Code review & personal roadmap"]
           }
         ],
         "prerequisites": "No programming experience needed",
         "outcomes": [
-          "Build and ship 3 Python projects",
-          "Understand OOP and write clean code",
+          "Build and ship 3 complete Python projects",
+          "Understand OOP and write clean, readable code",
           "Work with real APIs and data",
-          "Have a clear path to continue learning"
+          "Have a personalised roadmap to continue"
         ],
-        "includes": ["Both day recordings", "All project code", "Resource list", "Doubt support for 2 weeks", "Learner's Certificate"],
+        "includes": ["Both day recordings", "All project source code", "Resource reading list", "2 weeks of doubt support via WhatsApp", "Learner's Certificate"],
         "certificate": "learner"
       }
     },
@@ -103,7 +103,7 @@
       "id": "python-deep-dive",
       "subject": "python",
       "subjectLabel": "Python Programming",
-      "icon": "🐍",
+      "icon": "Code2",
       "type": "deep-dive",
       "title": "Python Mastery — 90 Days",
       "tagline": "From beginner to job-ready Python developer",
@@ -111,39 +111,48 @@
       "currency": "INR",
       "duration": "90 days",
       "level": "Beginner to Advanced",
-      "instructor": "Arjun Mehta",
+      "instructor": "Prasant Mishra",
       "schedule": {
         "rule": "weekly-monday",
         "time": "Sat & Sun · 10:00 AM – 12:00 PM IST"
       },
       "content": {
-        "overview": "A comprehensive 90-day program built for people who want to go from zero to genuinely job-ready. Weekly live sessions, assignments, code reviews, and a capstone project.",
+        "overview": "A comprehensive 90-day program built for people who want to go from zero to genuinely job-ready. Weekly live sessions, graded assignments, code reviews, and a capstone project you can show employers.",
         "sessions": [
           {
             "session": "Month 1",
             "title": "Core Python",
-            "topics": ["Python fundamentals", "Data structures in depth", "Functions & decorators", "OOP", "Error handling & logging", "Testing basics"]
+            "topics": ["Python fundamentals in depth", "Data structures & algorithms basics", "Functions, decorators & closures", "OOP — classes, inheritance, dunder methods", "Exception handling & logging", "Unit testing with pytest"]
           },
           {
             "session": "Month 2",
             "title": "Applied Python",
-            "topics": ["File & database I/O", "APIs & web scraping", "Data analysis with Pandas", "Automation scripts", "Virtual environments", "Packaging"]
+            "topics": ["File & database I/O (SQLite)", "REST APIs & web scraping (requests, BeautifulSoup)", "Data analysis with Pandas & NumPy", "Automation scripts (OS, scheduling)", "Virtual environments & packaging", "Type hints & mypy"]
           },
           {
             "session": "Month 3",
             "title": "Professional Python",
-            "topics": ["Algorithm design", "Git & version control", "Flask/FastAPI basics", "Deployment fundamentals", "Capstone project", "Portfolio & career prep"]
+            "topics": ["Algorithm design & complexity", "Git & version control (collaborative workflows)", "Web APIs with FastAPI", "Docker basics & deployment", "Capstone project — build & ship", "Portfolio review & interview prep"]
           }
         ],
-        "prerequisites": "None — but commitment to 8–10 hrs/week",
+        "prerequisites": "None — but commitment to 8–10 hours/week",
         "outcomes": [
-          "Write production-quality Python",
-          "Build and deploy web APIs",
-          "Work with data using Pandas",
-          "Ship a capstone project for your portfolio",
-          "Be interview-ready for junior Python roles"
+          "Write production-quality, tested Python code",
+          "Build and deploy REST APIs with FastAPI",
+          "Analyse data with Pandas",
+          "Ship a real capstone project for your portfolio",
+          "Be interview-ready for junior Python developer roles"
         ],
-        "includes": ["Weekly live sessions", "All recordings", "Code reviews", "1 doubt session/week", "Capstone project guidance", "Learner's Certificate", "Alumni network access"],
+        "includes": [
+          "Weekly live sessions (2 hrs each)",
+          "All session recordings",
+          "Weekly graded assignments",
+          "1-on-1 code review every 2 weeks",
+          "1 doubt session per week (group)",
+          "Capstone project mentorship",
+          "Learner's Certificate",
+          "Alumni community access"
+        ],
         "certificate": "learner"
       }
     },
@@ -151,7 +160,7 @@
       "id": "ai-masterclass",
       "subject": "ai",
       "subjectLabel": "Artificial Intelligence",
-      "icon": "🤖",
+      "icon": "Brain",
       "type": "masterclass",
       "title": "AI Demystified in 3 Hours",
       "tagline": "What AI actually is — and how it actually works",
@@ -159,38 +168,90 @@
       "currency": "INR",
       "duration": "3 hours",
       "level": "Beginner",
-      "instructor": "Siddharth Rao",
+      "instructor": "Prasant Mishra",
       "schedule": {
         "rule": "monthly-first-saturday",
         "time": "2:00 PM IST"
       },
       "content": {
-        "overview": "Strip away the hype. Understand how machine learning, neural networks, and LLMs actually work — without needing a PhD. Live demos, real intuition.",
+        "overview": "Strip away the hype. Understand how machine learning, neural networks, and LLMs actually work — without needing a PhD. Built around visual intuition and live demos throughout.",
         "sessions": [
           {
             "session": "Hour 1",
             "title": "What Machines Actually Learn",
-            "topics": ["What is ML really", "Training, features, labels", "Linear models explained visually", "Why deep learning works"]
+            "topics": ["What ML really is (vs. traditional programming)", "Training, features & labels explained visually", "Linear models & decision boundaries", "Why deep learning suddenly worked"]
           },
           {
             "session": "Hour 2",
             "title": "Neural Networks & LLMs",
-            "topics": ["How a neural network learns", "Backpropagation intuitively", "What a transformer does", "How ChatGPT works under the hood"]
+            "topics": ["How a neural network learns — forward & backward pass", "Backpropagation explained intuitively (no calculus required)", "What a transformer actually does", "How GPT-4 and Claude work under the hood"]
           },
           {
             "session": "Hour 3",
             "title": "AI in Practice",
-            "topics": ["Building with APIs (hands-on)", "Prompt engineering principles", "Where AI fails & why", "What to build next"]
+            "topics": ["Live: building with AI APIs (OpenAI / Anthropic)", "Prompt engineering principles that actually work", "Where AI fails — hallucinations, bias, limits", "Roadmap: how to go deeper into AI"]
           }
         ],
-        "prerequisites": "Curiosity only. No math or coding required.",
+        "prerequisites": "Curiosity only. No maths or coding required.",
         "outcomes": [
           "Explain how LLMs work to anyone",
-          "Understand the limits of current AI",
+          "Understand the real limits of current AI",
           "Use AI APIs to build something real",
-          "Know the right path to learn AI deeper"
+          "Know the right learning path to go deeper"
         ],
-        "includes": ["Recording", "Resource list", "Learner's Certificate"],
+        "includes": ["Full recording", "Curated resource list", "API demo code", "Learner's Certificate"],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "ai-cohort",
+      "subject": "ai",
+      "subjectLabel": "Artificial Intelligence",
+      "icon": "Brain",
+      "type": "cohort",
+      "title": "Build with AI — Weekend Cohort",
+      "tagline": "Go from AI consumer to AI builder in one weekend",
+      "price": 2499,
+      "currency": "INR",
+      "duration": "2 days · 14 hours",
+      "level": "Beginner to Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "biweekly-weekends",
+        "time": "9:00 AM – 4:00 PM IST"
+      },
+      "content": {
+        "overview": "A hands-on weekend that teaches you to build real products using AI APIs — not just talk about AI. By Sunday evening you'll have shipped three working projects.",
+        "sessions": [
+          {
+            "session": "Day 1 — Morning",
+            "title": "AI Foundations & APIs",
+            "topics": ["How LLMs work (intuition)", "OpenAI & Anthropic API setup", "Prompt engineering — zero-shot, few-shot, chain-of-thought", "Structured output & JSON mode"]
+          },
+          {
+            "session": "Day 1 — Afternoon",
+            "title": "Project 1 & 2",
+            "topics": ["Project 1: AI Q&A over your own documents (RAG basics)", "Project 2: AI writing assistant with memory", "Token limits, costs & best practices", "Error handling & fallbacks"]
+          },
+          {
+            "session": "Day 2 — Morning",
+            "title": "Advanced Patterns",
+            "topics": ["Function calling & tool use", "Agents — multi-step reasoning", "Embeddings & semantic search", "Evaluating AI outputs"]
+          },
+          {
+            "session": "Day 2 — Afternoon",
+            "title": "Project 3 & Deployment",
+            "topics": ["Project 3: your own AI micro-SaaS concept", "Deploying AI apps (Vercel + API keys)", "Cost optimisation", "What to build next — personal roadmap"]
+          }
+        ],
+        "prerequisites": "Basic Python (variables, functions, loops). No AI knowledge needed.",
+        "outcomes": [
+          "Build 3 working AI-powered applications",
+          "Understand prompt engineering deeply",
+          "Implement RAG and agent patterns",
+          "Deploy an AI product end-to-end"
+        ],
+        "includes": ["Both day recordings", "All project code", "Prompt template library", "2 weeks doubt support", "Learner's Certificate"],
         "certificate": "learner"
       }
     },
@@ -198,51 +259,60 @@
       "id": "ai-deep-dive",
       "subject": "ai",
       "subjectLabel": "Artificial Intelligence",
-      "icon": "🤖",
+      "icon": "Brain",
       "type": "deep-dive",
-      "title": "AI & ML — Full Program",
+      "title": "AI & ML Engineering — 12 Weeks",
       "tagline": "From fundamentals to building and deploying real models",
       "price": 9999,
       "currency": "INR",
       "duration": "12 weeks",
       "level": "Intermediate",
-      "instructor": "Siddharth Rao",
+      "instructor": "Prasant Mishra",
       "schedule": {
         "rule": "weekly-monday",
         "time": "Sat · 2:00 PM – 5:00 PM IST"
       },
       "content": {
-        "overview": "A rigorous 12-week program for people serious about working in AI. Code-first, math-where-necessary, project-driven throughout.",
+        "overview": "A rigorous 12-week program for people serious about working in AI. Code-first, maths where necessary, project-driven throughout. You will train, evaluate, and deploy real models.",
         "sessions": [
           {
             "session": "Weeks 1–3",
             "title": "ML Foundations",
-            "topics": ["Statistics & probability for ML", "Linear & logistic regression", "Feature engineering", "Model evaluation & overfitting"]
+            "topics": ["Statistics & probability for ML", "Linear & logistic regression from scratch", "Feature engineering & selection", "Model evaluation — metrics, overfitting, cross-validation"]
           },
           {
             "session": "Weeks 4–6",
             "title": "Core Algorithms",
-            "topics": ["Decision trees & Random forests", "SVMs", "Clustering", "Dimensionality reduction"]
+            "topics": ["Decision trees & Random Forests", "SVMs & kernel methods", "Clustering — K-Means, DBSCAN", "Dimensionality reduction — PCA, t-SNE"]
           },
           {
             "session": "Weeks 7–9",
             "title": "Deep Learning",
-            "topics": ["Neural networks from scratch", "PyTorch basics", "CNNs & RNNs", "Transfer learning"]
+            "topics": ["Neural networks from scratch (NumPy)", "PyTorch fundamentals", "CNNs for vision, RNNs/LSTMs for sequences", "Transfer learning & fine-tuning"]
           },
           {
             "session": "Weeks 10–12",
-            "title": "Applied AI",
-            "topics": ["LLM APIs & fine-tuning", "Model deployment (FastAPI + Docker)", "Capstone project", "Portfolio & interview prep"]
+            "title": "Applied AI & Capstone",
+            "topics": ["LLM APIs & fine-tuning (LoRA)", "Model deployment — FastAPI + Docker + cloud", "Capstone project: your own ML product", "Portfolio, GitHub, interview prep"]
           }
         ],
-        "prerequisites": "Python basics, basic maths (algebra level)",
+        "prerequisites": "Python basics, algebra-level maths. No prior ML experience needed.",
         "outcomes": [
           "Train and evaluate ML models end-to-end",
           "Build neural networks with PyTorch",
+          "Fine-tune LLMs with LoRA",
           "Deploy models to production",
-          "Ship a real AI project"
+          "Ship a real AI product for your portfolio"
         ],
-        "includes": ["Weekly live sessions", "All recordings", "Weekly assignments", "Code reviews", "Capstone guidance", "Learner's Certificate"],
+        "includes": [
+          "Weekly 3-hour live sessions",
+          "All recordings",
+          "Weekly assignments with model answers",
+          "Code reviews",
+          "Capstone project mentorship",
+          "Learner's Certificate",
+          "Alumni network access"
+        ],
         "certificate": "learner"
       }
     },
@@ -250,7 +320,7 @@
       "id": "calculus-masterclass",
       "subject": "maths",
       "subjectLabel": "Mathematics",
-      "icon": "∫",
+      "icon": "Sigma",
       "type": "masterclass",
       "title": "Calculus in 3 Hours",
       "tagline": "Derivatives and integrals — actually understood",
@@ -258,21 +328,85 @@
       "currency": "INR",
       "duration": "3 hours",
       "level": "Intermediate",
-      "instructor": "Dr. Priya Nair",
+      "instructor": "Prasant Mishra",
       "schedule": {
         "rule": "monthly-first-saturday",
         "time": "11:00 AM IST"
       },
       "content": {
-        "overview": "A focused deep-dive into the two big ideas in calculus — derivatives and integrals — built around geometric intuition first, formulas second.",
+        "overview": "A focused deep-dive into the two big ideas in calculus — derivatives and integrals — built around geometric intuition first and formulas second. You'll leave actually understanding why the rules work.",
         "sessions": [
-          { "session": "Hour 1", "title": "Derivatives", "topics": ["What a derivative really means", "Rules & shortcuts", "Chain rule visually", "Applications"] },
-          { "session": "Hour 2", "title": "Integrals", "topics": ["Integration as area", "Antiderivatives", "Definite integrals", "Fundamental theorem"] },
-          { "session": "Hour 3", "title": "Applications", "topics": ["Optimization problems", "Related rates", "Where calculus shows up in ML", "Problem session"] }
+          {
+            "session": "Hour 1",
+            "title": "Derivatives",
+            "topics": ["What a derivative really means — the slope idea", "Differentiation rules & shortcuts", "Chain rule, product rule — explained visually", "Applications: rates of change & tangents"]
+          },
+          {
+            "session": "Hour 2",
+            "title": "Integrals",
+            "topics": ["Integration as area accumulation", "Antiderivatives & the reverse process", "Definite integrals & the Fundamental Theorem", "Substitution method"]
+          },
+          {
+            "session": "Hour 3",
+            "title": "Applications & ML Connections",
+            "topics": ["Optimisation problems — maxima & minima", "Related rates", "Where calculus appears in ML (gradient descent)", "Problem-solving session"]
+          }
         ],
-        "prerequisites": "Basic algebra and functions",
-        "outcomes": ["Differentiate any standard function", "Evaluate definite integrals", "Apply calculus to real problems"],
-        "includes": ["Recording", "Problem set PDF", "Learner's Certificate"],
+        "prerequisites": "Basic algebra and familiarity with functions (y = f(x))",
+        "outcomes": [
+          "Differentiate any standard function confidently",
+          "Evaluate definite and indefinite integrals",
+          "Apply calculus to real optimisation problems",
+          "Understand why gradient descent works"
+        ],
+        "includes": ["Recording", "Problem set PDF (30 problems)", "Full solutions", "Learner's Certificate"],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "linear-algebra-masterclass",
+      "subject": "maths",
+      "subjectLabel": "Mathematics",
+      "icon": "Sigma",
+      "type": "masterclass",
+      "title": "Linear Algebra for ML in 3 Hours",
+      "tagline": "The maths behind neural networks — made visual",
+      "price": 399,
+      "currency": "INR",
+      "duration": "3 hours",
+      "level": "Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "monthly-first-saturday",
+        "time": "3:00 PM IST"
+      },
+      "content": {
+        "overview": "Every AI model is built on linear algebra. This session builds a visual, geometric intuition for vectors, matrices, and transformations — exactly the parts that show up in ML.",
+        "sessions": [
+          {
+            "session": "Hour 1",
+            "title": "Vectors & Spaces",
+            "topics": ["What a vector really is", "Vector operations — addition, scaling, dot product", "Basis vectors and span", "Linear independence"]
+          },
+          {
+            "session": "Hour 2",
+            "title": "Matrices as Transformations",
+            "topics": ["Matrix multiplication as composition of transformations", "Transpose, inverse", "Determinant — what it actually means", "Systems of equations"]
+          },
+          {
+            "session": "Hour 3",
+            "title": "Eigenvalues, PCA & Neural Nets",
+            "topics": ["Eigenvalues & eigenvectors visually", "PCA — how dimensionality reduction works", "How weights in neural networks are matrices", "Practical NumPy session"]
+          }
+        ],
+        "prerequisites": "Basic algebra. Calculus helpful but not required.",
+        "outcomes": [
+          "Understand matrix operations geometrically",
+          "Explain PCA and embeddings intuitively",
+          "Read ML papers without freezing at the maths",
+          "Use NumPy confidently for linear algebra"
+        ],
+        "includes": ["Recording", "Visual cheat sheet PDF", "NumPy code notebook", "Learner's Certificate"],
         "certificate": "learner"
       }
     },
@@ -280,28 +414,51 @@
       "id": "maths-cohort",
       "subject": "maths",
       "subjectLabel": "Mathematics",
-      "icon": "∫",
+      "icon": "Sigma",
       "type": "cohort",
-      "title": "Maths Weekend Bootcamp",
-      "tagline": "Calculus + Linear Algebra in a single power weekend",
+      "title": "Maths for ML — Power Weekend",
+      "tagline": "Calculus + Linear Algebra + Probability in one focused weekend",
       "price": 2499,
       "currency": "INR",
       "duration": "2 days · 14 hours",
       "level": "Intermediate",
-      "instructor": "Dr. Priya Nair",
+      "instructor": "Prasant Mishra",
       "schedule": {
         "rule": "biweekly-weekends",
         "time": "9:00 AM – 4:00 PM IST"
       },
       "content": {
-        "overview": "The maths you need for engineering and data science — taught in two intense, focused days. Calculus on Day 1, Linear Algebra on Day 2.",
+        "overview": "The complete maths toolkit for machine learning — taught in two intense, focused days. Designed for people who want to understand AI deeply, not just use it.",
         "sessions": [
-          { "session": "Day 1", "title": "Calculus", "topics": ["Limits & derivatives", "Integration", "Multivariable calculus intro", "Optimization"] },
-          { "session": "Day 2", "title": "Linear Algebra", "topics": ["Vectors & matrices", "Matrix operations", "Eigenvalues", "Applications in ML"] }
+          {
+            "session": "Day 1 — Morning",
+            "title": "Calculus for Optimisation",
+            "topics": ["Derivatives & partial derivatives", "Gradient descent from scratch", "Chain rule & backpropagation intuition", "Multivariable optimisation"]
+          },
+          {
+            "session": "Day 1 — Afternoon",
+            "title": "Linear Algebra",
+            "topics": ["Vectors, matrices & transformations", "Matrix multiplication", "Eigenvalues & PCA", "NumPy hands-on"]
+          },
+          {
+            "session": "Day 2 — Morning",
+            "title": "Probability & Statistics",
+            "topics": ["Probability basics — distributions, Bayes' theorem", "Expected value & variance", "MLE & MAP estimation", "Information theory basics (entropy, KL divergence)"]
+          },
+          {
+            "session": "Day 2 — Afternoon",
+            "title": "Tying it Together",
+            "topics": ["How all three areas combine in a neural network", "Reading an ML paper's maths section", "Problem-solving marathon", "Personal study plan"]
+          }
         ],
-        "prerequisites": "12th grade maths or equivalent",
-        "outcomes": ["Solid calculus foundations", "Linear algebra for data science", "Solve university-level problems confidently"],
-        "includes": ["Both day recordings", "Problem sets", "Solutions manual", "Learner's Certificate"],
+        "prerequisites": "12th grade maths (algebra, basic trigonometry). No calculus experience needed.",
+        "outcomes": [
+          "Understand gradient descent mathematically",
+          "Read ML papers without fear",
+          "Use NumPy for matrix operations",
+          "Solve probability problems for ML interviews"
+        ],
+        "includes": ["Both day recordings", "Problem sets with full solutions", "Formula reference PDF", "Learner's Certificate"],
         "certificate": "learner"
       }
     },
@@ -309,15 +466,15 @@
       "id": "webdev-sprint",
       "subject": "technology",
       "subjectLabel": "Web Development",
-      "icon": "💻",
+      "icon": "Globe",
       "type": "sprint",
       "title": "Build Your First Website — 3 Weeks",
-      "tagline": "HTML, CSS, and JavaScript — from blank page to deployed site",
+      "tagline": "HTML, CSS, JavaScript — from blank page to deployed site",
       "price": 1999,
       "currency": "INR",
       "duration": "3 weeks",
       "level": "Beginner",
-      "instructor": "Riya Kapoor",
+      "instructor": "Prasant Mishra",
       "schedule": {
         "rule": "fixed-days",
         "days": "Mon, Wed, Fri",
@@ -325,60 +482,48 @@
         "nextStart": "rolling"
       },
       "content": {
-        "overview": "Three focused weeks to go from nothing to a live, deployed personal website. Learn the building blocks of the web with hands-on projects.",
+        "overview": "Three focused weeks to go from nothing to a live, deployed personal portfolio website. You build something real every session — no toy exercises.",
         "sessions": [
-          { "session": "Week 1", "title": "HTML & CSS", "topics": ["HTML structure", "CSS styling", "Flexbox & Grid", "Responsive design"] },
-          { "session": "Week 2", "title": "JavaScript Basics", "topics": ["Variables & functions", "DOM manipulation", "Events", "Fetch API"] },
-          { "session": "Week 3", "title": "Build & Deploy", "topics": ["Project: portfolio site", "GitHub basics", "Deploy with Vercel", "Code review"] }
+          {
+            "session": "Week 1",
+            "title": "HTML & CSS",
+            "topics": ["HTML document structure & semantic elements", "CSS selectors, box model, typography", "Flexbox & Grid — responsive layouts", "Your first page: personal bio"]
+          },
+          {
+            "session": "Week 2",
+            "title": "JavaScript",
+            "topics": ["Variables, functions, events", "DOM manipulation — changing the page live", "Fetch API — pulling data from the internet", "Project: dynamic portfolio page"]
+          },
+          {
+            "session": "Week 3",
+            "title": "Build & Deploy",
+            "topics": ["Project: complete personal portfolio site", "GitHub — version control basics", "Deploy live with Vercel (free tier)", "Code review & next steps"]
+          }
         ],
-        "prerequisites": "None",
-        "outcomes": ["Build a responsive website from scratch", "Understand HTML/CSS/JS fundamentals", "Deploy a live site"],
-        "includes": ["6 live sessions", "Recordings", "Starter code", "Learner's Certificate"],
+        "prerequisites": "None — absolute beginners welcome",
+        "outcomes": [
+          "Build a responsive, deployed personal website",
+          "Understand HTML, CSS and JavaScript fundamentals",
+          "Use Git and deploy to Vercel",
+          "Know exactly what to learn next (React, etc.)"
+        ],
+        "includes": ["6 live sessions", "All recordings", "Starter project files", "Learner's Certificate"],
         "certificate": "learner"
       }
     },
     {
-      "id": "physics-cohort",
-      "subject": "science",
-      "subjectLabel": "Physics",
-      "icon": "⚛",
-      "type": "cohort",
-      "title": "Classical Mechanics Weekend",
-      "tagline": "Newton to energy conservation — one focused weekend",
-      "price": 1999,
+      "id": "react-sprint",
+      "subject": "technology",
+      "subjectLabel": "Web Development",
+      "icon": "Globe",
+      "type": "sprint",
+      "title": "React Foundations — 4 Weeks",
+      "tagline": "Build modern UIs with the world's most popular frontend library",
+      "price": 2999,
       "currency": "INR",
-      "duration": "2 days · 12 hours",
-      "level": "Beginner",
-      "instructor": "Prof. Kavita Sharma",
-      "schedule": {
-        "rule": "biweekly-weekends",
-        "time": "9:00 AM – 3:00 PM IST"
-      },
-      "content": {
-        "overview": "A rigorous but accessible weekend covering the core of classical mechanics. Built around physical intuition first — equations second.",
-        "sessions": [
-          { "session": "Day 1", "title": "Motion & Forces", "topics": ["Kinematics", "Newton's laws", "Friction & normal force", "Problem-solving method"] },
-          { "session": "Day 2", "title": "Energy & Momentum", "topics": ["Work & energy", "Conservation of energy", "Momentum & collisions", "Rotational basics"] }
-        ],
-        "prerequisites": "Basic algebra and 11th grade physics helpful",
-        "outcomes": ["Solve mechanics problems from first principles", "Build physical intuition", "Prepared for university physics"],
-        "includes": ["Recordings", "Problem sets with solutions", "Learner's Certificate"],
-        "certificate": "learner"
-      }
-    },
-    {
-      "id": "dsa-standard",
-      "subject": "programming",
-      "subjectLabel": "Data Structures & Algorithms",
-      "icon": "◇",
-      "type": "standard",
-      "title": "DSA for Interviews — 6 Weeks",
-      "tagline": "Everything you need to crack coding interviews",
-      "price": 4999,
-      "currency": "INR",
-      "duration": "6 weeks",
+      "duration": "4 weeks",
       "level": "Intermediate",
-      "instructor": "Arjun Mehta",
+      "instructor": "Prasant Mishra",
       "schedule": {
         "rule": "fixed-days",
         "days": "Tue, Thu, Sat",
@@ -386,16 +531,192 @@
         "nextStart": "rolling"
       },
       "content": {
-        "overview": "A focused 6-week course covering every data structure and algorithm pattern that appears in technical interviews at product companies.",
+        "overview": "A focused four-week sprint through React — the library that powers most modern web apps. You'll build three real projects and understand the mental model deeply.",
         "sessions": [
-          { "session": "Week 1–2", "title": "Arrays, Strings & Hashing", "topics": ["Two pointers", "Sliding window", "Hash maps", "Prefix sums"] },
-          { "session": "Week 3", "title": "Trees & Graphs", "topics": ["Binary trees", "BST", "DFS/BFS", "Graph representations"] },
-          { "session": "Week 4", "title": "Recursion & Dynamic Programming", "topics": ["Recursion patterns", "Memoization", "Bottom-up DP", "Classic DP problems"] },
-          { "session": "Week 5–6", "title": "Advanced & Mock Interviews", "topics": ["Heaps & tries", "Greedy", "Backtracking", "3 mock interviews with feedback"] }
+          {
+            "session": "Week 1",
+            "title": "React Mental Model",
+            "topics": ["Why React — components, JSX, the virtual DOM", "Props & component composition", "State with useState", "Event handling"]
+          },
+          {
+            "session": "Week 2",
+            "title": "Data & Effects",
+            "topics": ["useEffect — data fetching & side effects", "Lifting state up", "Context API", "Project 1: live search UI"]
+          },
+          {
+            "session": "Week 3",
+            "title": "Routing & Forms",
+            "topics": ["React Router — multi-page apps", "Forms & controlled inputs", "Custom hooks", "Project 2: multi-page dashboard"]
+          },
+          {
+            "session": "Week 4",
+            "title": "Production Ready",
+            "topics": ["State management patterns", "Performance — useMemo, useCallback", "Project 3: full CRUD app", "Deployment & portfolio"]
+          }
         ],
-        "prerequisites": "Python or any programming language basics",
-        "outcomes": ["Solve medium LeetCode problems consistently", "Recognise and apply 15+ patterns", "Perform under interview conditions"],
-        "includes": ["Live sessions + recordings", "Problem list (100 curated)", "Mock interviews", "Learner's Certificate"],
+        "prerequisites": "HTML, CSS, basic JavaScript (variables, functions, events)",
+        "outcomes": [
+          "Build multi-page React applications",
+          "Manage state and side effects correctly",
+          "Create custom hooks",
+          "Deploy React apps to production"
+        ],
+        "includes": ["12 live sessions", "All recordings", "Starter repos for each project", "Learner's Certificate"],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "physics-cohort",
+      "subject": "science",
+      "subjectLabel": "Physics",
+      "icon": "Atom",
+      "type": "cohort",
+      "title": "Classical Mechanics Weekend",
+      "tagline": "Newton to energy conservation — one focused weekend",
+      "price": 1999,
+      "currency": "INR",
+      "duration": "2 days · 12 hours",
+      "level": "Beginner",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "biweekly-weekends",
+        "time": "9:00 AM – 3:00 PM IST"
+      },
+      "content": {
+        "overview": "A rigorous but accessible weekend covering the core of classical mechanics. Physical intuition first — equations follow naturally. By Day 2 you'll be solving problems you never thought you could.",
+        "sessions": [
+          {
+            "session": "Day 1",
+            "title": "Motion & Forces",
+            "topics": ["Kinematics — displacement, velocity, acceleration", "Newton's three laws in depth", "Friction, normal force & tension", "Problem-solving method: FBDs & systematic approach"]
+          },
+          {
+            "session": "Day 2",
+            "title": "Energy & Momentum",
+            "topics": ["Work, power & kinetic energy", "Conservation of mechanical energy", "Momentum & impulse", "Collisions — elastic & inelastic", "Rotational motion basics"]
+          }
+        ],
+        "prerequisites": "Basic algebra. 11th grade physics helpful but not required.",
+        "outcomes": [
+          "Solve mechanics problems from first principles",
+          "Build genuine physical intuition",
+          "Prepared for university physics or JEE/NEET mechanics"
+        ],
+        "includes": ["Both day recordings", "Problem sets with full solutions", "Learner's Certificate"],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "dsa-standard",
+      "subject": "programming",
+      "subjectLabel": "Data Structures & Algorithms",
+      "icon": "GitBranch",
+      "type": "standard",
+      "title": "DSA for Interviews — 6 Weeks",
+      "tagline": "Everything you need to crack coding interviews at product companies",
+      "price": 4999,
+      "currency": "INR",
+      "duration": "6 weeks",
+      "level": "Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Tue, Thu, Sat",
+        "time": "8:00 PM – 9:30 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "A focused 6-week course covering every data structure and algorithm pattern that appears in technical interviews. Pattern-first teaching — you learn to recognise the problem type, not just memorise solutions.",
+        "sessions": [
+          {
+            "session": "Weeks 1–2",
+            "title": "Arrays, Strings & Hashing",
+            "topics": ["Two pointers", "Sliding window", "Hash maps & hash sets", "Prefix sums & difference arrays"]
+          },
+          {
+            "session": "Week 3",
+            "title": "Trees & Graphs",
+            "topics": ["Binary trees — traversals & properties", "Binary search trees", "DFS & BFS", "Graph representations & common patterns"]
+          },
+          {
+            "session": "Week 4",
+            "title": "Recursion & Dynamic Programming",
+            "topics": ["Recursion patterns & call stack", "Memoization (top-down DP)", "Bottom-up DP with tables", "Classic DP: knapsack, LCS, coin change"]
+          },
+          {
+            "session": "Weeks 5–6",
+            "title": "Advanced Topics & Mock Interviews",
+            "topics": ["Heaps & priority queues", "Tries", "Greedy algorithms", "Backtracking", "3 full mock interviews with detailed written feedback"]
+          }
+        ],
+        "prerequisites": "Python (or any language) basics — variables, loops, functions, classes",
+        "outcomes": [
+          "Solve medium LeetCode problems consistently",
+          "Recognise and apply 15+ algorithm patterns",
+          "Perform confidently under interview conditions",
+          "Be ready for technical screens at product companies"
+        ],
+        "includes": [
+          "Live sessions + all recordings",
+          "100 curated problem list",
+          "Pattern cheat sheet",
+          "3 mock interviews with feedback",
+          "Learner's Certificate"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "python-standard",
+      "subject": "python",
+      "subjectLabel": "Python Programming",
+      "icon": "Code2",
+      "type": "standard",
+      "title": "Python for Data Science — 8 Weeks",
+      "tagline": "NumPy, Pandas, Matplotlib and the full data workflow",
+      "price": 5999,
+      "currency": "INR",
+      "duration": "8 weeks",
+      "level": "Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Sat & Sun",
+        "time": "10:00 AM – 12:00 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "A structured 8-week program covering the complete Python data science stack — from raw data to actionable insights. Project-driven: every week ends with a real dataset.",
+        "sessions": [
+          {
+            "session": "Weeks 1–2",
+            "title": "Python & NumPy Foundations",
+            "topics": ["Python refresher (fast-paced)", "NumPy arrays & broadcasting", "Vectorised operations", "Random number generation & distributions"]
+          },
+          {
+            "session": "Weeks 3–4",
+            "title": "Pandas — Data Wrangling",
+            "topics": ["DataFrames & Series", "Indexing, filtering & groupby", "Merging, joining & reshaping", "Handling missing data", "Project: clean a messy real-world dataset"]
+          },
+          {
+            "session": "Weeks 5–6",
+            "title": "Visualisation & EDA",
+            "topics": ["Matplotlib & Seaborn", "Exploratory Data Analysis workflow", "Distribution plots, heatmaps, pair plots", "Project: full EDA on Indian census data"]
+          },
+          {
+            "session": "Weeks 7–8",
+            "title": "Applied Analysis & Capstone",
+            "topics": ["Statistical testing basics", "Correlation vs causation", "Reporting with Jupyter notebooks", "Capstone: end-to-end analysis project"]
+          }
+        ],
+        "prerequisites": "Basic Python (variables, loops, functions). No statistics background needed.",
+        "outcomes": [
+          "Clean, transform and analyse real datasets with Pandas",
+          "Create clear, publication-quality visualisations",
+          "Run an end-to-end EDA workflow",
+          "Present findings clearly in Jupyter notebooks"
+        ],
+        "includes": ["Live sessions + recordings", "All datasets & notebooks", "Weekly assignments", "Capstone feedback", "Learner's Certificate"],
         "certificate": "learner"
       }
     }

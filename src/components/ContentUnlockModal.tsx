@@ -1,7 +1,14 @@
 "use client";
 import { useState } from "react";
+import * as LucideIcons from "lucide-react";
 import type { CourseVariant } from "@/lib/variants";
 import { typeConfig } from "@/lib/variants";
+
+function CourseIcon({ name, size = 36 }: { name: string; size?: number }) {
+  const Icon = (LucideIcons as Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>>)[name];
+  if (!Icon) return <span style={{ fontSize: size }}>{name}</span>;
+  return <Icon size={size} strokeWidth={1.5} />;
+}
 
 type Props = {
   variant: CourseVariant;
@@ -94,7 +101,7 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
         {step === "gate" ? (
           <div style={{ padding: 28 }}>
             <div style={{ textAlign: "center", marginBottom: 28 }}>
-              <div style={{ fontSize: 36, marginBottom: 16 }}>{variant.icon}</div>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: 16, color: cfg.color }}><CourseIcon name={variant.icon} size={40} /></div>
               <h2 style={{ fontSize: 22, marginBottom: 8 }}>Get the full course content</h2>
               <p style={{ fontSize: 14, color: "var(--text-muted)", lineHeight: 1.6 }}>
                 Enter your details to unlock the complete syllabus, session breakdown, and what's covered — instantly.
