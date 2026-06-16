@@ -1,9 +1,16 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import * as LucideIcons from "lucide-react";
 import { variants, typeConfig, sectionOrder, getVariantsByType, getUpcomingForVariant } from "@/lib/variants";
 import type { CourseVariant } from "@/lib/variants";
 import ContentUnlockModal from "@/components/ContentUnlockModal";
+
+function CourseIcon({ name, size = 20 }: { name: string; size?: number }) {
+  const Icon = (LucideIcons as Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>>)[name];
+  if (!Icon) return <span style={{ fontSize: size }}>{name}</span>;
+  return <Icon size={size} strokeWidth={1.8} />;
+}
 
 const sectionMeta = {
   masterclass: {
@@ -47,8 +54,8 @@ function VariantCard({ v, onUnlock }: { v: CourseVariant; onUnlock: (v: CourseVa
         <div style={{
           width: 44, height: 44, background: "var(--surface-2)", borderRadius: 10,
           display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 20, border: "1px solid var(--border)", flexShrink: 0,
-        }}>{v.icon}</div>
+          color: cfg.color, border: "1px solid var(--border)", flexShrink: 0,
+        }}><CourseIcon name={v.icon} size={20} /></div>
         <div style={{
           fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 100,
           background: cfg.bg, color: cfg.color, border: `1px solid ${cfg.border}`,
