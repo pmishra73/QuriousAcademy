@@ -117,9 +117,18 @@ export default function Footer() {
           <p style={{ fontSize: 12, color: "var(--text-muted)" }}>
             © {new Date().getFullYear()} Qurious Academy. All rights reserved.
           </p>
-          <p style={{ fontSize: 12, color: "var(--text-muted)" }}>
-            Built with intention ✦ India
-          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <p style={{ fontSize: 12, color: "var(--text-muted)" }}>
+              Built with intention ✦ India
+            </p>
+            <Link
+              href="/login"
+              style={{ fontSize: 11, color: "var(--text-muted)", opacity: 0.45, letterSpacing: "0.04em" }}
+              className="hover:opacity-100"
+            >
+              Staff login
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
