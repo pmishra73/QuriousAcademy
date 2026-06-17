@@ -1,5 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import Link from "next/link";
 import * as LucideIcons from "lucide-react";
 import { variants, typeConfig, sectionOrder, getVariantsByType, getUpcomingForVariant } from "@/lib/variants";
@@ -40,9 +42,20 @@ const sectionMeta = {
   },
 } as const;
 
+const levelColors: Record<string, { color: string; bg: string; border: string }> = {
+  beginner:     { color: "#34d399", bg: "rgba(52,211,153,0.1)",  border: "rgba(52,211,153,0.25)" },
+  intermediate: { color: "#f59e0b", bg: "rgba(245,158,11,0.1)", border: "rgba(245,158,11,0.25)" },
+  advanced:     { color: "#f97316", bg: "rgba(249,115,22,0.1)", border: "rgba(249,115,22,0.25)" },
+  "all levels": { color: "#60a5fa", bg: "rgba(96,165,250,0.1)", border: "rgba(96,165,250,0.25)" },
+};
+function levelStyle(level: string) {
+  return levelColors[level.toLowerCase()] ?? { color: "var(--text-muted)", bg: "var(--surface-2)", border: "var(--border)" };
+}
+
 function VariantCard({ v, onUnlock }: { v: CourseVariant; onUnlock: (v: CourseVariant) => void }) {
   const cfg = typeConfig[v.type];
   const dates = getUpcomingForVariant(v);
+  const levels = v.level.split(/[,/]/).map((l) => l.trim());
 
   return (
     <div className="card-hover" style={{
@@ -56,15 +69,24 @@ function VariantCard({ v, onUnlock }: { v: CourseVariant; onUnlock: (v: CourseVa
           display: "flex", alignItems: "center", justifyContent: "center",
           color: cfg.color, border: "1px solid var(--border)", flexShrink: 0,
         }}><CourseIcon name={v.icon} size={20} /></div>
-        <div style={{
-          fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 100,
-          background: cfg.bg, color: cfg.color, border: `1px solid ${cfg.border}`,
-          letterSpacing: "0.06em", textTransform: "uppercase",
-        }}>{v.level}</div>
+        <div style={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "flex-end" }}>
+          {levels.map((lvl) => {
+            const ls = levelStyle(lvl);
+            return (
+              <span key={lvl} style={{
+                fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 100,
+                background: ls.bg, color: ls.color, border: `1px solid ${ls.border}`,
+                letterSpacing: "0.05em", textTransform: "capitalize",
+              }}>{lvl}</span>
+            );
+          })}
+        </div>
       </div>
 
       <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.07em" }}>{v.subjectLabel}</div>
-      <h3 style={{ fontSize: 17, marginBottom: 6, lineHeight: 1.3, fontFamily: "var(--font-dm-serif)" }}>{v.title}</h3>
+      <Link href={`/courses/${v.id}`} style={{ textDecoration: "none" }}>
+        <h3 style={{ fontSize: 17, marginBottom: 6, lineHeight: 1.3, fontFamily: "var(--font-dm-serif), 'Source Serif 4', serif", color: "var(--foreground)" }}>{v.title}</h3>
+      </Link>
       <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.55, marginBottom: 16 }}>{v.tagline}</p>
 
       {/* Instructor + duration */}
@@ -136,11 +158,17 @@ const classTypeOptions: { value: string; label: string; description: string }[] 
   { value: "standard", label: "Full Course", description: "A self-paced recorded course with structured modules. Go at your own speed with lifetime access and instructor Q&A support." },
 ];
 
-export default function CoursesPage() {
-  const [activeSubject, setActiveSubject] = useState("all");
+function CoursesPageInner() {
+  const searchParams = useSearchParams();
+  const [activeSubject, setActiveSubject] = useState(() => searchParams.get("subject") ?? "all");
   const [activeType, setActiveType] = useState("all");
   const [unlockTarget, setUnlockTarget] = useState<CourseVariant | null>(null);
   const [hoveredType, setHoveredType] = useState<string | null>(null);
+
+  useEffect(() => {
+    const s = searchParams.get("subject");
+    if (s) setActiveSubject(s);
+  }, [searchParams]);
 
   const subjects = ["all", ...Array.from(new Set(variants.map((v) => v.subject)))];
   const subjectLabels: Record<string, string> = {
@@ -194,18 +222,21 @@ export default function CoursesPage() {
           {/* Class type filter */}
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
             <span style={{ fontSize: 11, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.07em", marginRight: 4, flexShrink: 0 }}>Type</span>
-            {classTypeOptions.map((opt) => (
+            {classTypeOptions.map((opt) => {
+              const cfg = opt.value !== "all" ? typeConfig[opt.value as CourseVariant["type"]] : null;
+              const isActive = activeType === opt.value;
+              return (
               <div key={opt.value} style={{ position: "relative" }}
                 onMouseEnter={() => opt.value !== "all" && setHoveredType(opt.value)}
                 onMouseLeave={() => setHoveredType(null)}
               >
                 <button onClick={() => setActiveType(opt.value)} style={{
                   padding: "5px 14px", borderRadius: 100, fontSize: 12, fontWeight: 500,
-                  cursor: "pointer", border: "1px solid",
-                  borderColor: activeType === opt.value ? "var(--primary)" : "var(--border)",
-                  background: activeType === opt.value ? "rgba(91,124,250,0.12)" : "var(--surface-2)",
-                  color: activeType === opt.value ? "var(--primary)" : "var(--text-dim)",
-                  transition: "all 0.15s", fontFamily: "inherit",
+                  cursor: "pointer", border: "1px solid", fontFamily: "inherit",
+                  borderColor: isActive ? (cfg?.color ?? "var(--primary)") : "var(--border)",
+                  background: isActive ? (cfg?.bg ?? "rgba(91,124,250,0.12)") : "var(--surface-2)",
+                  color: isActive ? (cfg?.color ?? "var(--primary)") : "var(--text-dim)",
+                  transition: "all 0.15s",
                 }}>
                   {opt.label}
                 </button>
@@ -223,13 +254,32 @@ export default function CoursesPage() {
                   </div>
                 )}
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
 
-      {/* Sections */}
+      {/* Sections — flat grid when any filter is active, sectioned otherwise */}
       <div style={{ padding: "0 24px 80px" }}>
+        {(activeSubject !== "all" || activeType !== "all") ? (
+          /* Flat filtered grid */
+          <div style={{ maxWidth: 1200, margin: "0 auto", paddingTop: 40 }}>
+            {(() => {
+              const all = sectionOrder.flatMap((type) => filteredVariants(type));
+              if (all.length === 0) return (
+                <p style={{ color: "var(--text-muted)", textAlign: "center", padding: "60px 0" }}>No courses match this filter combination.</p>
+              );
+              return (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 20 }}>
+                  {all.map((v) => <VariantCard key={v.id} v={v} onUnlock={setUnlockTarget} />)}
+                </div>
+              );
+            })()}
+          </div>
+        ) : (
+        /* Sectioned default view */
+        <>
         {sectionOrder.map((type) => {
           const cards = filteredVariants(type);
           if (cards.length === 0) return null;
@@ -264,6 +314,8 @@ export default function CoursesPage() {
             </section>
           );
         })}
+        </>
+        )}
 
         {/* 1-on-1 premium section */}
         {(activeSubject === "all" && activeType === "all") && (
@@ -344,5 +396,13 @@ export default function CoursesPage() {
         <ContentUnlockModal variant={unlockTarget} onClose={() => setUnlockTarget(null)} />
       )}
     </div>
+  );
+}
+
+export default function CoursesPage() {
+  return (
+    <Suspense fallback={<div style={{ padding: 80, textAlign: "center", color: "var(--text-muted)" }}>Loading…</div>}>
+      <CoursesPageInner />
+    </Suspense>
   );
 }

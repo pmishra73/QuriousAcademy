@@ -2,11 +2,11 @@ import Link from "next/link";
 import { courses } from "@/lib/courses";
 
 const categories = [
-  { icon: "🐍", label: "Programming", desc: "Python, JavaScript, DSA and more", href: "/courses?cat=programming" },
-  { icon: "∫", label: "Mathematics", desc: "Calculus, Discrete Maths, Statistics", href: "/courses?cat=maths" },
-  { icon: "🤖", label: "AI & ML", desc: "Machine learning and modern AI systems", href: "/courses?cat=ai" },
-  { icon: "⚛", label: "Science", desc: "Physics, Chemistry, Biology", href: "/courses?cat=science" },
-  { icon: "💻", label: "Technology", desc: "Web, Cloud, Systems design", href: "/courses?cat=technology" },
+  { icon: "🐍", label: "Programming", desc: "Python, JavaScript, DSA and more", href: "/courses?subject=python" },
+  { icon: "∫", label: "Mathematics", desc: "Calculus, Discrete Maths, Statistics", href: "/courses?subject=maths" },
+  { icon: "🤖", label: "AI & ML", desc: "Machine learning and modern AI systems", href: "/courses?subject=ai" },
+  { icon: "⚛", label: "Science", desc: "Physics, Chemistry, Biology", href: "/courses?subject=science" },
+  { icon: "💻", label: "Technology", desc: "Web, Cloud, Systems design", href: "/courses?subject=technology" },
 ];
 
 export default function Home() {
@@ -22,12 +22,11 @@ export default function Home() {
             ✦ Live classes · Small batches · Expert instructors
           </div>
           <h1 className="animate-fade-up stagger-2" style={{ fontSize: "clamp(42px, 7vw, 76px)", marginBottom: 24 }}>
-            Learn the subjects that{" "}
-            <span className="gradient-text" style={{ fontStyle: "italic" }}>shape the future</span>
+            AI is the Tool.{" "}
+            <span className="gradient-text" style={{ fontStyle: "italic" }}>You are the Architect.</span>
           </h1>
-          <p className="animate-fade-up stagger-3" style={{ fontSize: 18, color: "var(--text-dim)", lineHeight: 1.7, maxWidth: 560, margin: "0 auto 40px" }}>
-            Qurious Academy offers live, interactive courses in Programming, Mathematics, AI, Science, and Technology.
-            Learn from experts in small batches where every question gets answered.
+          <p className="animate-fade-up stagger-3" style={{ fontSize: 18, color: "var(--text-dim)", lineHeight: 1.7, maxWidth: 580, margin: "0 auto 40px" }}>
+            Learn the fundamental subjects you need to command the technology of tomorrow — taught live by expert mentors.
           </p>
           <div className="animate-fade-up stagger-4" style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/courses" style={{ background: "var(--primary)", color: "white", padding: "14px 28px", borderRadius: 8, fontWeight: 500, fontSize: 15 }}>
