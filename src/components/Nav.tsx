@@ -11,6 +11,11 @@ const links = [
   { href: "/contact", label: "Contact" },
 ];
 
+const partnerLinks = [
+  { href: "/corporate", label: "For Corporates", color: "#f59e0b", bg: "rgba(245,158,11,0.1)", border: "rgba(245,158,11,0.25)" },
+  { href: "/institutes", label: "For Institutes", color: "#a78bfa", bg: "rgba(167,139,250,0.1)", border: "rgba(167,139,250,0.25)" },
+];
+
 export default function Nav() {
   const path = usePathname();
   const [open, setOpen] = useState(false);
@@ -69,19 +74,50 @@ export default function Nav() {
         </Link>
 
         {/* Desktop nav */}
-        <nav style={{ display: "flex", alignItems: "center", gap: 8 }} className="hidden md:flex">
+        <nav style={{ display: "flex", alignItems: "center", gap: 4 }} className="hidden md:flex">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
               style={{
-                padding: "6px 14px",
+                padding: "6px 12px",
                 borderRadius: 6,
-                fontSize: 14,
+                fontSize: 13,
                 fontWeight: 400,
                 color: path === l.href ? "var(--foreground)" : "var(--text-dim)",
                 background: path === l.href ? "var(--surface-2)" : "transparent",
                 transition: "all 0.15s",
+              }}
+            >
+              {l.label}
+            </Link>
+          ))}
+          <div style={{ width: 1, height: 18, background: "var(--border)", margin: "0 6px" }} />
+          {partnerLinks.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              style={{
+                padding: "5px 12px",
+                borderRadius: 100,
+                fontSize: 12,
+                fontWeight: 600,
+                color: l.color,
+                background: path === l.href ? l.bg : "transparent",
+                border: `1px solid ${path === l.href ? l.border : "transparent"}`,
+                transition: "all 0.15s",
+                whiteSpace: "nowrap",
+              }}
+              className="partner-nav-link"
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.background = l.bg;
+                (e.currentTarget as HTMLElement).style.borderColor = l.border;
+              }}
+              onMouseLeave={(e) => {
+                if (path !== l.href) {
+                  (e.currentTarget as HTMLElement).style.background = "transparent";
+                  (e.currentTarget as HTMLElement).style.borderColor = "transparent";
+                }
               }}
             >
               {l.label}
@@ -177,10 +213,16 @@ export default function Nav() {
           <Link
             href="/teach"
             onClick={() => setOpen(false)}
-            style={{ display: "block", padding: "10px 0", fontSize: 15, color: "var(--text-dim)" }}
+            style={{ display: "block", padding: "10px 0", fontSize: 15, color: "var(--text-dim)", borderBottom: "1px solid var(--border)" }}
           >
             Teach on Qurious Academy
           </Link>
+          {partnerLinks.map((l) => (
+            <Link key={l.href} href={l.href} onClick={() => setOpen(false)}
+              style={{ display: "block", padding: "10px 0", fontSize: 15, fontWeight: 600, color: l.color }}>
+              {l.label}
+            </Link>
+          ))}
         </div>
       )}
     </header>

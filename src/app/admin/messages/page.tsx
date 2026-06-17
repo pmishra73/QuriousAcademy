@@ -24,8 +24,8 @@ export default async function MessagesPage() {
               <span style={{ position: "absolute", top: 20, right: 24, width: 8, height: 8, borderRadius: "50%", background: "var(--primary)", display: "block" }} />
             )}
             <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 10 }}>
-              <span style={{ fontSize: 11, padding: "2px 10px", borderRadius: 100, background: m.type === "contact" ? "rgba(91,124,250,0.12)" : "rgba(167,139,250,0.12)", color: m.type === "contact" ? "#5b7cfa" : "#a78bfa", border: `1px solid ${m.type === "contact" ? "rgba(91,124,250,0.2)" : "rgba(167,139,250,0.2)"}`, fontWeight: 600 }}>
-                {m.type === "contact" ? "Contact" : "Teach with us"}
+              <span style={{ fontSize: 11, padding: "2px 10px", borderRadius: 100, ...({ contact: { background: "rgba(91,124,250,0.12)", color: "#5b7cfa", border: "1px solid rgba(91,124,250,0.2)" }, teach_application: { background: "rgba(167,139,250,0.12)", color: "#a78bfa", border: "1px solid rgba(167,139,250,0.2)" }, corporate: { background: "rgba(245,158,11,0.1)", color: "#f59e0b", border: "1px solid rgba(245,158,11,0.25)" }, institute: { background: "rgba(167,139,250,0.1)", color: "#a78bfa", border: "1px solid rgba(167,139,250,0.25)" } }[m.type] ?? { background: "var(--surface-2)", color: "var(--text-muted)", border: "1px solid var(--border)" }), fontWeight: 600 }}>
+                {{ contact: "Contact", teach_application: "Teach with us", corporate: "🏢 Corporate", institute: "🎓 Institute" }[m.type] ?? m.type}
               </span>
               <span style={{ fontSize: 13, fontWeight: 600 }}>{m.name}</span>
               <span style={{ fontSize: 12, color: "var(--text-muted)" }}>{m.email}</span>
