@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { validateCoupon } from "@/lib/sheets";
+import { validateCoupon } from "@/lib/coupon";
 
 export async function POST(req: NextRequest) {
   const { code } = await req.json();

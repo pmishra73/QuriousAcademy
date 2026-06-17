@@ -52,10 +52,33 @@
 - [x] Payment create-order: applies 10% to Razorpay order amount if valid coupon
 - [x] Payment verify: marks coupon used, includes discount detail in confirmation emails
 
+## DB + Auth + Admin Panel + Teacher Panel
+
+- [x] Prisma 7 schema: User, CourseAssignment, Enrollment, Lead, Coupon, Session, Attendance, StudentNote, Resource, Announcement, Message
+- [x] Coupon table: reason (syllabus_unlock / course_completion / promotional), single-use enforced at DB layer (status + usedByEnrollmentId FK)
+- [x] NextAuth v5 credentials login with role-based JWT (admin / teacher)
+- [x] /login page — clean, themed, handles unauthorized error
+- [x] proxy.ts route guard: /admin/* requires admin role, /teacher/* requires teacher or admin
+- [x] Admin layout + sidebar nav (Dashboard, Enrollments, Leads & Coupons, Courses, Teachers, Messages, Content)
+- [x] Admin dashboard: KPI cards (enrollments, revenue, leads, coupons redeemed, unread messages, upcoming sessions) + recent enrollments table
+- [x] Admin enrollments page: full table with coupon, discount, status
+- [x] Admin leads & coupons page: leads table + full coupon table with reason/status/used-at
+- [x] Admin: Generate Promotional Coupon modal (posts to /api/admin/coupons/generate)
+- [x] Admin messages page: contact + teach-with-us enquiries, mark as read
+- [x] Admin teachers page: teacher cards, active/inactive badge, Add Teacher link
+- [x] Teacher layout + sidebar nav (My Courses, Sessions, Students, Resources, Announcements, Profile) — green accent
+- [x] Teacher dashboard: assigned courses with enrollment count + upcoming sessions
+- [x] Coupon logic migrated from Google Sheets → Postgres DB (unlock-content, coupon/validate, payment/verify)
+- [x] /api/admin/seed: one-time endpoint to create first admin account (protected by SEED_SECRET env var)
+- [x] @prisma/adapter-pg driver adapter for Prisma 7 Postgres connection
+
 ## Pending / To Do
 
-- [ ] Add GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY, GOOGLE_SHEET_ID to Vercel env vars
-- [ ] Set up Google Sheet with Leads and Coupons tabs (headers in row 1)
-- [ ] Share Google Sheet with service account email (Editor access)
+- [ ] **Deploy DB**: Add Neon Postgres via Vercel Marketplace → get DATABASE_URL
+- [ ] **Seed admin**: POST /api/admin/seed with SEED_SECRET + credentials to create first admin
+- [ ] Add SEED_SECRET, NEXTAUTH_SECRET env vars to Vercel
+- [ ] Complete admin: course management UI (add/edit courses, assign teachers)
+- [ ] Complete teacher panel: students roster + attendance marking, resources upload, announcements send
+- [ ] Teacher panel: Mark Complete → auto-generate + email course-completion coupon
 - [ ] Add more articles to /blog as content grows
 - [ ] Add more courses to courses.json as offerings expand
