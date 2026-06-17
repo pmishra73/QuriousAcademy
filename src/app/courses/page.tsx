@@ -55,7 +55,7 @@ function levelStyle(level: string) {
 function VariantCard({ v, onUnlock }: { v: CourseVariant; onUnlock: (v: CourseVariant) => void }) {
   const cfg = typeConfig[v.type];
   const dates = getUpcomingForVariant(v);
-  const levels = v.level.split(/[,/]/).map((l) => l.trim());
+  const levels = v.level.split(/[,/]|\s+to\s+/i).map((l) => l.trim()).filter(Boolean);
 
   return (
     <div className="card-hover" style={{
