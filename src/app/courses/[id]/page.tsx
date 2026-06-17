@@ -18,10 +18,10 @@ const subjectToCategory: Record<string, string> = {
 };
 
 const levelColors: Record<string, { color: string; bg: string; border: string }> = {
-  beginner:     { color: "#34d399", bg: "rgba(52,211,153,0.1)",  border: "rgba(52,211,153,0.25)" },
-  intermediate: { color: "#f59e0b", bg: "rgba(245,158,11,0.1)", border: "rgba(245,158,11,0.25)" },
-  advanced:     { color: "#f97316", bg: "rgba(249,115,22,0.1)", border: "rgba(249,115,22,0.25)" },
-  "all levels": { color: "#60a5fa", bg: "rgba(96,165,250,0.1)", border: "rgba(96,165,250,0.25)" },
+  beginner:     { color: "#22d3ee", bg: "rgba(34,211,238,0.1)",  border: "rgba(34,211,238,0.25)" },
+  intermediate: { color: "#f472b6", bg: "rgba(244,114,182,0.1)", border: "rgba(244,114,182,0.25)" },
+  advanced:     { color: "#ef4444", bg: "rgba(239,68,68,0.1)",   border: "rgba(239,68,68,0.25)" },
+  "all levels": { color: "#94a3b8", bg: "rgba(148,163,184,0.1)", border: "rgba(148,163,184,0.25)" },
 };
 function levelStyle(level: string) {
   return levelColors[level.toLowerCase()] ?? { color: "var(--text-muted)", bg: "var(--surface-2)", border: "var(--border)" };
