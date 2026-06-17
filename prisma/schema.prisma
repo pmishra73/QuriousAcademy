@@ -194,6 +194,8 @@ model Announcement {
 enum MessageType {
   contact
   teach_application
+  corporate
+  institute
 }
 
 model Message {
