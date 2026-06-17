@@ -1,0 +1,209 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Auth ───────────────────────────────────────────────────────────────────
+
+enum Role {
+  admin
+  teacher
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      Role
+  photo     String?
+  bio       String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  courses       CourseAssignment[]
+  attendances   Attendance[]
+  notes         StudentNote[]
+  announcements Announcement[]
+}
+
+// ─── Courses ─────────────────────────────────────────────────────────────────
+
+model CourseAssignment {
+  id        String @id @default(cuid())
+  teacherId String
+  courseId  String
+  teacher   User   @relation(fields: [teacherId], references: [id])
+
+  @@unique([teacherId, courseId])
+}
+
+// ─── Enrollments ─────────────────────────────────────────────────────────────
+
+enum EnrollmentStatus {
+  confirmed
+  pending
+  refunded
+}
+
+model Enrollment {
+  id                String           @id @default(cuid())
+  courseId          String
+  studentName       String
+  studentEmail      String
+  studentPhone      String
+  razorpayOrderId   String           @unique
+  razorpayPaymentId String?
+  amountPaid        Int
+  discountApplied   Int              @default(0)
+  status            EnrollmentStatus @default(pending)
+  couponCode        String?
+  createdAt         DateTime         @default(now())
+
+  // coupon that was applied at checkout (FK stored in Coupon.usedByEnrollmentId)
+  couponUsed           Coupon?      @relation("CouponUsedBy")
+  // coupon issued as a reward upon completing this enrollment
+  completionCoupon     Coupon?      @relation("CouponCompletion")
+
+  attendances Attendance[]
+  notes       StudentNote[]
+}
+
+// ─── Leads ───────────────────────────────────────────────────────────────────
+
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  courseId  String
+  createdAt DateTime @default(now())
+
+  coupons Coupon[]
+}
+
+// ─── Coupons ─────────────────────────────────────────────────────────────────
+
+enum CouponStatus {
+  unused
+  used
+  revoked
+}
+
+enum CouponReason {
+  syllabus_unlock
+  course_completion
+  promotional
+}
+
+model Coupon {
+  code     String       @id
+  status   CouponStatus @default(unused)
+  reason   CouponReason
+  discount Int          @default(10)
+  leadId   String?
+  lead     Lead?        @relation(fields: [leadId], references: [id])
+
+  // enrollment that consumed this coupon
+  usedByEnrollmentId String?     @unique
+  usedByEnrollment   Enrollment? @relation("CouponUsedBy", fields: [usedByEnrollmentId], references: [id])
+
+  // enrollment that triggered generation of this completion-reward coupon
+  completionEnrollmentId String?     @unique
+  completionEnrollment   Enrollment? @relation("CouponCompletion", fields: [completionEnrollmentId], references: [id])
+
+  createdAt DateTime  @default(now())
+  usedAt    DateTime?
+}
+
+// ─── Sessions ────────────────────────────────────────────────────────────────
+
+enum SessionStatus {
+  scheduled
+  completed
+  cancelled
+}
+
+model Session {
+  id          String        @id @default(cuid())
+  courseId    String
+  title       String
+  scheduledAt DateTime
+  meetingLink String?
+  notes       String?
+  status      SessionStatus @default(scheduled)
+  createdAt   DateTime      @default(now())
+
+  attendances Attendance[]
+}
+
+model Attendance {
+  id           String     @id @default(cuid())
+  sessionId    String
+  enrollmentId String
+  teacherId    String
+  present      Boolean    @default(false)
+  session      Session    @relation(fields: [sessionId], references: [id])
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
+  teacher      User       @relation(fields: [teacherId], references: [id])
+
+  @@unique([sessionId, enrollmentId])
+}
+
+// ─── Student Notes ────────────────────────────────────────────────────────────
+
+model StudentNote {
+  id           String     @id @default(cuid())
+  enrollmentId String
+  teacherId    String
+  note         String
+  createdAt    DateTime   @default(now())
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
+  teacher      User       @relation(fields: [teacherId], references: [id])
+}
+
+// ─── Resources ───────────────────────────────────────────────────────────────
+
+model Resource {
+  id        String   @id @default(cuid())
+  courseId  String
+  title     String
+  url       String
+  type      String
+  createdAt DateTime @default(now())
+}
+
+// ─── Announcements ───────────────────────────────────────────────────────────
+
+model Announcement {
+  id        String   @id @default(cuid())
+  courseId  String
+  teacherId String
+  subject   String
+  body      String
+  sentAt    DateTime @default(now())
+  teacher   User     @relation(fields: [teacherId], references: [id])
+}
+
+// ─── Messages ────────────────────────────────────────────────────────────────
+
+enum MessageType {
+  contact
+  teach_application
+}
+
+model Message {
+  id        String      @id @default(cuid())
+  type      MessageType
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  body      String
+  read      Boolean     @default(false)
+  createdAt DateTime    @default(now())
+}

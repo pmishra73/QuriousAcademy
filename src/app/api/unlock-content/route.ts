@@ -1,22 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createTransporter, FROM, ADMIN } from "@/lib/mailer";
-import { appendLead, saveCoupon, generateCouponCode } from "@/lib/sheets";
+import { db } from "@/lib/db";
+import { createCoupon } from "@/lib/coupon";
 
 export async function POST(req: NextRequest) {
   const { name, email, phone, courseId, courseTitle } = await req.json();
 
-  const couponCode = generateCouponCode();
-
-  // Persist to Google Sheets (best-effort — don't block content unlock)
-  Promise.all([
-    appendLead({ name, email, phone, courseId, courseTitle, couponCode }),
-    saveCoupon({ code: couponCode, email, phone, courseId }),
-  ]).catch((err) => console.error("Sheets write failed:", err));
+  // Save lead + coupon to DB (best-effort)
+  let couponCode = "";
+  try {
+    const lead = await db.lead.create({ data: { name, email, phone, courseId } });
+    couponCode = await createCoupon({ reason: "syllabus_unlock", leadId: lead.id });
+  } catch (err) {
+    console.error("DB write failed:", err);
+    // Generate code in-memory so email still sends
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    couponCode = `QA-${Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("")}`;
+  }
 
   const transporter = createTransporter();
 
   try {
-    // Notify admin
     await transporter.sendMail({
       from: FROM,
       to: ADMIN,
@@ -36,7 +40,6 @@ export async function POST(req: NextRequest) {
       `,
     });
 
-    // Send coupon to student
     await transporter.sendMail({
       from: FROM,
       to: email,
@@ -67,7 +70,6 @@ export async function POST(req: NextRequest) {
     });
   } catch (err) {
     console.error("Email send failed:", err);
-    // Don't fail the response — coupon is still in Sheets
   }
 
   return NextResponse.json({ ok: true, couponCode });

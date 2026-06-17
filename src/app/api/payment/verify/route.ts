@@ -3,7 +3,8 @@ import crypto from "crypto";
 import { createTransporter, FROM, ADMIN } from "@/lib/mailer";
 import { variants } from "@/lib/variants";
 import { courses } from "@/lib/courses";
-import { markCouponUsed } from "@/lib/sheets";
+import { db } from "@/lib/db";
+import { markCouponUsed } from "@/lib/coupon";
 
 export async function POST(req: NextRequest) {
   const {
@@ -30,11 +31,29 @@ export async function POST(req: NextRequest) {
   const paidAmount = finalAmount ?? basePrice;
   const discountApplied = couponCode && paidAmount < basePrice;
 
-  // Mark coupon as used (fire-and-forget)
-  if (couponCode?.trim()) {
-    markCouponUsed(couponCode.trim().toUpperCase()).catch((err) =>
-      console.error("Failed to mark coupon used:", err),
-    );
+  // Save enrollment to DB and mark coupon used atomically
+  let enrollmentId: string | undefined;
+  try {
+    const enrollment = await db.enrollment.create({
+      data: {
+        courseId,
+        studentName,
+        studentEmail,
+        studentPhone,
+        razorpayOrderId: razorpay_order_id,
+        razorpayPaymentId: razorpay_payment_id,
+        amountPaid: Math.round(paidAmount * 100),
+        discountApplied: discountApplied ? 10 : 0,
+        status: "confirmed",
+        couponCode: couponCode?.trim().toUpperCase() || undefined,
+      },
+    });
+    enrollmentId = enrollment.id;
+    if (couponCode?.trim()) {
+      await markCouponUsed(couponCode.trim().toUpperCase(), enrollment.id);
+    }
+  } catch (err) {
+    console.error("DB write failed:", err);
   }
 
   const transporter = createTransporter();
