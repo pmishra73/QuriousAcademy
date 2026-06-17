@@ -34,7 +34,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ i
   const variant = variants.find((v) => v.id === id);
   if (variant) {
     const cfg = typeConfig[variant.type];
-    const levels = variant.level.split(/[,/]/).map((l) => l.trim());
+    const levels = variant.level.split(/[,/]|\s+to\s+/i).map((l) => l.trim()).filter(Boolean);
     const relatedPosts = getAllPostsMeta().filter(
       (p) => p.category === subjectToCategory[variant.subject]
     ).slice(0, 3);
