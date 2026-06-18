@@ -4,11 +4,11 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const links = [
-  { href: "/courses", label: "Courses" },
-  { href: "/about", label: "About" },
-  { href: "/blog", label: "Resources" },
-  { href: "/faq", label: "FAQ" },
-  { href: "/contact", label: "Contact" },
+  { href: "/courses", label: "Courses", icon: "📚" },
+  { href: "/about", label: "About", icon: "✦" },
+  { href: "/blog", label: "Resources", icon: "📖" },
+  { href: "/faq", label: "FAQ", icon: "💬" },
+  { href: "/contact", label: "Contact", icon: "✉" },
 ];
 
 const partnerLinks = [
@@ -24,7 +24,7 @@ export default function Nav() {
     <header
       style={{
         borderBottom: "1px solid var(--border)",
-        background: "rgba(8,12,24,0.8)",
+        background: "rgba(8,12,24,0.92)",
         backdropFilter: "blur(16px)",
         position: "sticky",
         top: 0,
@@ -35,15 +35,16 @@ export default function Nav() {
         style={{
           maxWidth: 1200,
           margin: "0 auto",
-          padding: "0 24px",
+          padding: "0 20px",
           height: 64,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          gap: 12,
         }}
       >
         {/* Logo */}
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
           <div
             style={{
               width: 32,
@@ -64,9 +65,10 @@ export default function Nav() {
           <span
             style={{
               fontFamily: "var(--font-dm-serif)",
-              fontSize: 20,
+              fontSize: 18,
               color: "var(--foreground)",
               letterSpacing: "-0.03em",
+              whiteSpace: "nowrap",
             }}
           >
             Qurious Academy
@@ -74,25 +76,30 @@ export default function Nav() {
         </Link>
 
         {/* Desktop nav */}
-        <nav style={{ display: "flex", alignItems: "center", gap: 4 }} className="hidden md:flex">
-          {links.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              style={{
-                padding: "6px 12px",
-                borderRadius: 6,
-                fontSize: 13,
-                fontWeight: 400,
-                color: path === l.href ? "var(--foreground)" : "var(--text-dim)",
-                background: path === l.href ? "var(--surface-2)" : "transparent",
-                transition: "all 0.15s",
-              }}
-            >
-              {l.label}
-            </Link>
-          ))}
-          <div style={{ width: 1, height: 18, background: "var(--border)", margin: "0 6px" }} />
+        <nav style={{ alignItems: "center", gap: 2, flex: 1, justifyContent: "center" }} className="hidden md:flex">
+          {links.map((l) => {
+            const active = path === l.href || (l.href !== "/" && path.startsWith(l.href));
+            return (
+              <Link
+                key={l.href}
+                href={l.href}
+                style={{
+                  padding: "7px 13px",
+                  borderRadius: 8,
+                  fontSize: 13,
+                  fontWeight: active ? 600 : 400,
+                  color: active ? "var(--foreground)" : "var(--text-dim)",
+                  background: active ? "var(--surface-2)" : "transparent",
+                  border: active ? "1px solid var(--border)" : "1px solid transparent",
+                  transition: "all 0.15s",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {l.label}
+              </Link>
+            );
+          })}
+          <div style={{ width: 1, height: 18, background: "var(--border)", margin: "0 6px", flexShrink: 0 }} />
           {partnerLinks.map((l) => (
             <Link
               key={l.href}
@@ -108,7 +115,6 @@ export default function Nav() {
                 transition: "all 0.15s",
                 whiteSpace: "nowrap",
               }}
-              className="partner-nav-link"
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLElement).style.background = l.bg;
                 (e.currentTarget as HTMLElement).style.borderColor = l.border;
@@ -126,22 +132,7 @@ export default function Nav() {
         </nav>
 
         {/* CTA */}
-        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-          <Link
-            href="/teach"
-            style={{
-              fontSize: 13,
-              color: "var(--text-dim)",
-              padding: "8px 16px",
-              borderRadius: 7,
-              border: "1px solid var(--border)",
-              fontWeight: 500,
-              transition: "all 0.15s",
-            }}
-            className="hidden md:block hover:text-white"
-          >
-            Teach on Qurious Academy
-          </Link>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", flexShrink: 0 }}>
           <Link
             href="/courses"
             style={{
@@ -150,9 +141,11 @@ export default function Nav() {
               padding: "8px 18px",
               borderRadius: 7,
               background: "var(--primary)",
-              fontWeight: 500,
+              fontWeight: 600,
               transition: "all 0.15s",
+              whiteSpace: "nowrap",
             }}
+            className="hidden md:block"
           >
             Explore Courses
           </Link>
@@ -162,12 +155,16 @@ export default function Nav() {
             onClick={() => setOpen(!open)}
             className="md:hidden"
             style={{
-              background: "none",
-              border: "none",
+              background: open ? "var(--surface-2)" : "none",
+              border: open ? "1px solid var(--border)" : "1px solid transparent",
+              borderRadius: 8,
               cursor: "pointer",
               color: "var(--foreground)",
-              padding: 6,
+              padding: "6px 8px",
+              alignItems: "center",
+              justifyContent: "center",
             }}
+            aria-label="Toggle menu"
           >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
               {open ? (
@@ -190,39 +187,82 @@ export default function Nav() {
           style={{
             borderTop: "1px solid var(--border)",
             background: "var(--surface)",
-            padding: "12px 24px 16px",
+            padding: "8px 16px 20px",
           }}
           className="md:hidden"
         >
-          {links.map((l) => (
+          {/* Nav links as pill grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 12, paddingTop: 8 }}>
+            {links.map((l) => {
+              const active = path === l.href || (l.href !== "/" && path.startsWith(l.href));
+              return (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    padding: "11px 14px",
+                    borderRadius: 10,
+                    fontSize: 14,
+                    fontWeight: active ? 600 : 500,
+                    color: active ? "var(--foreground)" : "var(--text-dim)",
+                    background: active ? "var(--surface-2)" : "transparent",
+                    border: `1px solid ${active ? "var(--border)" : "transparent"}`,
+                  }}
+                >
+                  <span style={{ fontSize: 16 }}>{l.icon}</span>
+                  {l.label}
+                </Link>
+              );
+            })}
+          </div>
+
+          <div style={{ borderTop: "1px solid var(--border)", paddingTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+            {/* Main CTA */}
             <Link
-              key={l.href}
-              href={l.href}
+              href="/courses"
               onClick={() => setOpen(false)}
               style={{
-                display: "block",
-                padding: "10px 0",
-                fontSize: 15,
-                color: path === l.href ? "var(--foreground)" : "var(--text-dim)",
-                borderBottom: "1px solid var(--border)",
+                display: "block", textAlign: "center",
+                padding: "12px", borderRadius: 10,
+                fontSize: 14, fontWeight: 700,
+                color: "white", background: "var(--primary)",
               }}
             >
-              {l.label}
+              Explore Courses →
             </Link>
-          ))}
-          <Link
-            href="/teach"
-            onClick={() => setOpen(false)}
-            style={{ display: "block", padding: "10px 0", fontSize: 15, color: "var(--text-dim)", borderBottom: "1px solid var(--border)" }}
-          >
-            Teach on Qurious Academy
-          </Link>
-          {partnerLinks.map((l) => (
-            <Link key={l.href} href={l.href} onClick={() => setOpen(false)}
-              style={{ display: "block", padding: "10px 0", fontSize: 15, fontWeight: 600, color: l.color }}>
-              {l.label}
+
+            {/* Partner links */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+              {partnerLinks.map((l) => (
+                <Link key={l.href} href={l.href} onClick={() => setOpen(false)}
+                  style={{
+                    display: "block", textAlign: "center",
+                    padding: "10px", borderRadius: 10,
+                    fontSize: 12, fontWeight: 600, color: l.color,
+                    background: l.bg, border: `1px solid ${l.border}`,
+                  }}>
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+
+            <Link
+              href="/teach"
+              onClick={() => setOpen(false)}
+              style={{
+                display: "block", textAlign: "center",
+                padding: "10px", borderRadius: 10,
+                fontSize: 13, color: "var(--text-dim)",
+                border: "1px solid var(--border)",
+              }}
+            >
+              Teach on Qurious Academy
             </Link>
-          ))}
+          </div>
         </div>
       )}
     </header>

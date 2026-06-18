@@ -89,7 +89,7 @@ function VariantCard({ v, onUnlock }: { v: CourseVariant; onUnlock: (v: CourseVa
       </Link>
       <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.55, marginBottom: 16 }}>{v.tagline}</p>
 
-      {/* Instructor + duration */}
+      {/* Instructor + duration + delivery mode */}
       <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
         {[v.instructor.split(" ")[0] + " " + (v.instructor.split(" ")[1]?.[0] ?? "") + ".", v.duration].map((t, i) => (
           <span key={i} style={{
@@ -97,6 +97,23 @@ function VariantCard({ v, onUnlock }: { v: CourseVariant; onUnlock: (v: CourseVa
             padding: "3px 10px", borderRadius: 6, border: "1px solid var(--border)",
           }}>{t}</span>
         ))}
+        {v.deliveryMode && (() => {
+          const modeStyle =
+            v.deliveryMode === "Live"
+              ? { color: "#34d399", bg: "rgba(52,211,153,0.1)", border: "rgba(52,211,153,0.25)", icon: "🔴" }
+              : v.deliveryMode === "Live+Recorded"
+              ? { color: "#60a5fa", bg: "rgba(96,165,250,0.1)", border: "rgba(96,165,250,0.25)", icon: "🎥" }
+              : { color: "var(--text-muted)", bg: "var(--surface-2)", border: "var(--border)", icon: "📼" };
+          return (
+            <span style={{
+              fontSize: 11, fontWeight: 600,
+              color: modeStyle.color, background: modeStyle.bg,
+              padding: "3px 10px", borderRadius: 6, border: `1px solid ${modeStyle.border}`,
+            }}>
+              {modeStyle.icon} {v.deliveryMode}
+            </span>
+          );
+        })()}
       </div>
 
       {/* Upcoming dates */}

@@ -6,6 +6,7 @@
       "subjectLabel": "Python Programming",
       "icon": "Code2",
       "type": "masterclass",
+      "deliveryMode": "Live",
       "title": "Python in 3 Hours",
       "tagline": "The essential 20% that does 80% of the work",
       "price": 499,
@@ -23,17 +24,32 @@
           {
             "session": "Hour 1",
             "title": "The Python Mental Model",
-            "topics": ["Variables & data types", "Control flow — if/for/while", "Functions & scope", "The REPL and running your first script"]
+            "topics": [
+              "Variables & data types",
+              "Control flow — if/for/while",
+              "Functions & scope",
+              "The REPL and running your first script"
+            ]
           },
           {
             "session": "Hour 2",
             "title": "Working with Data",
-            "topics": ["Lists, dicts, sets, tuples", "List comprehensions", "File I/O — reading & writing", "Error handling with try/except"]
+            "topics": [
+              "Lists, dicts, sets, tuples",
+              "List comprehensions",
+              "File I/O — reading & writing",
+              "Error handling with try/except"
+            ]
           },
           {
             "session": "Hour 3",
             "title": "Real-World Python",
-            "topics": ["Installing & using libraries with pip", "Calling a JSON REST API", "Writing a mini automation script", "Where to go next — roadmap"]
+            "topics": [
+              "Installing & using libraries with pip",
+              "Calling a JSON REST API",
+              "Writing a mini automation script",
+              "Where to go next — roadmap"
+            ]
           }
         ],
         "prerequisites": "None — just a laptop and curiosity",
@@ -43,7 +59,13 @@
           "Use third-party libraries",
           "Know exactly what to learn next"
         ],
-        "includes": ["Session recording", "All code files", "Cheat sheet PDF", "Curated next-steps resource list", "Learner's Certificate"],
+        "includes": [
+          "Session recording",
+          "All code files",
+          "Cheat sheet PDF",
+          "Curated next-steps resource list",
+          "Learner's Certificate"
+        ],
         "certificate": "learner"
       }
     },
@@ -53,6 +75,7 @@
       "subjectLabel": "Python Programming",
       "icon": "Code2",
       "type": "cohort",
+      "deliveryMode": "Live",
       "title": "Python Weekend Intensive",
       "tagline": "Go from zero to building projects in a single weekend",
       "price": 2999,
@@ -70,22 +93,42 @@
           {
             "session": "Day 1 — Morning",
             "title": "Python Foundations",
-            "topics": ["Setup & environment", "Variables, operators, data types", "Control flow & loops", "Functions & scope"]
+            "topics": [
+              "Setup & environment",
+              "Variables, operators, data types",
+              "Control flow & loops",
+              "Functions & scope"
+            ]
           },
           {
             "session": "Day 1 — Afternoon",
             "title": "Data Structures",
-            "topics": ["Lists, tuples, dicts, sets", "List comprehensions", "Nested data structures", "Project 1: Data parser & cleaner"]
+            "topics": [
+              "Lists, tuples, dicts, sets",
+              "List comprehensions",
+              "Nested data structures",
+              "Project 1: Data parser & cleaner"
+            ]
           },
           {
             "session": "Day 2 — Morning",
             "title": "Intermediate Python",
-            "topics": ["Object-Oriented Programming", "File I/O & CSV handling", "Error handling & logging", "Modules, packages & pip"]
+            "topics": [
+              "Object-Oriented Programming",
+              "File I/O & CSV handling",
+              "Error handling & logging",
+              "Modules, packages & pip"
+            ]
           },
           {
             "session": "Day 2 — Afternoon",
             "title": "Applied Projects",
-            "topics": ["Calling REST APIs", "Project 2: Live weather CLI app", "Project 3: File automation script", "Code review & personal roadmap"]
+            "topics": [
+              "Calling REST APIs",
+              "Project 2: Live weather CLI app",
+              "Project 3: File automation script",
+              "Code review & personal roadmap"
+            ]
           }
         ],
         "prerequisites": "No programming experience needed",
@@ -95,7 +138,13 @@
           "Work with real APIs and data",
           "Have a personalised roadmap to continue"
         ],
-        "includes": ["Both day recordings", "All project source code", "Resource reading list", "2 weeks of doubt support via WhatsApp", "Learner's Certificate"],
+        "includes": [
+          "Both day recordings",
+          "All project source code",
+          "Resource reading list",
+          "2 weeks of doubt support via WhatsApp",
+          "Learner's Certificate"
+        ],
         "certificate": "learner"
       }
     },
@@ -105,6 +154,7 @@
       "subjectLabel": "Python Programming",
       "icon": "Code2",
       "type": "deep-dive",
+      "deliveryMode": "Live+Recorded",
       "title": "Python Mastery — 90 Days",
       "tagline": "From beginner to job-ready Python developer",
       "price": 7999,
@@ -122,17 +172,38 @@
           {
             "session": "Month 1",
             "title": "Core Python",
-            "topics": ["Python fundamentals in depth", "Data structures & algorithms basics", "Functions, decorators & closures", "OOP — classes, inheritance, dunder methods", "Exception handling & logging", "Unit testing with pytest"]
+            "topics": [
+              "Python fundamentals in depth",
+              "Data structures & algorithms basics",
+              "Functions, decorators & closures",
+              "OOP — classes, inheritance, dunder methods",
+              "Exception handling & logging",
+              "Unit testing with pytest"
+            ]
           },
           {
             "session": "Month 2",
             "title": "Applied Python",
-            "topics": ["File & database I/O (SQLite)", "REST APIs & web scraping (requests, BeautifulSoup)", "Data analysis with Pandas & NumPy", "Automation scripts (OS, scheduling)", "Virtual environments & packaging", "Type hints & mypy"]
+            "topics": [
+              "File & database I/O (SQLite)",
+              "REST APIs & web scraping (requests, BeautifulSoup)",
+              "Data analysis with Pandas & NumPy",
+              "Automation scripts (OS, scheduling)",
+              "Virtual environments & packaging",
+              "Type hints & mypy"
+            ]
           },
           {
             "session": "Month 3",
             "title": "Professional Python",
-            "topics": ["Algorithm design & complexity", "Git & version control (collaborative workflows)", "Web APIs with FastAPI", "Docker basics & deployment", "Capstone project — build & ship", "Portfolio review & interview prep"]
+            "topics": [
+              "Algorithm design & complexity",
+              "Git & version control (collaborative workflows)",
+              "Web APIs with FastAPI",
+              "Docker basics & deployment",
+              "Capstone project — build & ship",
+              "Portfolio review & interview prep"
+            ]
           }
         ],
         "prerequisites": "None — but commitment to 8–10 hours/week",
@@ -162,6 +233,7 @@
       "subjectLabel": "Artificial Intelligence",
       "icon": "Brain",
       "type": "masterclass",
+      "deliveryMode": "Live",
       "title": "AI Demystified in 3 Hours",
       "tagline": "What AI actually is — and how it actually works",
       "price": 499,
@@ -179,17 +251,32 @@
           {
             "session": "Hour 1",
             "title": "What Machines Actually Learn",
-            "topics": ["What ML really is (vs. traditional programming)", "Training, features & labels explained visually", "Linear models & decision boundaries", "Why deep learning suddenly worked"]
+            "topics": [
+              "What ML really is (vs. traditional programming)",
+              "Training, features & labels explained visually",
+              "Linear models & decision boundaries",
+              "Why deep learning suddenly worked"
+            ]
           },
           {
             "session": "Hour 2",
             "title": "Neural Networks & LLMs",
-            "topics": ["How a neural network learns — forward & backward pass", "Backpropagation explained intuitively (no calculus required)", "What a transformer actually does", "How GPT-4 and Claude work under the hood"]
+            "topics": [
+              "How a neural network learns — forward & backward pass",
+              "Backpropagation explained intuitively (no calculus required)",
+              "What a transformer actually does",
+              "How GPT-4 and Claude work under the hood"
+            ]
           },
           {
             "session": "Hour 3",
             "title": "AI in Practice",
-            "topics": ["Live: building with AI APIs (OpenAI / Anthropic)", "Prompt engineering principles that actually work", "Where AI fails — hallucinations, bias, limits", "Roadmap: how to go deeper into AI"]
+            "topics": [
+              "Live: building with AI APIs (OpenAI / Anthropic)",
+              "Prompt engineering principles that actually work",
+              "Where AI fails — hallucinations, bias, limits",
+              "Roadmap: how to go deeper into AI"
+            ]
           }
         ],
         "prerequisites": "Curiosity only. No maths or coding required.",
@@ -199,7 +286,12 @@
           "Use AI APIs to build something real",
           "Know the right learning path to go deeper"
         ],
-        "includes": ["Full recording", "Curated resource list", "API demo code", "Learner's Certificate"],
+        "includes": [
+          "Full recording",
+          "Curated resource list",
+          "API demo code",
+          "Learner's Certificate"
+        ],
         "certificate": "learner"
       }
     },
@@ -209,6 +301,7 @@
       "subjectLabel": "Artificial Intelligence",
       "icon": "Brain",
       "type": "cohort",
+      "deliveryMode": "Live",
       "title": "Build with AI — Weekend Cohort",
       "tagline": "Go from AI consumer to AI builder in one weekend",
       "price": 2499,
@@ -226,22 +319,42 @@
           {
             "session": "Day 1 — Morning",
             "title": "AI Foundations & APIs",
-            "topics": ["How LLMs work (intuition)", "OpenAI & Anthropic API setup", "Prompt engineering — zero-shot, few-shot, chain-of-thought", "Structured output & JSON mode"]
+            "topics": [
+              "How LLMs work (intuition)",
+              "OpenAI & Anthropic API setup",
+              "Prompt engineering — zero-shot, few-shot, chain-of-thought",
+              "Structured output & JSON mode"
+            ]
           },
           {
             "session": "Day 1 — Afternoon",
             "title": "Project 1 & 2",
-            "topics": ["Project 1: AI Q&A over your own documents (RAG basics)", "Project 2: AI writing assistant with memory", "Token limits, costs & best practices", "Error handling & fallbacks"]
+            "topics": [
+              "Project 1: AI Q&A over your own documents (RAG basics)",
+              "Project 2: AI writing assistant with memory",
+              "Token limits, costs & best practices",
+              "Error handling & fallbacks"
+            ]
           },
           {
             "session": "Day 2 — Morning",
             "title": "Advanced Patterns",
-            "topics": ["Function calling & tool use", "Agents — multi-step reasoning", "Embeddings & semantic search", "Evaluating AI outputs"]
+            "topics": [
+              "Function calling & tool use",
+              "Agents — multi-step reasoning",
+              "Embeddings & semantic search",
+              "Evaluating AI outputs"
+            ]
           },
           {
             "session": "Day 2 — Afternoon",
             "title": "Project 3 & Deployment",
-            "topics": ["Project 3: your own AI micro-SaaS concept", "Deploying AI apps (Vercel + API keys)", "Cost optimisation", "What to build next — personal roadmap"]
+            "topics": [
+              "Project 3: your own AI micro-SaaS concept",
+              "Deploying AI apps (Vercel + API keys)",
+              "Cost optimisation",
+              "What to build next — personal roadmap"
+            ]
           }
         ],
         "prerequisites": "Basic Python (variables, functions, loops). No AI knowledge needed.",
@@ -251,7 +364,13 @@
           "Implement RAG and agent patterns",
           "Deploy an AI product end-to-end"
         ],
-        "includes": ["Both day recordings", "All project code", "Prompt template library", "2 weeks doubt support", "Learner's Certificate"],
+        "includes": [
+          "Both day recordings",
+          "All project code",
+          "Prompt template library",
+          "2 weeks doubt support",
+          "Learner's Certificate"
+        ],
         "certificate": "learner"
       }
     },
@@ -261,6 +380,7 @@
       "subjectLabel": "Artificial Intelligence",
       "icon": "Brain",
       "type": "deep-dive",
+      "deliveryMode": "Live+Recorded",
       "title": "AI & ML Engineering — 12 Weeks",
       "tagline": "From fundamentals to building and deploying real models",
       "price": 9999,
@@ -278,22 +398,42 @@
           {
             "session": "Weeks 1–3",
             "title": "ML Foundations",
-            "topics": ["Statistics & probability for ML", "Linear & logistic regression from scratch", "Feature engineering & selection", "Model evaluation — metrics, overfitting, cross-validation"]
+            "topics": [
+              "Statistics & probability for ML",
+              "Linear & logistic regression from scratch",
+              "Feature engineering & selection",
+              "Model evaluation — metrics, overfitting, cross-validation"
+            ]
           },
           {
             "session": "Weeks 4–6",
             "title": "Core Algorithms",
-            "topics": ["Decision trees & Random Forests", "SVMs & kernel methods", "Clustering — K-Means, DBSCAN", "Dimensionality reduction — PCA, t-SNE"]
+            "topics": [
+              "Decision trees & Random Forests",
+              "SVMs & kernel methods",
+              "Clustering — K-Means, DBSCAN",
+              "Dimensionality reduction — PCA, t-SNE"
+            ]
           },
           {
             "session": "Weeks 7–9",
             "title": "Deep Learning",
-            "topics": ["Neural networks from scratch (NumPy)", "PyTorch fundamentals", "CNNs for vision, RNNs/LSTMs for sequences", "Transfer learning & fine-tuning"]
+            "topics": [
+              "Neural networks from scratch (NumPy)",
+              "PyTorch fundamentals",
+              "CNNs for vision, RNNs/LSTMs for sequences",
+              "Transfer learning & fine-tuning"
+            ]
           },
           {
             "session": "Weeks 10–12",
             "title": "Applied AI & Capstone",
-            "topics": ["LLM APIs & fine-tuning (LoRA)", "Model deployment — FastAPI + Docker + cloud", "Capstone project: your own ML product", "Portfolio, GitHub, interview prep"]
+            "topics": [
+              "LLM APIs & fine-tuning (LoRA)",
+              "Model deployment — FastAPI + Docker + cloud",
+              "Capstone project: your own ML product",
+              "Portfolio, GitHub, interview prep"
+            ]
           }
         ],
         "prerequisites": "Python basics, algebra-level maths. No prior ML experience needed.",
@@ -322,6 +462,7 @@
       "subjectLabel": "Mathematics",
       "icon": "Sigma",
       "type": "masterclass",
+      "deliveryMode": "Live",
       "title": "Calculus in 3 Hours",
       "tagline": "Derivatives and integrals — actually understood",
       "price": 399,
@@ -339,17 +480,32 @@
           {
             "session": "Hour 1",
             "title": "Derivatives",
-            "topics": ["What a derivative really means — the slope idea", "Differentiation rules & shortcuts", "Chain rule, product rule — explained visually", "Applications: rates of change & tangents"]
+            "topics": [
+              "What a derivative really means — the slope idea",
+              "Differentiation rules & shortcuts",
+              "Chain rule, product rule — explained visually",
+              "Applications: rates of change & tangents"
+            ]
           },
           {
             "session": "Hour 2",
             "title": "Integrals",
-            "topics": ["Integration as area accumulation", "Antiderivatives & the reverse process", "Definite integrals & the Fundamental Theorem", "Substitution method"]
+            "topics": [
+              "Integration as area accumulation",
+              "Antiderivatives & the reverse process",
+              "Definite integrals & the Fundamental Theorem",
+              "Substitution method"
+            ]
           },
           {
             "session": "Hour 3",
             "title": "Applications & ML Connections",
-            "topics": ["Optimisation problems — maxima & minima", "Related rates", "Where calculus appears in ML (gradient descent)", "Problem-solving session"]
+            "topics": [
+              "Optimisation problems — maxima & minima",
+              "Related rates",
+              "Where calculus appears in ML (gradient descent)",
+              "Problem-solving session"
+            ]
           }
         ],
         "prerequisites": "Basic algebra and familiarity with functions (y = f(x))",
@@ -359,7 +515,12 @@
           "Apply calculus to real optimisation problems",
           "Understand why gradient descent works"
         ],
-        "includes": ["Recording", "Problem set PDF (30 problems)", "Full solutions", "Learner's Certificate"],
+        "includes": [
+          "Recording",
+          "Problem set PDF (30 problems)",
+          "Full solutions",
+          "Learner's Certificate"
+        ],
         "certificate": "learner"
       }
     },
@@ -369,6 +530,7 @@
       "subjectLabel": "Mathematics",
       "icon": "Sigma",
       "type": "masterclass",
+      "deliveryMode": "Live",
       "title": "Linear Algebra for ML in 3 Hours",
       "tagline": "The maths behind neural networks — made visual",
       "price": 399,
@@ -386,17 +548,32 @@
           {
             "session": "Hour 1",
             "title": "Vectors & Spaces",
-            "topics": ["What a vector really is", "Vector operations — addition, scaling, dot product", "Basis vectors and span", "Linear independence"]
+            "topics": [
+              "What a vector really is",
+              "Vector operations — addition, scaling, dot product",
+              "Basis vectors and span",
+              "Linear independence"
+            ]
           },
           {
             "session": "Hour 2",
             "title": "Matrices as Transformations",
-            "topics": ["Matrix multiplication as composition of transformations", "Transpose, inverse", "Determinant — what it actually means", "Systems of equations"]
+            "topics": [
+              "Matrix multiplication as composition of transformations",
+              "Transpose, inverse",
+              "Determinant — what it actually means",
+              "Systems of equations"
+            ]
           },
           {
             "session": "Hour 3",
             "title": "Eigenvalues, PCA & Neural Nets",
-            "topics": ["Eigenvalues & eigenvectors visually", "PCA — how dimensionality reduction works", "How weights in neural networks are matrices", "Practical NumPy session"]
+            "topics": [
+              "Eigenvalues & eigenvectors visually",
+              "PCA — how dimensionality reduction works",
+              "How weights in neural networks are matrices",
+              "Practical NumPy session"
+            ]
           }
         ],
         "prerequisites": "Basic algebra. Calculus helpful but not required.",
@@ -406,7 +583,12 @@
           "Read ML papers without freezing at the maths",
           "Use NumPy confidently for linear algebra"
         ],
-        "includes": ["Recording", "Visual cheat sheet PDF", "NumPy code notebook", "Learner's Certificate"],
+        "includes": [
+          "Recording",
+          "Visual cheat sheet PDF",
+          "NumPy code notebook",
+          "Learner's Certificate"
+        ],
         "certificate": "learner"
       }
     },
@@ -416,6 +598,7 @@
       "subjectLabel": "Mathematics",
       "icon": "Sigma",
       "type": "cohort",
+      "deliveryMode": "Live",
       "title": "Maths for ML — Power Weekend",
       "tagline": "Calculus + Linear Algebra + Probability in one focused weekend",
       "price": 2499,
@@ -433,22 +616,42 @@
           {
             "session": "Day 1 — Morning",
             "title": "Calculus for Optimisation",
-            "topics": ["Derivatives & partial derivatives", "Gradient descent from scratch", "Chain rule & backpropagation intuition", "Multivariable optimisation"]
+            "topics": [
+              "Derivatives & partial derivatives",
+              "Gradient descent from scratch",
+              "Chain rule & backpropagation intuition",
+              "Multivariable optimisation"
+            ]
           },
           {
             "session": "Day 1 — Afternoon",
             "title": "Linear Algebra",
-            "topics": ["Vectors, matrices & transformations", "Matrix multiplication", "Eigenvalues & PCA", "NumPy hands-on"]
+            "topics": [
+              "Vectors, matrices & transformations",
+              "Matrix multiplication",
+              "Eigenvalues & PCA",
+              "NumPy hands-on"
+            ]
           },
           {
             "session": "Day 2 — Morning",
             "title": "Probability & Statistics",
-            "topics": ["Probability basics — distributions, Bayes' theorem", "Expected value & variance", "MLE & MAP estimation", "Information theory basics (entropy, KL divergence)"]
+            "topics": [
+              "Probability basics — distributions, Bayes' theorem",
+              "Expected value & variance",
+              "MLE & MAP estimation",
+              "Information theory basics (entropy, KL divergence)"
+            ]
           },
           {
             "session": "Day 2 — Afternoon",
             "title": "Tying it Together",
-            "topics": ["How all three areas combine in a neural network", "Reading an ML paper's maths section", "Problem-solving marathon", "Personal study plan"]
+            "topics": [
+              "How all three areas combine in a neural network",
+              "Reading an ML paper's maths section",
+              "Problem-solving marathon",
+              "Personal study plan"
+            ]
           }
         ],
         "prerequisites": "12th grade maths (algebra, basic trigonometry). No calculus experience needed.",
@@ -458,7 +661,12 @@
           "Use NumPy for matrix operations",
           "Solve probability problems for ML interviews"
         ],
-        "includes": ["Both day recordings", "Problem sets with full solutions", "Formula reference PDF", "Learner's Certificate"],
+        "includes": [
+          "Both day recordings",
+          "Problem sets with full solutions",
+          "Formula reference PDF",
+          "Learner's Certificate"
+        ],
         "certificate": "learner"
       }
     },
@@ -468,6 +676,7 @@
       "subjectLabel": "Web Development",
       "icon": "Globe",
       "type": "sprint",
+      "deliveryMode": "Live+Recorded",
       "title": "Build Your First Website — 3 Weeks",
       "tagline": "HTML, CSS, JavaScript — from blank page to deployed site",
       "price": 1999,
@@ -487,17 +696,32 @@
           {
             "session": "Week 1",
             "title": "HTML & CSS",
-            "topics": ["HTML document structure & semantic elements", "CSS selectors, box model, typography", "Flexbox & Grid — responsive layouts", "Your first page: personal bio"]
+            "topics": [
+              "HTML document structure & semantic elements",
+              "CSS selectors, box model, typography",
+              "Flexbox & Grid — responsive layouts",
+              "Your first page: personal bio"
+            ]
           },
           {
             "session": "Week 2",
             "title": "JavaScript",
-            "topics": ["Variables, functions, events", "DOM manipulation — changing the page live", "Fetch API — pulling data from the internet", "Project: dynamic portfolio page"]
+            "topics": [
+              "Variables, functions, events",
+              "DOM manipulation — changing the page live",
+              "Fetch API — pulling data from the internet",
+              "Project: dynamic portfolio page"
+            ]
           },
           {
             "session": "Week 3",
             "title": "Build & Deploy",
-            "topics": ["Project: complete personal portfolio site", "GitHub — version control basics", "Deploy live with Vercel (free tier)", "Code review & next steps"]
+            "topics": [
+              "Project: complete personal portfolio site",
+              "GitHub — version control basics",
+              "Deploy live with Vercel (free tier)",
+              "Code review & next steps"
+            ]
           }
         ],
         "prerequisites": "None — absolute beginners welcome",
@@ -507,7 +731,12 @@
           "Use Git and deploy to Vercel",
           "Know exactly what to learn next (React, etc.)"
         ],
-        "includes": ["6 live sessions", "All recordings", "Starter project files", "Learner's Certificate"],
+        "includes": [
+          "6 live sessions",
+          "All recordings",
+          "Starter project files",
+          "Learner's Certificate"
+        ],
         "certificate": "learner"
       }
     },
@@ -517,6 +746,7 @@
       "subjectLabel": "Web Development",
       "icon": "Globe",
       "type": "sprint",
+      "deliveryMode": "Live+Recorded",
       "title": "React Foundations — 4 Weeks",
       "tagline": "Build modern UIs with the world's most popular frontend library",
       "price": 2999,
@@ -536,22 +766,42 @@
           {
             "session": "Week 1",
             "title": "React Mental Model",
-            "topics": ["Why React — components, JSX, the virtual DOM", "Props & component composition", "State with useState", "Event handling"]
+            "topics": [
+              "Why React — components, JSX, the virtual DOM",
+              "Props & component composition",
+              "State with useState",
+              "Event handling"
+            ]
           },
           {
             "session": "Week 2",
             "title": "Data & Effects",
-            "topics": ["useEffect — data fetching & side effects", "Lifting state up", "Context API", "Project 1: live search UI"]
+            "topics": [
+              "useEffect — data fetching & side effects",
+              "Lifting state up",
+              "Context API",
+              "Project 1: live search UI"
+            ]
           },
           {
             "session": "Week 3",
             "title": "Routing & Forms",
-            "topics": ["React Router — multi-page apps", "Forms & controlled inputs", "Custom hooks", "Project 2: multi-page dashboard"]
+            "topics": [
+              "React Router — multi-page apps",
+              "Forms & controlled inputs",
+              "Custom hooks",
+              "Project 2: multi-page dashboard"
+            ]
           },
           {
             "session": "Week 4",
             "title": "Production Ready",
-            "topics": ["State management patterns", "Performance — useMemo, useCallback", "Project 3: full CRUD app", "Deployment & portfolio"]
+            "topics": [
+              "State management patterns",
+              "Performance — useMemo, useCallback",
+              "Project 3: full CRUD app",
+              "Deployment & portfolio"
+            ]
           }
         ],
         "prerequisites": "HTML, CSS, basic JavaScript (variables, functions, events)",
@@ -561,7 +811,12 @@
           "Create custom hooks",
           "Deploy React apps to production"
         ],
-        "includes": ["12 live sessions", "All recordings", "Starter repos for each project", "Learner's Certificate"],
+        "includes": [
+          "12 live sessions",
+          "All recordings",
+          "Starter repos for each project",
+          "Learner's Certificate"
+        ],
         "certificate": "learner"
       }
     },
@@ -571,6 +826,7 @@
       "subjectLabel": "Physics",
       "icon": "Atom",
       "type": "cohort",
+      "deliveryMode": "Live",
       "title": "Classical Mechanics Weekend",
       "tagline": "Newton to energy conservation — one focused weekend",
       "price": 1999,
@@ -588,12 +844,23 @@
           {
             "session": "Day 1",
             "title": "Motion & Forces",
-            "topics": ["Kinematics — displacement, velocity, acceleration", "Newton's three laws in depth", "Friction, normal force & tension", "Problem-solving method: FBDs & systematic approach"]
+            "topics": [
+              "Kinematics — displacement, velocity, acceleration",
+              "Newton's three laws in depth",
+              "Friction, normal force & tension",
+              "Problem-solving method: FBDs & systematic approach"
+            ]
           },
           {
             "session": "Day 2",
             "title": "Energy & Momentum",
-            "topics": ["Work, power & kinetic energy", "Conservation of mechanical energy", "Momentum & impulse", "Collisions — elastic & inelastic", "Rotational motion basics"]
+            "topics": [
+              "Work, power & kinetic energy",
+              "Conservation of mechanical energy",
+              "Momentum & impulse",
+              "Collisions — elastic & inelastic",
+              "Rotational motion basics"
+            ]
           }
         ],
         "prerequisites": "Basic algebra. 11th grade physics helpful but not required.",
@@ -602,7 +869,11 @@
           "Build genuine physical intuition",
           "Prepared for university physics or JEE/NEET mechanics"
         ],
-        "includes": ["Both day recordings", "Problem sets with full solutions", "Learner's Certificate"],
+        "includes": [
+          "Both day recordings",
+          "Problem sets with full solutions",
+          "Learner's Certificate"
+        ],
         "certificate": "learner"
       }
     },
@@ -612,6 +883,7 @@
       "subjectLabel": "Data Structures & Algorithms",
       "icon": "GitBranch",
       "type": "standard",
+      "deliveryMode": "Recorded",
       "title": "DSA for Interviews — 6 Weeks",
       "tagline": "Everything you need to crack coding interviews at product companies",
       "price": 4999,
@@ -631,22 +903,43 @@
           {
             "session": "Weeks 1–2",
             "title": "Arrays, Strings & Hashing",
-            "topics": ["Two pointers", "Sliding window", "Hash maps & hash sets", "Prefix sums & difference arrays"]
+            "topics": [
+              "Two pointers",
+              "Sliding window",
+              "Hash maps & hash sets",
+              "Prefix sums & difference arrays"
+            ]
           },
           {
             "session": "Week 3",
             "title": "Trees & Graphs",
-            "topics": ["Binary trees — traversals & properties", "Binary search trees", "DFS & BFS", "Graph representations & common patterns"]
+            "topics": [
+              "Binary trees — traversals & properties",
+              "Binary search trees",
+              "DFS & BFS",
+              "Graph representations & common patterns"
+            ]
           },
           {
             "session": "Week 4",
             "title": "Recursion & Dynamic Programming",
-            "topics": ["Recursion patterns & call stack", "Memoization (top-down DP)", "Bottom-up DP with tables", "Classic DP: knapsack, LCS, coin change"]
+            "topics": [
+              "Recursion patterns & call stack",
+              "Memoization (top-down DP)",
+              "Bottom-up DP with tables",
+              "Classic DP: knapsack, LCS, coin change"
+            ]
           },
           {
             "session": "Weeks 5–6",
             "title": "Advanced Topics & Mock Interviews",
-            "topics": ["Heaps & priority queues", "Tries", "Greedy algorithms", "Backtracking", "3 full mock interviews with detailed written feedback"]
+            "topics": [
+              "Heaps & priority queues",
+              "Tries",
+              "Greedy algorithms",
+              "Backtracking",
+              "3 full mock interviews with detailed written feedback"
+            ]
           }
         ],
         "prerequisites": "Python (or any language) basics — variables, loops, functions, classes",
@@ -672,6 +965,7 @@
       "subjectLabel": "Python Programming",
       "icon": "Code2",
       "type": "standard",
+      "deliveryMode": "Recorded",
       "title": "Python for Data Science — 8 Weeks",
       "tagline": "NumPy, Pandas, Matplotlib and the full data workflow",
       "price": 5999,
@@ -691,22 +985,43 @@
           {
             "session": "Weeks 1–2",
             "title": "Python & NumPy Foundations",
-            "topics": ["Python refresher (fast-paced)", "NumPy arrays & broadcasting", "Vectorised operations", "Random number generation & distributions"]
+            "topics": [
+              "Python refresher (fast-paced)",
+              "NumPy arrays & broadcasting",
+              "Vectorised operations",
+              "Random number generation & distributions"
+            ]
           },
           {
             "session": "Weeks 3–4",
             "title": "Pandas — Data Wrangling",
-            "topics": ["DataFrames & Series", "Indexing, filtering & groupby", "Merging, joining & reshaping", "Handling missing data", "Project: clean a messy real-world dataset"]
+            "topics": [
+              "DataFrames & Series",
+              "Indexing, filtering & groupby",
+              "Merging, joining & reshaping",
+              "Handling missing data",
+              "Project: clean a messy real-world dataset"
+            ]
           },
           {
             "session": "Weeks 5–6",
             "title": "Visualisation & EDA",
-            "topics": ["Matplotlib & Seaborn", "Exploratory Data Analysis workflow", "Distribution plots, heatmaps, pair plots", "Project: full EDA on Indian census data"]
+            "topics": [
+              "Matplotlib & Seaborn",
+              "Exploratory Data Analysis workflow",
+              "Distribution plots, heatmaps, pair plots",
+              "Project: full EDA on Indian census data"
+            ]
           },
           {
             "session": "Weeks 7–8",
             "title": "Applied Analysis & Capstone",
-            "topics": ["Statistical testing basics", "Correlation vs causation", "Reporting with Jupyter notebooks", "Capstone: end-to-end analysis project"]
+            "topics": [
+              "Statistical testing basics",
+              "Correlation vs causation",
+              "Reporting with Jupyter notebooks",
+              "Capstone: end-to-end analysis project"
+            ]
           }
         ],
         "prerequisites": "Basic Python (variables, loops, functions). No statistics background needed.",
@@ -716,7 +1031,13 @@
           "Run an end-to-end EDA workflow",
           "Present findings clearly in Jupyter notebooks"
         ],
-        "includes": ["Live sessions + recordings", "All datasets & notebooks", "Weekly assignments", "Capstone feedback", "Learner's Certificate"],
+        "includes": [
+          "Live sessions + recordings",
+          "All datasets & notebooks",
+          "Weekly assignments",
+          "Capstone feedback",
+          "Learner's Certificate"
+        ],
         "certificate": "learner"
       }
     }

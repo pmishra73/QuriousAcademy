@@ -21,8 +21,9 @@ export default function Home() {
           <div className="tag animate-fade-up stagger-1" style={{ marginBottom: 28, display: "inline-flex" }}>
             ✦ Live classes · Small batches · Expert instructors
           </div>
-          <h1 className="animate-fade-up stagger-2" style={{ fontSize: "clamp(42px, 7vw, 76px)", marginBottom: 24 }}>
-            AI is the Tool.{" "}
+          <h1 className="animate-fade-up stagger-2" style={{ fontSize: "clamp(36px, 7vw, 76px)", marginBottom: 24, lineHeight: 1.1 }}>
+            AI is the Tool.
+            <br />
             <span className="gradient-text" style={{ fontStyle: "italic" }}>You are the Architect.</span>
           </h1>
           <p className="animate-fade-up stagger-3" style={{ fontSize: 18, color: "var(--text-dim)", lineHeight: 1.7, maxWidth: 580, margin: "0 auto 40px" }}>
@@ -65,9 +66,9 @@ export default function Home() {
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 40, flexWrap: "wrap", gap: 16 }}>
             <div>
               <div className="tag" style={{ display: "inline-flex", marginBottom: 14 }}>Featured</div>
-              <h2 style={{ fontSize: "clamp(26px,3.5vw,38px)" }}>Courses enrolling now</h2>
+              <h2 style={{ fontSize: "clamp(26px,3.5vw,38px)" }}>Hot Courses Now 🔥</h2>
             </div>
-            <Link href="/courses" style={{ fontSize: 14, color: "var(--primary)", fontWeight: 500 }}>View all →</Link>
+            <Link href="/courses" style={{ fontSize: 13, color: "white", padding: "8px 18px", borderRadius: 7, background: "var(--primary)", fontWeight: 500 }}>All Courses →</Link>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))", gap: 20 }}>
             {featured.map((c) => (

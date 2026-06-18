@@ -7,6 +7,7 @@ export type CourseVariant = {
   subjectLabel: string;
   icon: string;
   type: "masterclass" | "cohort" | "sprint" | "standard" | "deep-dive";
+  deliveryMode: "Live" | "Live+Recorded" | "Recorded";
   title: string;
   tagline: string;
   price: number;
