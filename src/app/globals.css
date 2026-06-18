@@ -245,3 +245,16 @@
   margin: 2.5em 0;
 }
 
+
+/* Hero headline responsive split */
+@media (max-width: 640px) {
+  .hero-architect {
+    display: block;
+  }
+}
+
+/* Admin table horizontal scroll on mobile */
+.table-scroll-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}

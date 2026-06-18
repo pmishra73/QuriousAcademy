@@ -22,7 +22,8 @@ export default async function EnrollmentsPage() {
             No enrollments yet.
           </div>
         ) : (
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <div className="table-scroll-wrap">
+          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 700 }}>
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border)", background: "var(--surface-2)" }}>
                 {["Student", "Email", "Phone", "Course", "Amount", "Coupon", "Status", "Date"].map((h) => (
@@ -55,6 +56,7 @@ export default async function EnrollmentsPage() {
               })}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>

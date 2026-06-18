@@ -35,7 +35,8 @@ export default async function LeadsPage() {
         {leads.length === 0 ? (
           <div style={{ padding: "40px 24px", textAlign: "center", color: "var(--text-muted)", fontSize: 14 }}>No leads yet.</div>
         ) : (
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <div className="table-scroll-wrap">
+          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 600 }}>
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border)", background: "var(--surface-2)" }}>
                 {["Name", "Email", "Phone", "Course", "Coupon", "Date"].map((h) => (
@@ -63,6 +64,7 @@ export default async function LeadsPage() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
 
@@ -72,7 +74,8 @@ export default async function LeadsPage() {
         {coupons.length === 0 ? (
           <div style={{ padding: "40px 24px", textAlign: "center", color: "var(--text-muted)", fontSize: 14 }}>No coupons yet.</div>
         ) : (
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <div className="table-scroll-wrap">
+          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 560 }}>
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border)", background: "var(--surface-2)" }}>
                 {["Code", "Reason", "Discount", "Status", "Used at", "Created"].map((h) => (
@@ -98,6 +101,7 @@ export default async function LeadsPage() {
               })}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>
