@@ -6,6 +6,7 @@ export function createTransporter() {
     host: "smtpout.secureserver.net",
     port: 587,
     secure: false,
+    tls: { rejectUnauthorized: false },
     auth: {
       user: process.env.EMAIL_FROM,
       pass: process.env.EMAIL_PASS,
