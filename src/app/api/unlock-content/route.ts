@@ -68,8 +68,9 @@ export async function POST(req: NextRequest) {
         </div>
       `,
     });
-  } catch (err) {
-    console.error("Email send failed:", err);
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("Email send failed:", msg, "| EMAIL_FROM:", process.env.EMAIL_FROM, "| PASS set:", !!process.env.EMAIL_PASS);
   }
 
   return NextResponse.json({ ok: true, couponCode });
