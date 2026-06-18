@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Linear Algebra for ML in 3 Hours — Qurious Academy</title>
+<link rel="stylesheet" href="_shared.css" />
+</head>
+<body>
+
+<!-- PAGE 1 — COVER -->
+<div class="page cover">
+  <div class="cover-top">
+    <div class="logo">Qurious<span>Academy</span></div>
+    <div class="subject-badge">&#931; Mathematics</div>
+  </div>
+  <div class="cover-hero">
+    <div class="delivery-tag">&#9679; Live Masterclass</div>
+    <div class="cover-title">Linear Algebra<br/><span class="highlight">for ML in 3 Hours</span></div>
+    <div class="cover-tagline">The maths behind neural networks — made visual. Every AI model is built on linear algebra. This session builds the geometric intuition you need to read ML papers and understand what's really happening inside models.</div>
+    <div class="cover-stats">
+      <div class="stat"><div class="stat-label">Price</div><div class="stat-value price">&#8377;399</div></div>
+      <div class="stat"><div class="stat-label">Duration</div><div class="stat-value">3 Hours</div></div>
+      <div class="stat"><div class="stat-label">Level</div><div class="stat-value">Intermediate</div></div>
+      <div class="stat"><div class="stat-label">Format</div><div class="stat-value">Live</div></div>
+      <div class="stat"><div class="stat-label">Schedule</div><div class="stat-value">1st Saturday, 3 PM</div></div>
+    </div>
+  </div>
+  <div class="cover-footer">
+    <div class="instructor-line">
+      <div class="instructor-avatar">P</div>
+      <div>
+        <div class="instructor-name">Prasant Mishra</div>
+        <div class="instructor-role">Founder &amp; Instructor, Qurious Academy</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--text-muted);">quriousacademy.com</div>
+  </div>
+</div>
+
+<!-- PAGE 2 — OVERVIEW + FIT -->
+<div class="page inner-page">
+  <div class="section-label">About This Course</div>
+  <div class="section-title">What is Linear Algebra for ML in 3 Hours?</div>
+  <p class="overview-text">
+    If you've ever looked at a machine learning paper and seen a wall of matrices, indices, and summation signs and felt your brain switch off — this session is the fix. Linear algebra is the language that ML is written in, and once you develop a geometric visual intuition for it, the notation becomes transparent rather than opaque.
+  </p>
+  <br/>
+  <p class="overview-text">
+    The session is structured around visual understanding first. A vector isn't just a list of numbers — it's an arrow in space. A matrix isn't just a grid — it's a transformation that stretches, rotates, and reflects space. Matrix multiplication isn't just a formula — it's the composition of two transformations. Once you see this, everything else follows naturally.
+  </p>
+  <br/>
+  <p class="overview-text">
+    The third hour applies this intuition directly to machine learning: how the weights in a neural network layer are a matrix transformation, how PCA reduces dimensions by finding the directions of maximum variance (eigenvalues and eigenvectors), and how embeddings represent meaning as vectors in high-dimensional space. There's also a practical NumPy session where you implement key operations in code.
+  </p>
+  <div class="section-divider"></div>
+  <div class="section-label">Is This Right for You?</div>
+  <div class="section-title">Who Should Attend</div>
+  <div class="fit-grid">
+    <div class="fit-card yes">
+      <div class="fit-card-title">&#10003; This is for you if…</div>
+      <ul class="fit-list">
+        <li data-icon="✓">You're learning ML and keep hitting linear algebra (weight matrices, attention, embeddings) without understanding the maths underneath</li>
+        <li data-icon="✓">You took linear algebra in college and learned the mechanical operations but never developed geometric intuition</li>
+        <li data-icon="✓">You want to read ML papers without freezing at equations involving matrices and eigenvectors</li>
+        <li data-icon="✓">You're enrolling in the AI &amp; ML Engineering 12-Week program and want to solidify your linear algebra before it begins</li>
+      </ul>
+    </div>
+    <div class="fit-card no">
+      <div class="fit-card-title">&#10007; This is NOT for you if…</div>
+      <ul class="fit-list">
+        <li data-icon="✗">You need advanced linear algebra for graduate-level work (abstract vector spaces, spectral theory) — this session covers the applied ML-relevant subset</li>
+        <li data-icon="✗">You have no algebra background at all — you need to be comfortable with variables, equations, and coordinate geometry</li>
+        <li data-icon="✗">You're looking for a NumPy tutorial only — the maths foundations are the core of this session; NumPy is the final practical block</li>
+      </ul>
+    </div>
+  </div>
+  <div class="prereq-box">
+    <strong>Prerequisites:</strong> Basic algebra and coordinate geometry (plotting points, lines, equations). Calculus is helpful but not required. No prior linear algebra experience needed.
+  </div>
+</div>
+
+<!-- PAGE 3 — CURRICULUM -->
+<div class="page inner-page">
+  <div class="section-label">Curriculum</div>
+  <div class="section-title">What You'll Cover, Hour by Hour</div>
+
+  <div class="session-block">
+    <div class="session-header">
+      <div class="session-pill">Hour 1</div>
+      <div class="session-title">Vectors &amp; Spaces</div>
+    </div>
+    <ul class="topic-list">
+      <li><strong>What a vector really is</strong> — not a list of numbers but a directed quantity in space; the geometric interpretation that makes everything else clear</li>
+      <li><strong>Vector operations</strong> — addition (parallelogram rule), scalar multiplication (stretching/shrinking), and the dot product (projections and similarity); each explained geometrically</li>
+      <li><strong>Basis vectors and span</strong> — how any vector in a space can be expressed as a combination of basis vectors; the concept of a coordinate system as a choice of basis</li>
+      <li><strong>Linear independence</strong> — when a set of vectors provides genuinely new directions vs. being redundant; why this matters for dimensionality and PCA</li>
+    </ul>
+  </div>
+
+  <div class="session-block">
+    <div class="session-header">
+      <div class="session-pill">Hour 2</div>
+      <div class="session-title">Matrices as Transformations</div>
+    </div>
+    <ul class="topic-list">
+      <li><strong>Matrix multiplication as composition of transformations</strong> — the key insight: matrix-vector multiplication transforms a vector; matrix-matrix multiplication composes two transformations; why order matters</li>
+      <li><strong>Transpose and inverse</strong> — geometric interpretations of both; when an inverse exists, what it means when it doesn't, and why these operations appear everywhere in ML</li>
+      <li><strong>Determinant — what it actually means</strong> — the determinant as a scale factor for area/volume under a transformation; zero determinant as "squashing" to a lower dimension</li>
+      <li><strong>Systems of equations</strong> — solving Ax = b geometrically; why this is equivalent to finding the intersection of hyperplanes; the connection to neural network layers</li>
+    </ul>
+  </div>
+
+  <div class="session-block">
+    <div class="session-header">
+      <div class="session-pill">Hour 3</div>
+      <div class="session-title">Eigenvalues, PCA &amp; Neural Nets</div>
+    </div>
+    <ul class="topic-list">
+      <li><strong>Eigenvalues &amp; eigenvectors visually</strong> — vectors that don't change direction under a transformation; how eigendecomposition reveals the "natural axes" of a matrix; visual demonstration</li>
+      <li><strong>PCA — how dimensionality reduction works</strong> — Principal Component Analysis explained from eigenvectors; how it finds the directions of maximum variance and uses them to reduce dimensions</li>
+      <li><strong>How weights in neural networks are matrices</strong> — each layer is a matrix multiplication followed by a non-linearity; the geometric interpretation of what a deep network is doing to its input</li>
+      <li><strong>Practical NumPy session</strong> — implementing dot products, matrix multiplication, eigendecomposition, and a simple PCA in NumPy; the code that ties the session's ideas to real ML practice</li>
+    </ul>
+  </div>
+</div>
+
+<!-- PAGE 4 — OUTCOMES + INCLUDES + LOGISTICS -->
+<div class="page inner-page">
+  <div class="section-label">Learning Outcomes</div>
+  <div class="section-title">What You'll Walk Away With</div>
+  <div class="outcomes-grid">
+    <div class="outcome-card">
+      <div class="outcome-num">01</div>
+      <div class="outcome-text"><strong>Understand matrix operations geometrically</strong> — not just how to compute them but what they mean; the visual intuition that makes the algebra obvious</div>
+    </div>
+    <div class="outcome-card">
+      <div class="outcome-num">02</div>
+      <div class="outcome-text"><strong>Explain PCA and embeddings intuitively</strong> — the geometric story behind two of the most important ideas in ML: dimensionality reduction and vector representations of meaning</div>
+    </div>
+    <div class="outcome-card">
+      <div class="outcome-num">03</div>
+      <div class="outcome-text"><strong>Read ML papers without freezing at the maths</strong> — the notation becomes navigable once you have the geometric intuition; you'll recognise what the symbols are doing</div>
+    </div>
+    <div class="outcome-card">
+      <div class="outcome-num">04</div>
+      <div class="outcome-text"><strong>Use NumPy confidently for linear algebra</strong> — translate mathematical operations directly into NumPy code; the practical foundation for every ML framework</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <div class="section-label">What's Included</div>
+  <div class="section-title">Everything You Get</div>
+  <ul class="includes-list">
+    <li><div class="check-icon">✓</div><div><strong>Recording</strong> — full HD recording of the session shared within 24 hours</div></li>
+    <li><div class="check-icon">✓</div><div><strong>Visual cheat sheet PDF</strong> — a reference sheet with geometric diagrams for every major operation covered</div></li>
+    <li><div class="check-icon">✓</div><div><strong>NumPy code notebook</strong> — a Jupyter notebook with all code from the session, ready to run and experiment with</div></li>
+    <li><div class="check-icon">✓</div><div><strong>Learner's Certificate</strong> — digital certificate of completion from Qurious Academy</div></li>
+  </ul>
+
+  <div class="section-divider"></div>
+
+  <div class="section-label">Logistics</div>
+  <div class="section-title">Schedule &amp; Pricing</div>
+  <div class="logistics-grid">
+    <div class="logistics-card"><div class="logistics-card-label">Schedule</div><div class="logistics-card-value">First Saturday of every month</div></div>
+    <div class="logistics-card"><div class="logistics-card-label">Time</div><div class="logistics-card-value">3:00 PM IST</div></div>
+    <div class="logistics-card"><div class="logistics-card-label">Duration</div><div class="logistics-card-value">3 hours (single session)</div></div>
+    <div class="logistics-card"><div class="logistics-card-label">Price</div><div class="logistics-card-value" style="color:var(--primary);font-size:18px;">&#8377;399</div></div>
+  </div>
+  <div class="faq-block">
+    <div class="faq-q">Can I take this alongside the Calculus masterclass on the same day?</div>
+    <div class="faq-a">Yes — the Calculus session runs 11 AM–2 PM and this one runs 3–6 PM on the first Saturday of each month. Many students attend both as a combined maths day.</div>
+    <div class="faq-q">Do I need to know Python or NumPy before attending?</div>
+    <div class="faq-a">Basic Python familiarity helps for Hour 3, but the NumPy code is simple enough that even beginners can follow. The first two hours have no code at all.</div>
+    <div class="faq-q">How is this different from a standard linear algebra course?</div>
+    <div class="faq-a">Standard courses spend significant time on proofs and abstract theory. This session covers the geometric intuition and the specific subset of linear algebra that appears constantly in ML — no more, no less.</div>
+  </div>
+</div>
+
+<!-- PAGE 5 — INSTRUCTOR + BACK COVER -->
+<div class="page inner-page">
+  <div class="section-label">Your Instructor</div>
+  <div class="section-title">About Prasant Mishra</div>
+  <div class="instructor-card">
+    <div class="instructor-photo">P</div>
+    <div style="flex:1;">
+      <div style="font-size:20px;font-weight:700;margin-bottom:4px;">Prasant Mishra</div>
+      <div style="font-size:13px;color:var(--primary);margin-bottom:10px;">Founder &amp; Instructor — Qurious Academy</div>
+      <div class="instructor-tags">
+        <span class="instructor-tag">GenAI Solutions Architect</span>
+        <span class="instructor-tag">15+ Yrs Teaching</span>
+        <span class="instructor-tag">2500+ Students</span>
+        <span class="instructor-tag">60+ Projects Delivered</span>
+      </div>
+      <p class="instructor-bio">Prasant uses linear algebra daily — in designing neural network architectures, understanding attention mechanisms, and working with embedding spaces. That practical grounding means he knows exactly which parts of the subject matter and which can be safely deferred, making his teaching unusually focused and relevant.</p>
+      <p class="instructor-bio" style="margin-top:12px;">His visual-first approach to mathematics was shaped by his own experience: he learned the mechanics of linear algebra without the geometry and spent years working backwards to develop the intuition. This session is the resource he wishes he'd had.</p>
+    </div>
+  </div>
+</div>
+
+<div class="page back-cover">
+  <div class="back-cover-logo">Qurious<span>Academy</span></div>
+  <div class="back-cover-tagline">Focused, live learning for curious minds. No fluff — just the concepts that matter.</div>
+  <div class="cta-box">
+    <div class="cta-course-title">Linear Algebra for ML in 3 Hours</div>
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Live Masterclass · First Saturday monthly · 3 PM IST</div>
+    <div class="cta-price">&#8377;399</div>
+    <div class="cta-button">Enroll at quriousacademy.com</div>
+    <div class="cta-url">or visit quriousacademy.com/courses</div>
+  </div>
+  <div class="back-contact">
+    Questions? Reach us at <a href="mailto:hello@quriousacademy.com">hello@quriousacademy.com</a><br/>
+    &copy; 2025 Qurious Academy. All rights reserved.
+  </div>
+</div>
+
+</body>
+</html>
