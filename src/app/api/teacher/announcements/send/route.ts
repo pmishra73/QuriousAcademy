@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { createTransporter, FROM } from "@/lib/mailer";
+import { sendMail } from "@/lib/mailer";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -11,22 +11,17 @@ export async function POST(req: NextRequest) {
 
   const { courseId, subject, body } = await req.json();
 
-  // Save announcement record
   await db.announcement.create({ data: { courseId, teacherId: userId, subject, body } });
 
-  // Get all confirmed students for this course
   const enrollments = await db.enrollment.findMany({
     where: { courseId, status: "confirmed" },
     select: { studentEmail: true, studentName: true },
   });
 
-  const transporter = createTransporter();
   let sent = 0;
-
   for (const e of enrollments) {
     try {
-      await transporter.sendMail({
-        from: FROM,
+      await sendMail({
         to: e.studentEmail,
         subject: `[${courseId}] ${subject}`,
         html: `

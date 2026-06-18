@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { createTransporter, FROM, ADMIN } from "@/lib/mailer";
+import { sendMail, ADMIN } from "@/lib/mailer";
 
 export async function POST(req: NextRequest) {
   const { type, name, email, phone, subject, body } = await req.json();
@@ -16,9 +16,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const transporter = createTransporter();
-    await transporter.sendMail({
-      from: FROM,
+    await sendMail({
       to: ADMIN,
       subject: `[${type === "corporate" ? "Corporate" : "Institute"} Enquiry] ${name} — ${subject}`,
       html: `

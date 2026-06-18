@@ -1,18 +1,24 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-// Shared transporter — GoDaddy SMTP
-export function createTransporter() {
-  return nodemailer.createTransport({
-    host: "smtpout.secureserver.net",
-    port: 587,
-    secure: false,
-    tls: { rejectUnauthorized: false },
-    auth: {
-      user: process.env.EMAIL_FROM,
-      pass: process.env.EMAIL_PASS,
-    },
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+export const FROM = `Qurious Academy <${process.env.EMAIL_FROM ?? "hello@quriousacademy.com"}>`;
+export const ADMIN = process.env.EMAIL_TO ?? "hello@quriousacademy.com";
+
+export async function sendMail({
+  to,
+  subject,
+  html,
+}: {
+  to: string;
+  subject: string;
+  html: string;
+}) {
+  const { error } = await resend.emails.send({
+    from: FROM,
+    to,
+    subject,
+    html,
   });
+  if (error) throw new Error(error.message);
 }
-
-export const FROM = `"Qurious Academy" <${process.env.EMAIL_FROM ?? "hello@quriousacademy.com"}>`;
-export const ADMIN = process.env.EMAIL_TO ?? "prasant@quriousacademy.com";

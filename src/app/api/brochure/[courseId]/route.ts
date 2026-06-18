@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { createTransporter, FROM, ADMIN } from "@/lib/mailer";
+import { sendMail, ADMIN } from "@/lib/mailer";
 import { courses } from "@/lib/courses";
 
 const VALID_COURSE_IDS = new Set([
@@ -28,22 +28,17 @@ export async function POST(
   const pdfUrl = `/brochures/${courseId}.pdf`;
   const course = courses.find((c) => c.id === courseId);
   const courseTitle = course?.title ?? courseId;
+  const now = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
 
-  // Save lead (best-effort — don't fail the download if DB is unreachable)
   try {
     await db.lead.create({ data: { name, email, phone, courseId } });
   } catch (err) {
     console.error("Lead DB write failed:", err);
   }
 
-  // Notify admin + send student their download link
-  const transporter = createTransporter();
-  const now = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-
   try {
     await Promise.all([
-      transporter.sendMail({
-        from: FROM,
+      sendMail({
         to: ADMIN,
         subject: `Brochure download: ${name} → ${courseTitle}`,
         html: `
@@ -60,9 +55,7 @@ export async function POST(
           </div>
         `,
       }),
-
-      transporter.sendMail({
-        from: FROM,
+      sendMail({
         to: email,
         subject: `Your ${courseTitle} brochure — Qurious Academy`,
         html: `
@@ -77,23 +70,16 @@ export async function POST(
                 Download Brochure (PDF)
               </a>
             </div>
-            <p style="color:#555;line-height:1.7">
-              Ready to enroll? Use the button below to secure your spot.
-            </p>
             <a href="https://quriousacademy.com/enroll?course=${courseId}" style="display:inline-block;background:#f3f4ff;color:#3730a3;padding:12px 24px;border-radius:8px;font-weight:600;font-size:14px;text-decoration:none;border:1px solid #c7d2fe">
               Enroll in ${courseTitle} →
             </a>
-            <p style="color:#aaa;font-size:12px;margin-top:28px">
-              Questions? Reply to this email or reach us at hello@quriousacademy.com
-            </p>
-            <p style="color:#aaa;font-size:12px">— The Qurious Academy Team</p>
+            <p style="color:#aaa;font-size:12px;margin-top:28px">— The Qurious Academy Team · hello@quriousacademy.com</p>
           </div>
         `,
       }),
     ]);
   } catch (err) {
     console.error("Email send failed:", err);
-    // Still return the URL so the download works
   }
 
   return NextResponse.json({ url: pdfUrl });
