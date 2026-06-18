@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 3000
+    },
+    {
+      "name": "brochures",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "4445", "--directory", "course-brochures"],
+      "port": 4445
     }
   ]
 }

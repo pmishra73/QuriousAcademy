@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>React Foundations — 4 Weeks — Qurious Academy</title>
+<link rel="stylesheet" href="_shared.css" />
+</head>
+<body>
+
+<!-- PAGE 1 — COVER -->
+<div class="page cover">
+  <div class="cover-top">
+    <div class="logo">Qurious<span>Academy</span></div>
+    <div class="subject-badge">&#127760; Web Development</div>
+  </div>
+  <div class="cover-hero">
+    <div class="delivery-tag">&#9679; Live + Recorded · Sprint</div>
+    <div class="cover-title">React Foundations —<br/><span class="highlight">4 Weeks</span></div>
+    <div class="cover-tagline">Build modern UIs with the world's most popular frontend library. Three real projects, twelve live sessions, and a deep understanding of React's mental model.</div>
+    <div class="cover-stats">
+      <div class="stat"><div class="stat-label">Price</div><div class="stat-value price">&#8377;2,999</div></div>
+      <div class="stat"><div class="stat-label">Duration</div><div class="stat-value">4 Weeks</div></div>
+      <div class="stat"><div class="stat-label">Level</div><div class="stat-value">Intermediate</div></div>
+      <div class="stat"><div class="stat-label">Format</div><div class="stat-value">Live + Recorded</div></div>
+      <div class="stat"><div class="stat-label">Schedule</div><div class="stat-value">Tue, Thu, Sat · 8 PM</div></div>
+    </div>
+  </div>
+  <div class="cover-footer">
+    <div class="instructor-line">
+      <div class="instructor-avatar">P</div>
+      <div>
+        <div class="instructor-name">Prasant Mishra</div>
+        <div class="instructor-role">Founder &amp; Instructor, Qurious Academy</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--text-muted);">quriousacademy.com</div>
+  </div>
+</div>
+
+<!-- PAGE 2 — OVERVIEW + FIT -->
+<div class="page inner-page">
+  <div class="section-label">About This Course</div>
+  <div class="section-title">What is React Foundations — 4 Weeks?</div>
+  <p class="overview-text">
+    React powers the front end of Facebook, Airbnb, Netflix, Notion, and thousands of other modern applications. It's the dominant way to build web UIs today and the first framework most companies expect you to know. This sprint teaches React the right way — starting with the mental model that makes React's design decisions obvious, then building real projects that cement each concept.
+  </p>
+  <br/>
+  <p class="overview-text">
+    The sprint meets three evenings a week — Tuesday, Thursday, and Saturday at 8 PM IST — for four weeks, totalling twelve live 90-minute sessions. Each week has a theme: the React mental model, data and effects, routing and forms, and production readiness. Each theme ends with a project that pulls together everything covered.
+  </p>
+  <br/>
+  <p class="overview-text">
+    By the end of Week 4 you'll have built a live search UI, a multi-page dashboard, and a full CRUD application — all deployed to production. You'll understand state management, side effects, routing, custom hooks, and performance optimisation. More importantly, you'll have the mental model to debug React applications and learn new parts of the ecosystem independently.
+  </p>
+  <div class="section-divider"></div>
+  <div class="section-label">Is This Right for You?</div>
+  <div class="section-title">Who Should Attend</div>
+  <div class="fit-grid">
+    <div class="fit-card yes">
+      <div class="fit-card-title">&#10003; This is for you if…</div>
+      <ul class="fit-list">
+        <li data-icon="✓">You know HTML, CSS, and basic JavaScript and want to learn React — the most in-demand frontend skill in the industry</li>
+        <li data-icon="✓">You've tried learning React from documentation or YouTube and find it overwhelming without structure</li>
+        <li data-icon="✓">You want to build dynamic, multi-page web applications that feel like real products rather than static pages</li>
+        <li data-icon="✓">You're preparing for frontend developer roles and need React on your resume with real projects to show</li>
+      </ul>
+    </div>
+    <div class="fit-card no">
+      <div class="fit-card-title">&#10007; This is NOT for you if…</div>
+      <ul class="fit-list">
+        <li data-icon="✗">You don't know HTML, CSS, and JavaScript yet — complete the "Build Your First Website" sprint first</li>
+        <li data-icon="✗">You're looking for Next.js, server-side rendering, or full-stack React — this sprint covers client-side React only</li>
+        <li data-icon="✗">You already use React professionally — this is a foundations course, not an advanced patterns course</li>
+      </ul>
+    </div>
+  </div>
+  <div class="prereq-box">
+    <strong>Prerequisites:</strong> HTML, CSS, and basic JavaScript — you should be comfortable with variables, functions, events, and DOM manipulation. No React experience needed.
+  </div>
+</div>
+
+<!-- PAGE 3 — CURRICULUM -->
+<div class="page inner-page">
+  <div class="section-label">Curriculum</div>
+  <div class="section-title">Four Weeks, Twelve Sessions, Three Projects</div>
+
+  <div class="session-block">
+    <div class="session-header">
+      <div class="session-pill">Week 1</div>
+      <div class="session-title">The React Mental Model</div>
+    </div>
+    <ul class="topic-list">
+      <li><strong>Why React — components, JSX, the virtual DOM</strong> — what problem React solves, the component model as the fundamental abstraction, and how JSX turns HTML-like syntax into JavaScript function calls</li>
+      <li><strong>Props &amp; component composition</strong> — passing data into components; building a UI from small, reusable pieces; the difference between presentational and container components</li>
+      <li><strong>State with useState</strong> — React's core state hook; how state triggers re-renders; the rules of state and why you can't mutate it directly</li>
+      <li><strong>Event handling</strong> — onClick, onChange, onSubmit, and the React event system; building interactive components that respond to user input</li>
+    </ul>
+  </div>
+
+  <div class="session-block">
+    <div class="session-header">
+      <div class="session-pill">Week 2</div>
+      <div class="session-title">Data &amp; Effects</div>
+    </div>
+    <ul class="topic-list">
+      <li><strong>useEffect — data fetching &amp; side effects</strong> — when and how to run code outside React's render cycle; fetching data from APIs, subscriptions, and cleanup; the dependency array explained</li>
+      <li><strong>Lifting state up</strong> — sharing state between sibling components by moving it to a common ancestor; the pattern behind most real component architectures</li>
+      <li><strong>Context API</strong> — sharing state across many levels of the component tree without prop drilling; when to use Context vs. when it's overkill</li>
+      <li><strong>Project 1: live search UI</strong> — a real-time search interface that fetches from an API as the user types, with debouncing, loading states, and error handling</li>
+    </ul>
+  </div>
+
+  <div class="session-block">
+    <div class="session-header">
+      <div class="session-pill">Week 3</div>
+      <div class="session-title">Routing &amp; Forms</div>
+    </div>
+    <ul class="topic-list">
+      <li><strong>React Router — multi-page apps</strong> — client-side routing with React Router v6; defining routes, navigating between pages, URL parameters, and nested routes</li>
+      <li><strong>Forms &amp; controlled inputs</strong> — managing form state in React; controlled vs. uncontrolled inputs; validation patterns and form submission handling</li>
+      <li><strong>Custom hooks</strong> — extracting and reusing stateful logic; building your own hooks (useLocalStorage, useFetch, useDebounce) to keep components clean</li>
+      <li><strong>Project 2: multi-page dashboard</strong> — a multi-route dashboard application with navigation, data tables, and a detail view; using React Router and Context together</li>
+    </ul>
+  </div>
+
+  <div class="session-block">
+    <div class="session-header">
+      <div class="session-pill">Week 4</div>
+      <div class="session-title">Production Ready</div>
+    </div>
+    <ul class="topic-list">
+      <li><strong>State management patterns</strong> — when useState is not enough; useReducer for complex state logic; an introduction to what Zustand and Redux solve and when you need them</li>
+      <li><strong>Performance — useMemo, useCallback</strong> — understanding React re-renders; optimising expensive computations and stable references; when to optimise and when not to</li>
+      <li><strong>Project 3: full CRUD app</strong> — a complete Create/Read/Update/Delete application with local state management, form handling, optimistic updates, and error states</li>
+      <li><strong>Deployment &amp; portfolio</strong> — deploying your React app to Vercel; structuring your portfolio to show React projects; what to learn next (Next.js, TypeScript, testing)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- PAGE 4 — OUTCOMES + INCLUDES + LOGISTICS -->
+<div class="page inner-page">
+  <div class="section-label">Learning Outcomes</div>
+  <div class="section-title">What You'll Walk Away With</div>
+  <div class="outcomes-grid">
+    <div class="outcome-card">
+      <div class="outcome-num">01</div>
+      <div class="outcome-text"><strong>Build multi-page React applications</strong> — components, routing, and data fetching wired together into complete, navigable applications</div>
+    </div>
+    <div class="outcome-card">
+      <div class="outcome-num">02</div>
+      <div class="outcome-text"><strong>Manage state and side effects correctly</strong> — the most common source of React bugs, handled with confidence using the right patterns</div>
+    </div>
+    <div class="outcome-card">
+      <div class="outcome-num">03</div>
+      <div class="outcome-text"><strong>Create custom hooks</strong> — extracting reusable logic from components; the pattern that separates good React code from spaghetti</div>
+    </div>
+    <div class="outcome-card">
+      <div class="outcome-num">04</div>
+      <div class="outcome-text"><strong>Deploy React apps to production</strong> — a live deployment workflow with Vercel; three projects deployed and ready to show</div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <div class="section-label">What's Included</div>
+  <div class="section-title">Everything You Get</div>
+  <ul class="includes-list">
+    <li><div class="check-icon">✓</div><div><strong>12 live sessions</strong> — 90 minutes each, Tue/Thu/Sat evenings for 4 weeks</div></li>
+    <li><div class="check-icon">✓</div><div><strong>All recordings</strong> — every session recorded and available to rewatch permanently</div></li>
+    <li><div class="check-icon">✓</div><div><strong>Starter repos for each project</strong> — a clean GitHub repository for each of the three projects, with the base setup already done so you can focus on learning React</div></li>
+    <li><div class="check-icon">✓</div><div><strong>Learner's Certificate</strong> — digital certificate of completion from Qurious Academy</div></li>
+  </ul>
+
+  <div class="section-divider"></div>
+
+  <div class="section-label">Logistics</div>
+  <div class="section-title">Schedule &amp; Pricing</div>
+  <div class="logistics-grid">
+    <div class="logistics-card"><div class="logistics-card-label">Live Days</div><div class="logistics-card-value">Tuesday, Thursday, Saturday</div></div>
+    <div class="logistics-card"><div class="logistics-card-label">Time</div><div class="logistics-card-value">8:00 PM – 9:30 PM IST</div></div>
+    <div class="logistics-card"><div class="logistics-card-label">Duration</div><div class="logistics-card-value">4 weeks · 12 sessions · 18 hrs</div></div>
+    <div class="logistics-card"><div class="logistics-card-label">Price</div><div class="logistics-card-value" style="color:var(--primary);font-size:18px;">&#8377;2,999</div></div>
+  </div>
+  <div class="faq-block">
+    <div class="faq-q">Which version of React does this course use?</div>
+    <div class="faq-a">React 18 with functional components and hooks throughout. Class components are not covered — they're legacy and not used in new projects.</div>
+    <div class="faq-q">Will TypeScript be used?</div>
+    <div class="faq-a">No — the sprint uses JavaScript. TypeScript adds important benefits for larger projects but is a distraction when learning React's core concepts. We recommend adding TypeScript after completing this sprint.</div>
+    <div class="faq-q">What's the pathway after this sprint?</div>
+    <div class="faq-a">The natural next step is Next.js (React for production with server-side rendering and API routes), TypeScript, and a testing library (Vitest/Testing Library). We'll share a specific roadmap at the end of Week 4.</div>
+  </div>
+</div>
+
+<!-- PAGE 5 — INSTRUCTOR + BACK COVER -->
+<div class="page inner-page">
+  <div class="section-label">Your Instructor</div>
+  <div class="section-title">About Prasant Mishra</div>
+  <div class="instructor-card">
+    <div class="instructor-photo">P</div>
+    <div style="flex:1;">
+      <div style="font-size:20px;font-weight:700;margin-bottom:4px;">Prasant Mishra</div>
+      <div style="font-size:13px;color:var(--primary);margin-bottom:10px;">Founder &amp; Instructor — Qurious Academy</div>
+      <div class="instructor-tags">
+        <span class="instructor-tag">GenAI Solutions Architect</span>
+        <span class="instructor-tag">15+ Yrs Teaching</span>
+        <span class="instructor-tag">2500+ Students</span>
+        <span class="instructor-tag">60+ Projects Delivered</span>
+      </div>
+      <p class="instructor-bio">Prasant has built React-based front ends as part of numerous production projects. He's seen first-hand the conceptual mistakes that beginners most commonly make with React — thinking about it too much like plain JavaScript, misunderstanding the render cycle, fighting against state instead of working with it — and has designed this sprint specifically to prevent those misconceptions.</p>
+      <p class="instructor-bio" style="margin-top:12px;">His emphasis is on the React mental model: once you genuinely understand how React thinks about UI as a function of state, every API decision becomes obvious and debugging becomes straightforward. That understanding is the goal of every session.</p>
+    </div>
+  </div>
+</div>
+
+<div class="page back-cover">
+  <div class="back-cover-logo">Qurious<span>Academy</span></div>
+  <div class="back-cover-tagline">Focused, live learning for curious minds. No fluff — just the concepts that matter.</div>
+  <div class="cta-box">
+    <div class="cta-course-title">React Foundations — 4 Weeks</div>
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Live Sprint · Tue/Thu/Sat · 8–9:30 PM IST · Rolling start dates</div>
+    <div class="cta-price">&#8377;2,999</div>
+    <div class="cta-button">Enroll at quriousacademy.com</div>
+    <div class="cta-url">or visit quriousacademy.com/courses</div>
+  </div>
+  <div class="back-contact">
+    Questions? Reach us at <a href="mailto:hello@quriousacademy.com">hello@quriousacademy.com</a><br/>
+    &copy; 2025 Qurious Academy. All rights reserved.
+  </div>
+</div>
+
+</body>
+</html>
