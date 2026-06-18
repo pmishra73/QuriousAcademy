@@ -1,14 +1,14 @@
 import nodemailer from "nodemailer";
 
-// Shared transporter — Zoho SMTP
+// Shared transporter — GoDaddy SMTP
 export function createTransporter() {
   return nodemailer.createTransport({
-    host: "smtp.zoho.in",
+    host: "smtpout.secureserver.net",
     port: 587,
     secure: false,
     auth: {
-      user: process.env.EMAIL_FROM, // hello@quriousacademy.com
-      pass: process.env.EMAIL_PASS, // Zoho app password
+      user: process.env.EMAIL_FROM,
+      pass: process.env.EMAIL_PASS,
     },
   });
 }
