@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-import { createTransporter, FROM, ADMIN } from "@/lib/mailer";
+import { sendMail, ADMIN } from "@/lib/mailer";
 import { variants } from "@/lib/variants";
 import { courses } from "@/lib/courses";
 import { db } from "@/lib/db";
@@ -13,7 +13,6 @@ export async function POST(req: NextRequest) {
     couponCode, finalAmount,
   } = await req.json();
 
-  // Verify Razorpay signature
   const body = razorpay_order_id + "|" + razorpay_payment_id;
   const expectedSignature = crypto
     .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
@@ -31,8 +30,6 @@ export async function POST(req: NextRequest) {
   const paidAmount = finalAmount ?? basePrice;
   const discountApplied = couponCode && paidAmount < basePrice;
 
-  // Save enrollment to DB and mark coupon used atomically
-  let enrollmentId: string | undefined;
   try {
     const enrollment = await db.enrollment.create({
       data: {
@@ -48,7 +45,6 @@ export async function POST(req: NextRequest) {
         couponCode: couponCode?.trim().toUpperCase() || undefined,
       },
     });
-    enrollmentId = enrollment.id;
     if (couponCode?.trim()) {
       await markCouponUsed(couponCode.trim().toUpperCase(), enrollment.id);
     }
@@ -56,11 +52,8 @@ export async function POST(req: NextRequest) {
     console.error("DB write failed:", err);
   }
 
-  const transporter = createTransporter();
-
   try {
-    await transporter.sendMail({
-      from: FROM,
+    await sendMail({
       to: ADMIN,
       subject: `✅ Payment confirmed: ${studentName} → ${courseName}`,
       html: `
@@ -86,8 +79,7 @@ export async function POST(req: NextRequest) {
       `,
     });
 
-    await transporter.sendMail({
-      from: FROM,
+    await sendMail({
       to: studentEmail,
       subject: `You're enrolled — ${courseName} 🎉`,
       html: `
@@ -105,8 +97,7 @@ export async function POST(req: NextRequest) {
             <div>Order ID: <strong>${razorpay_order_id}</strong></div>
           </div>
           <p style="color:#555;line-height:1.7">Questions? Reply to this email — we respond within a few hours.</p>
-          <br/>
-          <p style="color:#555">— The Qurious Academy Team</p>
+          <br/><p style="color:#555">— The Qurious Academy Team</p>
         </div>
       `,
     });

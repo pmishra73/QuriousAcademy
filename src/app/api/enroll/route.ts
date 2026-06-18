@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createTransporter, FROM, ADMIN } from "@/lib/mailer";
+import { sendMail, ADMIN } from "@/lib/mailer";
 import { courses } from "@/lib/courses";
 
 export async function POST(req: NextRequest) {
   const { name, email, phone, course: courseId, utr } = await req.json();
   const course = courses.find((c) => c.id === courseId);
-  const transporter = createTransporter();
 
   try {
-    await transporter.sendMail({
-      from: FROM,
+    await sendMail({
       to: ADMIN,
       subject: `New Enrollment: ${name} → ${course?.title || courseId}`,
       html: `
@@ -39,8 +37,7 @@ export async function POST(req: NextRequest) {
       `,
     });
 
-    await transporter.sendMail({
-      from: FROM,
+    await sendMail({
       to: email,
       subject: `Enrollment received — ${course?.title || courseId}`,
       html: `

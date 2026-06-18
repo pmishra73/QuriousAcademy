@@ -1,34 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createTransporter, FROM, ADMIN } from "@/lib/mailer";
+import { sendMail, ADMIN } from "@/lib/mailer";
 import { db } from "@/lib/db";
 import { createCoupon } from "@/lib/coupon";
 
 export async function POST(req: NextRequest) {
   const { name, email, phone, courseId, courseTitle } = await req.json();
 
-  // Save lead + coupon to DB (best-effort)
   let couponCode = "";
   try {
     const lead = await db.lead.create({ data: { name, email, phone, courseId } });
     couponCode = await createCoupon({ reason: "syllabus_unlock", leadId: lead.id });
   } catch (err) {
     console.error("DB write failed:", err);
-    // Generate code in-memory so email still sends
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     couponCode = `QA-${Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("")}`;
   }
 
-  const transporter = createTransporter();
+  const now = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
 
   try {
-    await transporter.sendMail({
-      from: FROM,
+    await sendMail({
       to: ADMIN,
       subject: `Content unlock lead: ${name} → ${courseTitle}`,
       html: `
         <div style="font-family:system-ui,sans-serif;max-width:520px;background:#0a0e1a;color:#eef2ff;padding:28px;border-radius:12px">
           <div style="font-size:18px;font-weight:700;margin-bottom:4px">Course Content Unlock</div>
-          <div style="color:#9ba8c4;font-size:13px;margin-bottom:20px">${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST</div>
+          <div style="color:#9ba8c4;font-size:13px;margin-bottom:20px">${now} IST</div>
           <table style="width:100%;border-collapse:collapse">
             ${[["Name", name], ["Email", email], ["Phone", phone], ["Course", courseTitle], ["Coupon", couponCode]]
               .map(([k, v]) => `<tr>
@@ -40,8 +37,7 @@ export async function POST(req: NextRequest) {
       `,
     });
 
-    await transporter.sendMail({
-      from: FROM,
+    await sendMail({
       to: email,
       subject: `Your 10% off coupon for ${courseTitle} — Qurious Academy`,
       html: `
@@ -61,16 +57,13 @@ export async function POST(req: NextRequest) {
           <a href="https://quriousacademy.com/enroll?course=${courseId}" style="display:inline-block;margin-top:12px;background:#5b7cfa;color:white;padding:12px 24px;border-radius:8px;font-weight:600;font-size:14px;text-decoration:none">
             Enroll now →
           </a>
-          <p style="color:#999;font-size:12px;margin-top:28px">
-            This coupon is personal to you and can only be used once. If you have questions, reply to this email.
-          </p>
+          <p style="color:#999;font-size:12px;margin-top:28px">This coupon is personal to you and can only be used once.</p>
           <p style="color:#aaa;font-size:12px">— The Qurious Academy Team · hello@quriousacademy.com</p>
         </div>
       `,
     });
   } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error("Email send failed:", msg, "| EMAIL_FROM:", process.env.EMAIL_FROM, "| PASS set:", !!process.env.EMAIL_PASS);
+    console.error("Email send failed:", err instanceof Error ? err.message : String(err));
   }
 
   return NextResponse.json({ ok: true, couponCode });

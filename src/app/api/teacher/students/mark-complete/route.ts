@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { createCoupon } from "@/lib/coupon";
-import { createTransporter, FROM } from "@/lib/mailer";
+import { sendMail } from "@/lib/mailer";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -11,14 +11,10 @@ export async function POST(req: NextRequest) {
 
   const { enrollmentId, studentEmail, studentPhone, studentName, courseId } = await req.json();
 
-  // Generate completion coupon
   const code = await createCoupon({ reason: "course_completion", completionEnrollmentId: enrollmentId });
 
-  // Send email
   try {
-    const transporter = createTransporter();
-    await transporter.sendMail({
-      from: FROM,
+    await sendMail({
       to: studentEmail,
       subject: `Congratulations on completing ${courseId}! Here's a reward 🎉`,
       html: `
@@ -28,7 +24,7 @@ export async function POST(req: NextRequest) {
             You've successfully completed <strong>${courseId}</strong>. We're proud of your dedication and hard work.
           </p>
           <p style="color:#555;line-height:1.7">
-            As a reward for completing your course, here's an exclusive 10% off coupon for your next enrolment:
+            As a reward, here's an exclusive 10% off coupon for your next enrolment:
           </p>
           <div style="margin:28px 0;padding:20px 24px;background:#f3f4ff;border:2px dashed #5b7cfa;border-radius:10px;text-align:center">
             <div style="font-size:12px;color:#5b7cfa;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">Your reward coupon</div>
