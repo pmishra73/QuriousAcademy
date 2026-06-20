@@ -1,8 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as LucideIcons from "lucide-react";
 import type { CourseVariant } from "@/lib/variants";
 import { typeConfig } from "@/lib/variants";
+
+const SESSION_KEY = "qa_contact";
 
 function CourseIcon({ name, size = 36 }: { name: string; size?: number }) {
   const Icon = (LucideIcons as unknown as Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>>)[name];
@@ -20,14 +22,27 @@ type Step = "gate" | "content";
 export default function ContentUnlockModal({ variant, onClose }: Props) {
   const [step, setStep] = useState<Step>("gate");
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
+  const [prefilled, setPrefilled] = useState(false);
   const [coupon, setCoupon] = useState<string | null>(null);
   const cfg = typeConfig[variant.type];
+
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(SESSION_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setForm(parsed);
+        setPrefilled(true);
+      }
+    } catch {}
+  }, []);
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(form)); } catch {}
     setStep("content");
     fetch("/api/unlock-content", {
       method: "POST",
@@ -103,22 +118,29 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
 
         {step === "gate" ? (
           <div style={{ padding: 28 }}>
-            <div style={{ textAlign: "center", marginBottom: 28 }}>
-              <div style={{ display: "flex", justifyContent: "center", marginBottom: 16, color: cfg.color }}><CourseIcon name={variant.icon} size={40} /></div>
-              <h2 style={{ fontSize: 22, marginBottom: 8 }}>Get the full course content</h2>
-              <p style={{ fontSize: 14, color: "var(--text-muted)", lineHeight: 1.6 }}>
-                Enter your details to unlock the complete syllabus and session breakdown — instantly.
-              </p>
-              <div style={{
-                marginTop: 14, padding: "10px 16px", borderRadius: 8,
-                background: "rgba(52,211,153,0.08)", border: "1px solid rgba(52,211,153,0.2)",
-                fontSize: 13, color: "#34d399", display: "flex", alignItems: "center", gap: 8,
-              }}>
-                🎁 We'll email you a <strong>10% off coupon</strong> — valid at checkout.
+            <div style={{ textAlign: "center", marginBottom: 24 }}>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: 16, color: cfg.color }}>
+                <CourseIcon name={variant.icon} size={40} />
               </div>
+              <h2 style={{ fontSize: 21, marginBottom: 10, lineHeight: 1.3 }}>
+                See the full syllabus &amp; get 10% off
+              </h2>
+              <p style={{ fontSize: 14, color: "var(--text-muted)", lineHeight: 1.65 }}>
+                Get instant access to the complete session-by-session breakdown for <strong style={{ color: "var(--foreground)" }}>{variant.title}</strong> — every topic, outcome, and what's included. We'll also email you a <strong style={{ color: "#34d399" }}>10% discount coupon</strong> to use whenever you're ready to enrol.
+              </p>
             </div>
 
-            <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            {prefilled && (
+              <div style={{
+                marginBottom: 16, padding: "10px 14px", borderRadius: 8,
+                background: "rgba(91,124,250,0.08)", border: "1px solid rgba(91,124,250,0.2)",
+                fontSize: 13, color: "var(--primary)",
+              }}>
+                We remembered you from earlier — just hit the button below.
+              </div>
+            )}
+
+            <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <div>
                 <label style={lbl}>Your Name *</label>
                 <input style={inp} value={form.name} onChange={set("name")} placeholder="Full name" required />
@@ -132,14 +154,14 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
                 <input style={inp} type="tel" value={form.phone} onChange={set("phone")} placeholder="+91 98765 43210" required />
               </div>
               <button type="submit" style={{
-                marginTop: 8, background: "var(--primary)", color: "white",
+                marginTop: 6, background: "var(--primary)", color: "white",
                 border: "none", borderRadius: 8, padding: "13px", fontSize: 15,
-                fontWeight: 500, cursor: "pointer", fontFamily: "inherit",
+                fontWeight: 600, cursor: "pointer", fontFamily: "inherit",
               }}>
-                Unlock Course Content →
+                {prefilled ? "Show me the syllabus →" : "Get syllabus + 10% off coupon →"}
               </button>
               <p style={{ fontSize: 12, color: "var(--text-muted)", textAlign: "center" }}>
-                No spam. We'll send your 10% coupon to the email above.
+                No spam — just the syllabus and your coupon code.
               </p>
             </form>
           </div>
