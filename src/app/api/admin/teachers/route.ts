@@ -1,0 +1,27 @@
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/lib/db";
+import bcrypt from "bcryptjs";
+
+export async function GET() {
+  const teachers = await db.user.findMany({
+    where: { role: "teacher" },
+    orderBy: { createdAt: "desc" },
+    select: { id: true, name: true, email: true, bio: true, active: true, createdAt: true },
+  });
+  return NextResponse.json(teachers);
+}
+
+export async function POST(req: NextRequest) {
+  const { name, email, password, bio } = await req.json();
+  if (!name?.trim() || !email?.trim() || !password?.trim()) {
+    return NextResponse.json({ error: "Name, email and password are required." }, { status: 400 });
+  }
+  const existing = await db.user.findUnique({ where: { email } });
+  if (existing) return NextResponse.json({ error: "A user with that email already exists." }, { status: 409 });
+
+  const hashed = await bcrypt.hash(password, 12);
+  const user = await db.user.create({
+    data: { name, email, password: hashed, role: "teacher", bio: bio || null },
+  });
+  return NextResponse.json({ ok: true, id: user.id });
+}

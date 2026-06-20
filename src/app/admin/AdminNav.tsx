@@ -11,7 +11,8 @@ const navItems = [
   { href: "/admin/courses", label: "Courses", icon: "📚" },
   { href: "/admin/teachers", label: "Teachers", icon: "👤" },
   { href: "/admin/messages", label: "Messages", icon: "✉️" },
-  { href: "/admin/content", label: "Content", icon: "✍️" },
+  { href: "/admin/blogs", label: "Blogs", icon: "✍️" },
+  { href: "/admin/content", label: "Content", icon: "📄" },
   { href: "/admin/profile", label: "My Profile", icon: "⚙" },
 ];
 
@@ -79,11 +80,17 @@ export default function AdminNav({ onCollapse }: { onCollapse?: (c: boolean) => 
 
       {/* Footer */}
       <div style={{ padding: "10px 8px", borderTop: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: 2 }}>
-        {!collapsed && (
-          <Link href="/teacher" style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", borderRadius: 8, fontSize: 13, color: "var(--text-dim)", marginBottom: 2 }}>
-            <span>📋</span> Teacher View
-          </Link>
-        )}
+        <Link href="/teacher" title={collapsed ? "Switch to Teacher View" : undefined} style={{
+          display: "flex", alignItems: "center", gap: collapsed ? 0 : 10,
+          justifyContent: collapsed ? "center" : "flex-start",
+          padding: collapsed ? "10px 0" : "9px 12px",
+          borderRadius: 8, fontSize: collapsed ? 18 : 13,
+          color: "#34d399", background: "rgba(52,211,153,0.07)",
+          border: "1px solid rgba(52,211,153,0.2)",
+          marginBottom: 4, textDecoration: "none", fontWeight: 500,
+        }}>
+          {collapsed ? "🏫" : <><span>🏫</span> Switch to Teacher View</>}
+        </Link>
         <button onClick={() => signOut({ callbackUrl: "/" })} title={collapsed ? "Sign out" : undefined}
           style={{
             display: "flex", alignItems: "center", gap: collapsed ? 0 : 10, justifyContent: collapsed ? "center" : "flex-start",
