@@ -319,10 +319,10 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
                 background: "rgba(52,211,153,0.06)", border: "1px solid rgba(52,211,153,0.2)",
               }}>
                 <div style={{ fontSize: 13, fontWeight: 600, color: "#34d399", marginBottom: 4 }}>
-                  Want 10% off when you enrol?
+                  Drop your info so we can share a 10% off coupon!
                 </div>
                 <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 12, lineHeight: 1.5 }}>
-                  Share your details and we&apos;ll email you a coupon code — no strings attached.
+                  We&apos;ll email it to you — use it whenever you&apos;re ready to enrol.
                 </p>
                 <button
                   onClick={() => setStep("form")}
