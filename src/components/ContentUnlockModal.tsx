@@ -80,14 +80,11 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
   };
 
   const handleDownload = () => {
-    const content = buildTextContent(variant);
-    const blob = new Blob([content], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url;
-    a.download = `${variant.id}-course-content.txt`;
+    a.href = `/api/brochure/${variant.id}`;
+    a.download = `${variant.id}-syllabus.pdf`;
+    a.target = "_blank";
     a.click();
-    URL.revokeObjectURL(url);
   };
 
   return (
@@ -388,46 +385,3 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
   );
 }
 
-function buildTextContent(v: CourseVariant): string {
-  const lines = [
-    `QUBIT — COURSE CONTENT`,
-    `${"═".repeat(48)}`,
-    ``,
-    `${v.title}`,
-    `${v.subjectLabel} · ${typeConfig[v.type].label}`,
-    ``,
-    `Duration : ${v.duration}`,
-    `Level    : ${v.level}`,
-    `Instructor: ${v.instructor}`,
-    `Price    : ₹${v.price.toLocaleString("en-IN")}`,
-    ``,
-    `OVERVIEW`,
-    `${"─".repeat(40)}`,
-    v.content.overview,
-    ``,
-    `SESSION BREAKDOWN`,
-    `${"─".repeat(40)}`,
-    ...v.content.sessions.flatMap((s) => [
-      ``,
-      `${s.session} — ${s.title}`,
-      ...s.topics.map((t) => `  • ${t}`),
-    ]),
-    ``,
-    `WHAT YOU'LL LEARN`,
-    `${"─".repeat(40)}`,
-    ...v.content.outcomes.map((o) => `  ✓ ${o}`),
-    ``,
-    `PREREQUISITES`,
-    `${"─".repeat(40)}`,
-    `  ${v.content.prerequisites}`,
-    ``,
-    `THIS COURSE INCLUDES`,
-    `${"─".repeat(40)}`,
-    ...v.content.includes.map((i) => `  ✓ ${i}`),
-    ``,
-    `${"═".repeat(48)}`,
-    `Enroll at quriousacademy.com/enroll?course=${v.id}`,
-    `Questions? hello@quriousacademy.com`,
-  ];
-  return lines.join("\n");
-}

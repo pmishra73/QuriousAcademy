@@ -67,6 +67,15 @@ export async function GET(
     /* Certificate */
     .certificate-banner { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #f59e0b; border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; font-size: 14px; color: #78350f; }
 
+    /* Instructor */
+    .instructor-card { background: white; border: 1px solid #e8eaf0; border-radius: 14px; padding: 28px 32px; margin-bottom: 24px; display: flex; align-items: center; gap: 24px; }
+    .instructor-photo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 3px solid #eef0ff; }
+    .instructor-photo-fallback { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #5b7cfa, #8b6ff7); display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; font-weight: 700; flex-shrink: 0; }
+    .instructor-info { flex: 1; }
+    .instructor-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #8b9ab3; margin-bottom: 4px; }
+    .instructor-name { font-size: 20px; font-weight: 700; margin-bottom: 6px; color: #1a1d29; }
+    .instructor-bio { font-size: 14px; color: #4b5563; line-height: 1.6; }
+
     /* Footer */
     .footer { text-align: center; color: #9ba3b4; font-size: 12px; margin-top: 48px; padding-top: 24px; border-top: 1px solid #e8eaf0; }
 
@@ -160,6 +169,25 @@ export async function GET(
     <div class="price-amount">₹${v.price.toLocaleString("en-IN")}</div>
     <p class="price-note">${v.deliveryMode} · ${v.duration}${v.recordedPrice ? ` · Recorded version available at ₹${v.recordedPrice.toLocaleString("en-IN")}` : ""}</p>
     <a href="https://quriousacademy.com/enroll?course=${v.id}" class="enroll-btn">Enrol Now →</a>
+  </div>
+
+  <!-- Instructor -->
+  <div class="instructor-card">
+    <img
+      src="/founder.png"
+      alt="${v.instructor}"
+      class="instructor-photo"
+      onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+    />
+    <div class="instructor-photo-fallback" style="display:none">${v.instructor.split(" ").map((w: string) => w[0]).join("").slice(0, 2)}</div>
+    <div class="instructor-info">
+      <div class="instructor-label">Your Instructor</div>
+      <div class="instructor-name">${v.instructor}</div>
+      <div class="instructor-bio">
+        Finance professional with 14+ years across equity research, investment banking, and asset management.
+        Passionate about making complex financial concepts accessible through real-world case studies and hands-on learning.
+      </div>
+    </div>
   </div>
 
   <div class="footer">
