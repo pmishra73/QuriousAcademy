@@ -6,7 +6,8 @@ export type CourseVariant = {
   subject: string;
   subjectLabel: string;
   icon: string;
-  type: "masterclass" | "cohort" | "sprint" | "standard" | "deep-dive";
+  type: "masterclass" | "cohort" | "sprint" | "standard" | "deep-dive" | "full-course";
+  recordedPrice?: number;
   deliveryMode: "Live" | "Live+Recorded" | "Recorded";
   title: string;
   tagline: string;
@@ -63,11 +64,19 @@ export const typeConfig = {
   },
   "deep-dive": {
     label: "Deep Dive",
-    sublabel: "90+ days",
+    sublabel: "6–12 weeks",
     color: "#a78bfa",
     bg: "rgba(167,139,250,0.1)",
     border: "rgba(167,139,250,0.2)",
     icon: "🎯",
+  },
+  "full-course": {
+    label: "Full Course",
+    sublabel: "Goal-based program",
+    color: "#f43f5e",
+    bg: "rgba(244,63,94,0.1)",
+    border: "rgba(244,63,94,0.2)",
+    icon: "🏆",
   },
 } as const;
 
@@ -75,8 +84,9 @@ export const sectionOrder: CourseVariant["type"][] = [
   "masterclass",
   "cohort",
   "sprint",
-  "standard",
   "deep-dive",
+  "full-course",
+  "standard",
 ];
 
 export function getVariantsByType(type: CourseVariant["type"]) {

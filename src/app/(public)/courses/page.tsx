@@ -30,15 +30,20 @@ const sectionMeta = {
     sub: "Under 1 month · Ongoing batches",
     desc: "Focused, time-boxed courses for busy people who want results fast.",
   },
-  standard: {
-    heading: "Full Courses",
-    sub: "1–3 months · Structured learning",
-    desc: "Thorough, structured programs for learners who want to go deep and build a solid foundation.",
-  },
   "deep-dive": {
     heading: "Deep Dives",
-    sub: "90+ days · New batches weekly · Career-track",
+    sub: "6–12 weeks · Live + Recorded · Domain mastery",
     desc: "Comprehensive programs for learners who want to reach job-ready or research-ready proficiency.",
+  },
+  "full-course": {
+    heading: "Full Courses",
+    sub: "4–12 months · Live + Recorded · Goal-based",
+    desc: "Career-track programs built around a professional title. Learn everything needed to earn the role.",
+  },
+  standard: {
+    heading: "Classic Courses",
+    sub: "1–3 months · Structured learning",
+    desc: "Thorough, structured programs for learners who want to go deep and build a solid foundation.",
   },
 } as const;
 
