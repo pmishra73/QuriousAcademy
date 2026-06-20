@@ -1,17 +1,37 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useState } from "react";
 
 const navItems = [
   { href: "/teacher", label: "My Courses", icon: "📚" },
   { href: "/teacher/sessions", label: "Sessions", icon: "📅" },
   { href: "/teacher/students", label: "Students", icon: "🎓" },
+  { href: "/teacher/blogs", label: "Blogs", icon: "✍️" },
   { href: "/teacher/resources", label: "Resources", icon: "📎" },
   { href: "/teacher/announcements", label: "Announcements", icon: "📣" },
   { href: "/teacher/profile", label: "My Profile", icon: "⚙" },
 ];
+
+function AdminBackLink({ collapsed }: { collapsed: boolean }) {
+  const { data: session } = useSession();
+  const role = (session?.user as { role?: string })?.role;
+  if (role !== "admin") return null;
+  return (
+    <Link href="/admin" title={collapsed ? "Back to Admin" : undefined} style={{
+      display: "flex", alignItems: "center", gap: collapsed ? 0 : 10,
+      justifyContent: collapsed ? "center" : "flex-start",
+      padding: collapsed ? "10px 0" : "9px 12px",
+      borderRadius: 8, fontSize: collapsed ? 18 : 13,
+      color: "#5b7cfa", background: "rgba(91,124,250,0.07)",
+      border: "1px solid rgba(91,124,250,0.2)",
+      textDecoration: "none", fontWeight: 500,
+    }}>
+      {collapsed ? "⚙" : <><span>⚙</span> Back to Admin</>}
+    </Link>
+  );
+}
 
 export default function TeacherNav({ onCollapse }: { onCollapse?: (c: boolean) => void }) {
   const path = usePathname();
@@ -73,7 +93,8 @@ export default function TeacherNav({ onCollapse }: { onCollapse?: (c: boolean) =
       </nav>
 
       {/* Footer */}
-      <div style={{ padding: "10px 8px", borderTop: "1px solid var(--border)" }}>
+      <div style={{ padding: "10px 8px", borderTop: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: 4 }}>
+        <AdminBackLink collapsed={collapsed} />
         <button onClick={() => signOut({ callbackUrl: "/" })} title={collapsed ? "Sign out" : undefined}
           style={{
             display: "flex", alignItems: "center", gap: collapsed ? 0 : 10, justifyContent: collapsed ? "center" : "flex-start",
