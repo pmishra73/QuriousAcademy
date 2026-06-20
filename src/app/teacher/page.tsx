@@ -6,24 +6,31 @@ import Link from "next/link";
 export default async function TeacherHome() {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id;
+  const role = (session?.user as { role?: string })?.role;
+  const isAdmin = role === "admin";
 
-  const assignments = await db.courseAssignment.findMany({ where: { teacherId: userId } });
-  const courseIds = assignments.map((a) => a.courseId);
+  let courseIds: string[];
+  if (isAdmin) {
+    courseIds = variants.map((v) => v.id);
+  } else {
+    const assignments = await db.courseAssignment.findMany({ where: { teacherId: userId } });
+    courseIds = assignments.map((a) => a.courseId);
+  }
 
-  const myCourses = variants.filter((v) => courseIds.includes(v.id));
+  const myCourses = isAdmin ? variants : variants.filter((v) => courseIds.includes(v.id));
 
-  const enrollmentCounts = await db.enrollment.groupBy({
+  const enrollmentCounts = courseIds.length > 0 ? await db.enrollment.groupBy({
     by: ["courseId"],
     where: { courseId: { in: courseIds }, status: "confirmed" },
     _count: { id: true },
-  });
+  }) : [];
   const countMap = Object.fromEntries(enrollmentCounts.map((e) => [e.courseId, e._count.id]));
 
-  const upcomingSessions = await db.session.findMany({
+  const upcomingSessions = courseIds.length > 0 ? await db.session.findMany({
     where: { courseId: { in: courseIds }, status: "scheduled", scheduledAt: { gte: new Date() } },
     orderBy: { scheduledAt: "asc" },
     take: 5,
-  });
+  }) : [];
 
   return (
     <div>
