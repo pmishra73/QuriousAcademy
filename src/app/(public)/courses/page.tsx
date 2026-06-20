@@ -37,8 +37,13 @@ const sectionMeta = {
   },
   "full-course": {
     heading: "Full Courses",
-    sub: "4–12 months · Live + Recorded · Goal-based",
-    desc: "Career-track programs built around a professional title. Learn everything needed to earn the role.",
+    sub: "6–8 months · Live + Recorded · Goal-based",
+    desc: "Career-track programs built around a professional title. Learn everything needed to earn the role — including interview preparation.",
+  },
+  "interview-prep": {
+    heading: "Interview Preparation",
+    sub: "Personalised · Role & stack specific",
+    desc: "Targeted prep for your specific company, role and tech stack. DSA, system design and behavioural — all calibrated to your timeline.",
   },
   standard: {
     heading: "Classic Courses",

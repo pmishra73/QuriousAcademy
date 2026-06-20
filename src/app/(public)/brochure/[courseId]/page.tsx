@@ -1,36 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { variants } from "@/lib/variants";
 
-// Map courseId → human-readable title (for display before the API responds)
-const COURSE_TITLES: Record<string, string> = {
-  "python-masterclass": "Python in 3 Hours",
-  "python-cohort": "Python Weekend Intensive",
-  "python-deep-dive": "Python Mastery — 90 Days",
-  "python-standard": "Python for Data Science — 8 Weeks",
-  "ai-masterclass": "AI Demystified in 3 Hours",
-  "ai-cohort": "Build with AI — Weekend Cohort",
-  "ai-deep-dive": "AI & ML Engineering — 12 Weeks",
-  "calculus-masterclass": "Calculus in 3 Hours",
-  "linear-algebra-masterclass": "Linear Algebra for ML in 3 Hours",
-  "maths-cohort": "Maths for ML — Power Weekend",
-  "webdev-sprint": "Build Your First Website — 3 Weeks",
-  "react-sprint": "React Foundations — 4 Weeks",
-  "physics-cohort": "Classical Mechanics Weekend",
-  "dsa-standard": "DSA for Interviews — 6 Weeks",
-};
+const SESSION_KEY = "qa_contact";
 
+type ContactInfo = { name: string; email: string; phone: string };
 type Status = "idle" | "loading" | "success" | "error";
 
 export default function BrochurePage() {
   const { courseId } = useParams<{ courseId: string }>();
-  const title = COURSE_TITLES[courseId] ?? "Course Brochure";
+  const variant = variants.find((v) => v.id === courseId);
+  const title = variant?.title ?? "Course Brochure";
 
-  const [form, setForm] = useState({ name: "", email: "", phone: "" });
+  const [form, setForm] = useState<ContactInfo>({ name: "", email: "", phone: "" });
+  const [prefilled, setPrefilled] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const [errMsg, setErrMsg] = useState("");
+
+  // Pre-fill from sessionStorage if present
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(SESSION_KEY);
+      if (saved) {
+        const parsed: ContactInfo = JSON.parse(saved);
+        setForm(parsed);
+        setPrefilled(true);
+      }
+    } catch {}
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -54,7 +54,9 @@ export default function BrochurePage() {
 
       const { url } = await res.json();
 
-      // Trigger download
+      // Persist contact info in sessionStorage for this browser session
+      try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(form)); } catch {}
+
       const a = document.createElement("a");
       a.href = url;
       a.download = `${courseId}-brochure.pdf`;
@@ -111,6 +113,12 @@ export default function BrochurePage() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
+              {prefilled && (
+                <div className="rounded-lg bg-indigo-500/10 border border-indigo-500/20 px-4 py-3 text-xs text-indigo-300 leading-relaxed">
+                  We remembered your details from this session. Just hit download.
+                </div>
+              )}
+
               {[
                 { name: "name", label: "Full Name", type: "text", placeholder: "Ananya Sharma" },
                 { name: "email", label: "Email Address", type: "email", placeholder: "ananya@example.com" },
@@ -124,7 +132,7 @@ export default function BrochurePage() {
                     id={name}
                     name={name}
                     type={type}
-                    value={form[name as keyof typeof form]}
+                    value={form[name as keyof ContactInfo]}
                     onChange={handleChange}
                     placeholder={placeholder}
                     required
