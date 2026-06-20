@@ -11,6 +11,8 @@ const VALID_COURSE_IDS = new Set([
   "software-engineer", "software-engineer-ii", "systems-engineer", "senior-systems-engineer",
   "ai-engineer", "genai-specialist", "senior-ai-engineer",
   "mts-i", "mts-ii", "mts-iii", "staff-software-engineer",
+  "go-sprint", "java-sprint", "c-sprint", "cpp-sprint",
+  "chemistry-masterclass", "chemistry-cohort", "interview-prep",
 ]);
 
 export async function POST(
