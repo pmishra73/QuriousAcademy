@@ -9,7 +9,8 @@
       "deliveryMode": "Live",
       "title": "Python in 3 Hours",
       "tagline": "The essential 20% that does 80% of the work",
-      "price": 499,
+      "price": 799,
+      "recordedPrice": 199,
       "currency": "INR",
       "duration": "3 hours",
       "level": "Beginner",
@@ -60,10 +61,221 @@
           "Know exactly what to learn next"
         ],
         "includes": [
-          "Session recording",
+          "Full session recording (lifetime access)",
+          "Live doubt clearing session (1 hr)",
           "All code files",
           "Cheat sheet PDF",
           "Curated next-steps resource list",
+          "Learner's Certificate"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "ai-masterclass",
+      "subject": "ai",
+      "subjectLabel": "Artificial Intelligence",
+      "icon": "Brain",
+      "type": "masterclass",
+      "deliveryMode": "Live",
+      "title": "AI Demystified in 3 Hours",
+      "tagline": "What AI actually is — and how it actually works",
+      "price": 999,
+      "recordedPrice": 299,
+      "currency": "INR",
+      "duration": "3 hours",
+      "level": "Beginner",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "monthly-first-saturday",
+        "time": "2:00 PM IST"
+      },
+      "content": {
+        "overview": "Strip away the hype. Understand how machine learning, neural networks, and LLMs actually work — without needing a PhD. Built around visual intuition and live demos throughout.",
+        "sessions": [
+          {
+            "session": "Hour 1",
+            "title": "What Machines Actually Learn",
+            "topics": [
+              "What ML really is (vs. traditional programming)",
+              "Training, features & labels explained visually",
+              "Linear models & decision boundaries",
+              "Why deep learning suddenly worked"
+            ]
+          },
+          {
+            "session": "Hour 2",
+            "title": "Neural Networks & LLMs",
+            "topics": [
+              "How a neural network learns — forward & backward pass",
+              "Backpropagation explained intuitively (no calculus required)",
+              "What a transformer actually does",
+              "How GPT-4 and Claude work under the hood"
+            ]
+          },
+          {
+            "session": "Hour 3",
+            "title": "AI in Practice",
+            "topics": [
+              "Live: building with AI APIs (OpenAI / Anthropic)",
+              "Prompt engineering principles that actually work",
+              "Where AI fails — hallucinations, bias, limits",
+              "Roadmap: how to go deeper into AI"
+            ]
+          }
+        ],
+        "prerequisites": "Curiosity only. No maths or coding required.",
+        "outcomes": [
+          "Explain how LLMs work to anyone",
+          "Understand the real limits of current AI",
+          "Use AI APIs to build something real",
+          "Know the right learning path to go deeper"
+        ],
+        "includes": [
+          "Full session recording (lifetime access)",
+          "Live doubt clearing session (1 hr)",
+          "Curated resource list",
+          "API demo code",
+          "Learner's Certificate"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "calculus-masterclass",
+      "subject": "maths",
+      "subjectLabel": "Mathematics",
+      "icon": "Sigma",
+      "type": "masterclass",
+      "deliveryMode": "Live",
+      "title": "Calculus in 3 Hours",
+      "tagline": "Derivatives and integrals — actually understood",
+      "price": 799,
+      "recordedPrice": 199,
+      "currency": "INR",
+      "duration": "3 hours",
+      "level": "Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "monthly-first-saturday",
+        "time": "11:00 AM IST"
+      },
+      "content": {
+        "overview": "A focused deep-dive into the two big ideas in calculus — derivatives and integrals — built around geometric intuition first and formulas second. You'll leave actually understanding why the rules work.",
+        "sessions": [
+          {
+            "session": "Hour 1",
+            "title": "Derivatives",
+            "topics": [
+              "What a derivative really means — the slope idea",
+              "Differentiation rules & shortcuts",
+              "Chain rule, product rule — explained visually",
+              "Applications: rates of change & tangents"
+            ]
+          },
+          {
+            "session": "Hour 2",
+            "title": "Integrals",
+            "topics": [
+              "Integration as area accumulation",
+              "Antiderivatives & the reverse process",
+              "Definite integrals & the Fundamental Theorem",
+              "Substitution method"
+            ]
+          },
+          {
+            "session": "Hour 3",
+            "title": "Applications & ML Connections",
+            "topics": [
+              "Optimisation problems — maxima & minima",
+              "Related rates",
+              "Where calculus appears in ML (gradient descent)",
+              "Problem-solving session"
+            ]
+          }
+        ],
+        "prerequisites": "Basic algebra and familiarity with functions (y = f(x))",
+        "outcomes": [
+          "Differentiate any standard function confidently",
+          "Evaluate definite and indefinite integrals",
+          "Apply calculus to real optimisation problems",
+          "Understand why gradient descent works"
+        ],
+        "includes": [
+          "Full session recording (lifetime access)",
+          "Live doubt clearing session (1 hr)",
+          "Problem set PDF (30 problems)",
+          "Full solutions",
+          "Learner's Certificate"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "linear-algebra-masterclass",
+      "subject": "maths",
+      "subjectLabel": "Mathematics",
+      "icon": "Sigma",
+      "type": "masterclass",
+      "deliveryMode": "Live",
+      "title": "Linear Algebra for ML in 3 Hours",
+      "tagline": "The maths behind neural networks — made visual",
+      "price": 799,
+      "recordedPrice": 199,
+      "currency": "INR",
+      "duration": "3 hours",
+      "level": "Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "monthly-first-saturday",
+        "time": "3:00 PM IST"
+      },
+      "content": {
+        "overview": "Every AI model is built on linear algebra. This session builds a visual, geometric intuition for vectors, matrices, and transformations — exactly the parts that show up in ML.",
+        "sessions": [
+          {
+            "session": "Hour 1",
+            "title": "Vectors & Spaces",
+            "topics": [
+              "What a vector really is",
+              "Vector operations — addition, scaling, dot product",
+              "Basis vectors and span",
+              "Linear independence"
+            ]
+          },
+          {
+            "session": "Hour 2",
+            "title": "Matrices as Transformations",
+            "topics": [
+              "Matrix multiplication as composition of transformations",
+              "Transpose, inverse",
+              "Determinant — what it actually means",
+              "Systems of equations"
+            ]
+          },
+          {
+            "session": "Hour 3",
+            "title": "Eigenvalues, PCA & Neural Nets",
+            "topics": [
+              "Eigenvalues & eigenvectors visually",
+              "PCA — how dimensionality reduction works",
+              "How weights in neural networks are matrices",
+              "Practical NumPy session"
+            ]
+          }
+        ],
+        "prerequisites": "Basic algebra. Calculus helpful but not required.",
+        "outcomes": [
+          "Understand matrix operations geometrically",
+          "Explain PCA and embeddings intuitively",
+          "Read ML papers without freezing at the maths",
+          "Use NumPy confidently for linear algebra"
+        ],
+        "includes": [
+          "Full session recording (lifetime access)",
+          "Live doubt clearing session (1 hr)",
+          "Visual cheat sheet PDF",
+          "NumPy code notebook",
           "Learner's Certificate"
         ],
         "certificate": "learner"
@@ -79,6 +291,7 @@
       "title": "Python Weekend Intensive",
       "tagline": "Go from zero to building projects in a single weekend",
       "price": 2999,
+      "recordedPrice": 1499,
       "currency": "INR",
       "duration": "2 days · 16 hours",
       "level": "Beginner",
@@ -139,157 +352,11 @@
           "Have a personalised roadmap to continue"
         ],
         "includes": [
-          "Both day recordings",
+          "Both day recordings (lifetime access)",
+          "Live 2-hour doubt clearing session",
           "All project source code",
           "Resource reading list",
           "2 weeks of doubt support via WhatsApp",
-          "Learner's Certificate"
-        ],
-        "certificate": "learner"
-      }
-    },
-    {
-      "id": "python-deep-dive",
-      "subject": "python",
-      "subjectLabel": "Python Programming",
-      "icon": "Code2",
-      "type": "deep-dive",
-      "deliveryMode": "Live+Recorded",
-      "title": "Python Mastery — 90 Days",
-      "tagline": "From beginner to job-ready Python developer",
-      "price": 7999,
-      "currency": "INR",
-      "duration": "90 days",
-      "level": "Beginner to Advanced",
-      "instructor": "Prasant Mishra",
-      "schedule": {
-        "rule": "weekly-monday",
-        "time": "Sat & Sun · 10:00 AM – 12:00 PM IST"
-      },
-      "content": {
-        "overview": "A comprehensive 90-day program built for people who want to go from zero to genuinely job-ready. Weekly live sessions, graded assignments, code reviews, and a capstone project you can show employers.",
-        "sessions": [
-          {
-            "session": "Month 1",
-            "title": "Core Python",
-            "topics": [
-              "Python fundamentals in depth",
-              "Data structures & algorithms basics",
-              "Functions, decorators & closures",
-              "OOP — classes, inheritance, dunder methods",
-              "Exception handling & logging",
-              "Unit testing with pytest"
-            ]
-          },
-          {
-            "session": "Month 2",
-            "title": "Applied Python",
-            "topics": [
-              "File & database I/O (SQLite)",
-              "REST APIs & web scraping (requests, BeautifulSoup)",
-              "Data analysis with Pandas & NumPy",
-              "Automation scripts (OS, scheduling)",
-              "Virtual environments & packaging",
-              "Type hints & mypy"
-            ]
-          },
-          {
-            "session": "Month 3",
-            "title": "Professional Python",
-            "topics": [
-              "Algorithm design & complexity",
-              "Git & version control (collaborative workflows)",
-              "Web APIs with FastAPI",
-              "Docker basics & deployment",
-              "Capstone project — build & ship",
-              "Portfolio review & interview prep"
-            ]
-          }
-        ],
-        "prerequisites": "None — but commitment to 8–10 hours/week",
-        "outcomes": [
-          "Write production-quality, tested Python code",
-          "Build and deploy REST APIs with FastAPI",
-          "Analyse data with Pandas",
-          "Ship a real capstone project for your portfolio",
-          "Be interview-ready for junior Python developer roles"
-        ],
-        "includes": [
-          "Weekly live sessions (2 hrs each)",
-          "All session recordings",
-          "Weekly graded assignments",
-          "1-on-1 code review every 2 weeks",
-          "1 doubt session per week (group)",
-          "Capstone project mentorship",
-          "Learner's Certificate",
-          "Alumni community access"
-        ],
-        "certificate": "learner"
-      }
-    },
-    {
-      "id": "ai-masterclass",
-      "subject": "ai",
-      "subjectLabel": "Artificial Intelligence",
-      "icon": "Brain",
-      "type": "masterclass",
-      "deliveryMode": "Live",
-      "title": "AI Demystified in 3 Hours",
-      "tagline": "What AI actually is — and how it actually works",
-      "price": 499,
-      "currency": "INR",
-      "duration": "3 hours",
-      "level": "Beginner",
-      "instructor": "Prasant Mishra",
-      "schedule": {
-        "rule": "monthly-first-saturday",
-        "time": "2:00 PM IST"
-      },
-      "content": {
-        "overview": "Strip away the hype. Understand how machine learning, neural networks, and LLMs actually work — without needing a PhD. Built around visual intuition and live demos throughout.",
-        "sessions": [
-          {
-            "session": "Hour 1",
-            "title": "What Machines Actually Learn",
-            "topics": [
-              "What ML really is (vs. traditional programming)",
-              "Training, features & labels explained visually",
-              "Linear models & decision boundaries",
-              "Why deep learning suddenly worked"
-            ]
-          },
-          {
-            "session": "Hour 2",
-            "title": "Neural Networks & LLMs",
-            "topics": [
-              "How a neural network learns — forward & backward pass",
-              "Backpropagation explained intuitively (no calculus required)",
-              "What a transformer actually does",
-              "How GPT-4 and Claude work under the hood"
-            ]
-          },
-          {
-            "session": "Hour 3",
-            "title": "AI in Practice",
-            "topics": [
-              "Live: building with AI APIs (OpenAI / Anthropic)",
-              "Prompt engineering principles that actually work",
-              "Where AI fails — hallucinations, bias, limits",
-              "Roadmap: how to go deeper into AI"
-            ]
-          }
-        ],
-        "prerequisites": "Curiosity only. No maths or coding required.",
-        "outcomes": [
-          "Explain how LLMs work to anyone",
-          "Understand the real limits of current AI",
-          "Use AI APIs to build something real",
-          "Know the right learning path to go deeper"
-        ],
-        "includes": [
-          "Full recording",
-          "Curated resource list",
-          "API demo code",
           "Learner's Certificate"
         ],
         "certificate": "learner"
@@ -304,7 +371,8 @@
       "deliveryMode": "Live",
       "title": "Build with AI — Weekend Cohort",
       "tagline": "Go from AI consumer to AI builder in one weekend",
-      "price": 2499,
+      "price": 3999,
+      "recordedPrice": 1999,
       "currency": "INR",
       "duration": "2 days · 14 hours",
       "level": "Beginner to Intermediate",
@@ -365,228 +433,11 @@
           "Deploy an AI product end-to-end"
         ],
         "includes": [
-          "Both day recordings",
+          "Both day recordings (lifetime access)",
+          "Live 2-hour doubt clearing session",
           "All project code",
           "Prompt template library",
           "2 weeks doubt support",
-          "Learner's Certificate"
-        ],
-        "certificate": "learner"
-      }
-    },
-    {
-      "id": "ai-deep-dive",
-      "subject": "ai",
-      "subjectLabel": "Artificial Intelligence",
-      "icon": "Brain",
-      "type": "deep-dive",
-      "deliveryMode": "Live+Recorded",
-      "title": "AI & ML Engineering — 12 Weeks",
-      "tagline": "From fundamentals to building and deploying real models",
-      "price": 9999,
-      "currency": "INR",
-      "duration": "12 weeks",
-      "level": "Intermediate",
-      "instructor": "Prasant Mishra",
-      "schedule": {
-        "rule": "weekly-monday",
-        "time": "Sat · 2:00 PM – 5:00 PM IST"
-      },
-      "content": {
-        "overview": "A rigorous 12-week program for people serious about working in AI. Code-first, maths where necessary, project-driven throughout. You will train, evaluate, and deploy real models.",
-        "sessions": [
-          {
-            "session": "Weeks 1–3",
-            "title": "ML Foundations",
-            "topics": [
-              "Statistics & probability for ML",
-              "Linear & logistic regression from scratch",
-              "Feature engineering & selection",
-              "Model evaluation — metrics, overfitting, cross-validation"
-            ]
-          },
-          {
-            "session": "Weeks 4–6",
-            "title": "Core Algorithms",
-            "topics": [
-              "Decision trees & Random Forests",
-              "SVMs & kernel methods",
-              "Clustering — K-Means, DBSCAN",
-              "Dimensionality reduction — PCA, t-SNE"
-            ]
-          },
-          {
-            "session": "Weeks 7–9",
-            "title": "Deep Learning",
-            "topics": [
-              "Neural networks from scratch (NumPy)",
-              "PyTorch fundamentals",
-              "CNNs for vision, RNNs/LSTMs for sequences",
-              "Transfer learning & fine-tuning"
-            ]
-          },
-          {
-            "session": "Weeks 10–12",
-            "title": "Applied AI & Capstone",
-            "topics": [
-              "LLM APIs & fine-tuning (LoRA)",
-              "Model deployment — FastAPI + Docker + cloud",
-              "Capstone project: your own ML product",
-              "Portfolio, GitHub, interview prep"
-            ]
-          }
-        ],
-        "prerequisites": "Python basics, algebra-level maths. No prior ML experience needed.",
-        "outcomes": [
-          "Train and evaluate ML models end-to-end",
-          "Build neural networks with PyTorch",
-          "Fine-tune LLMs with LoRA",
-          "Deploy models to production",
-          "Ship a real AI product for your portfolio"
-        ],
-        "includes": [
-          "Weekly 3-hour live sessions",
-          "All recordings",
-          "Weekly assignments with model answers",
-          "Code reviews",
-          "Capstone project mentorship",
-          "Learner's Certificate",
-          "Alumni network access"
-        ],
-        "certificate": "learner"
-      }
-    },
-    {
-      "id": "calculus-masterclass",
-      "subject": "maths",
-      "subjectLabel": "Mathematics",
-      "icon": "Sigma",
-      "type": "masterclass",
-      "deliveryMode": "Live",
-      "title": "Calculus in 3 Hours",
-      "tagline": "Derivatives and integrals — actually understood",
-      "price": 399,
-      "currency": "INR",
-      "duration": "3 hours",
-      "level": "Intermediate",
-      "instructor": "Prasant Mishra",
-      "schedule": {
-        "rule": "monthly-first-saturday",
-        "time": "11:00 AM IST"
-      },
-      "content": {
-        "overview": "A focused deep-dive into the two big ideas in calculus — derivatives and integrals — built around geometric intuition first and formulas second. You'll leave actually understanding why the rules work.",
-        "sessions": [
-          {
-            "session": "Hour 1",
-            "title": "Derivatives",
-            "topics": [
-              "What a derivative really means — the slope idea",
-              "Differentiation rules & shortcuts",
-              "Chain rule, product rule — explained visually",
-              "Applications: rates of change & tangents"
-            ]
-          },
-          {
-            "session": "Hour 2",
-            "title": "Integrals",
-            "topics": [
-              "Integration as area accumulation",
-              "Antiderivatives & the reverse process",
-              "Definite integrals & the Fundamental Theorem",
-              "Substitution method"
-            ]
-          },
-          {
-            "session": "Hour 3",
-            "title": "Applications & ML Connections",
-            "topics": [
-              "Optimisation problems — maxima & minima",
-              "Related rates",
-              "Where calculus appears in ML (gradient descent)",
-              "Problem-solving session"
-            ]
-          }
-        ],
-        "prerequisites": "Basic algebra and familiarity with functions (y = f(x))",
-        "outcomes": [
-          "Differentiate any standard function confidently",
-          "Evaluate definite and indefinite integrals",
-          "Apply calculus to real optimisation problems",
-          "Understand why gradient descent works"
-        ],
-        "includes": [
-          "Recording",
-          "Problem set PDF (30 problems)",
-          "Full solutions",
-          "Learner's Certificate"
-        ],
-        "certificate": "learner"
-      }
-    },
-    {
-      "id": "linear-algebra-masterclass",
-      "subject": "maths",
-      "subjectLabel": "Mathematics",
-      "icon": "Sigma",
-      "type": "masterclass",
-      "deliveryMode": "Live",
-      "title": "Linear Algebra for ML in 3 Hours",
-      "tagline": "The maths behind neural networks — made visual",
-      "price": 399,
-      "currency": "INR",
-      "duration": "3 hours",
-      "level": "Intermediate",
-      "instructor": "Prasant Mishra",
-      "schedule": {
-        "rule": "monthly-first-saturday",
-        "time": "3:00 PM IST"
-      },
-      "content": {
-        "overview": "Every AI model is built on linear algebra. This session builds a visual, geometric intuition for vectors, matrices, and transformations — exactly the parts that show up in ML.",
-        "sessions": [
-          {
-            "session": "Hour 1",
-            "title": "Vectors & Spaces",
-            "topics": [
-              "What a vector really is",
-              "Vector operations — addition, scaling, dot product",
-              "Basis vectors and span",
-              "Linear independence"
-            ]
-          },
-          {
-            "session": "Hour 2",
-            "title": "Matrices as Transformations",
-            "topics": [
-              "Matrix multiplication as composition of transformations",
-              "Transpose, inverse",
-              "Determinant — what it actually means",
-              "Systems of equations"
-            ]
-          },
-          {
-            "session": "Hour 3",
-            "title": "Eigenvalues, PCA & Neural Nets",
-            "topics": [
-              "Eigenvalues & eigenvectors visually",
-              "PCA — how dimensionality reduction works",
-              "How weights in neural networks are matrices",
-              "Practical NumPy session"
-            ]
-          }
-        ],
-        "prerequisites": "Basic algebra. Calculus helpful but not required.",
-        "outcomes": [
-          "Understand matrix operations geometrically",
-          "Explain PCA and embeddings intuitively",
-          "Read ML papers without freezing at the maths",
-          "Use NumPy confidently for linear algebra"
-        ],
-        "includes": [
-          "Recording",
-          "Visual cheat sheet PDF",
-          "NumPy code notebook",
           "Learner's Certificate"
         ],
         "certificate": "learner"
@@ -601,7 +452,8 @@
       "deliveryMode": "Live",
       "title": "Maths for ML — Power Weekend",
       "tagline": "Calculus + Linear Algebra + Probability in one focused weekend",
-      "price": 2499,
+      "price": 2999,
+      "recordedPrice": 1499,
       "currency": "INR",
       "duration": "2 days · 14 hours",
       "level": "Intermediate",
@@ -662,9 +514,69 @@
           "Solve probability problems for ML interviews"
         ],
         "includes": [
-          "Both day recordings",
+          "Both day recordings (lifetime access)",
+          "Live 2-hour doubt clearing session",
           "Problem sets with full solutions",
           "Formula reference PDF",
+          "Learner's Certificate"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "physics-cohort",
+      "subject": "science",
+      "subjectLabel": "Physics",
+      "icon": "Atom",
+      "type": "cohort",
+      "deliveryMode": "Live",
+      "title": "Classical Mechanics Weekend",
+      "tagline": "Newton to energy conservation — one focused weekend",
+      "price": 2999,
+      "recordedPrice": 1499,
+      "currency": "INR",
+      "duration": "2 days · 12 hours",
+      "level": "Beginner",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "biweekly-weekends",
+        "time": "9:00 AM – 3:00 PM IST"
+      },
+      "content": {
+        "overview": "A rigorous but accessible weekend covering the core of classical mechanics. Physical intuition first — equations follow naturally. By Day 2 you'll be solving problems you never thought you could.",
+        "sessions": [
+          {
+            "session": "Day 1",
+            "title": "Motion & Forces",
+            "topics": [
+              "Kinematics — displacement, velocity, acceleration",
+              "Newton's three laws in depth",
+              "Friction, normal force & tension",
+              "Problem-solving method: FBDs & systematic approach"
+            ]
+          },
+          {
+            "session": "Day 2",
+            "title": "Energy & Momentum",
+            "topics": [
+              "Work, power & kinetic energy",
+              "Conservation of mechanical energy",
+              "Momentum & impulse",
+              "Collisions — elastic & inelastic",
+              "Rotational motion basics"
+            ]
+          }
+        ],
+        "prerequisites": "Basic algebra. 11th grade physics helpful but not required.",
+        "outcomes": [
+          "Solve mechanics problems from first principles",
+          "Build genuine physical intuition",
+          "Prepared for university physics or JEE/NEET mechanics"
+        ],
+        "includes": [
+          "Both day recordings (lifetime access)",
+          "Live 2-hour doubt clearing session",
+          "Problem sets with full solutions",
           "Learner's Certificate"
         ],
         "certificate": "learner"
@@ -676,12 +588,13 @@
       "subjectLabel": "Web Development",
       "icon": "Globe",
       "type": "sprint",
-      "deliveryMode": "Live+Recorded",
-      "title": "Build Your First Website — 3 Weeks",
+      "deliveryMode": "Live",
+      "title": "Build Your First Website — 4 Weeks",
       "tagline": "HTML, CSS, JavaScript — from blank page to deployed site",
-      "price": 1999,
+      "price": 5999,
+      "recordedPrice": 2999,
       "currency": "INR",
-      "duration": "3 weeks",
+      "duration": "4 weeks",
       "level": "Beginner",
       "instructor": "Prasant Mishra",
       "schedule": {
@@ -691,7 +604,7 @@
         "nextStart": "rolling"
       },
       "content": {
-        "overview": "Three focused weeks to go from nothing to a live, deployed personal portfolio website. You build something real every session — no toy exercises.",
+        "overview": "Four focused weeks to go from nothing to a live, deployed personal portfolio website. You build something real every session — no toy exercises.",
         "sessions": [
           {
             "session": "Week 1",
@@ -722,6 +635,16 @@
               "Deploy live with Vercel (free tier)",
               "Code review & next steps"
             ]
+          },
+          {
+            "session": "Week 4",
+            "title": "Polish & Projects",
+            "topics": [
+              "Responsive design deep-dive",
+              "Animations & transitions",
+              "Mini project: interactive landing page",
+              "Portfolio review & roadmap"
+            ]
           }
         ],
         "prerequisites": "None — absolute beginners welcome",
@@ -732,8 +655,7 @@
           "Know exactly what to learn next (React, etc.)"
         ],
         "includes": [
-          "6 live sessions",
-          "All recordings",
+          "12 live sessions + all recordings",
           "Starter project files",
           "Learner's Certificate"
         ],
@@ -746,10 +668,11 @@
       "subjectLabel": "Web Development",
       "icon": "Globe",
       "type": "sprint",
-      "deliveryMode": "Live+Recorded",
+      "deliveryMode": "Live",
       "title": "React Foundations — 4 Weeks",
       "tagline": "Build modern UIs with the world's most popular frontend library",
-      "price": 2999,
+      "price": 7999,
+      "recordedPrice": 3999,
       "currency": "INR",
       "duration": "4 weeks",
       "level": "Intermediate",
@@ -812,8 +735,7 @@
           "Deploy React apps to production"
         ],
         "includes": [
-          "12 live sessions",
-          "All recordings",
+          "12 live sessions + all recordings",
           "Starter repos for each project",
           "Learner's Certificate"
         ],
@@ -821,74 +743,98 @@
       }
     },
     {
-      "id": "physics-cohort",
-      "subject": "science",
-      "subjectLabel": "Physics",
-      "icon": "Atom",
-      "type": "cohort",
+      "id": "python-sprint",
+      "subject": "python",
+      "subjectLabel": "Python Programming",
+      "icon": "Code2",
+      "type": "sprint",
       "deliveryMode": "Live",
-      "title": "Classical Mechanics Weekend",
-      "tagline": "Newton to energy conservation — one focused weekend",
-      "price": 1999,
+      "title": "Python Sprint — 4 Weeks",
+      "tagline": "Core Python mastery in one focused month",
+      "price": 6999,
+      "recordedPrice": 3499,
       "currency": "INR",
-      "duration": "2 days · 12 hours",
-      "level": "Beginner",
+      "duration": "4 weeks",
+      "level": "Beginner to Intermediate",
       "instructor": "Prasant Mishra",
       "schedule": {
-        "rule": "biweekly-weekends",
-        "time": "9:00 AM – 3:00 PM IST"
+        "rule": "fixed-days",
+        "days": "Mon, Wed, Fri",
+        "time": "8:00 PM – 9:30 PM IST",
+        "nextStart": "rolling"
       },
       "content": {
-        "overview": "A rigorous but accessible weekend covering the core of classical mechanics. Physical intuition first — equations follow naturally. By Day 2 you'll be solving problems you never thought you could.",
+        "overview": "One month. One language. Complete Python competency. Covers everything from fundamentals to OOP and real projects — without the padding of a longer course.",
         "sessions": [
           {
-            "session": "Day 1",
-            "title": "Motion & Forces",
+            "session": "Week 1",
+            "title": "Python Foundations",
             "topics": [
-              "Kinematics — displacement, velocity, acceleration",
-              "Newton's three laws in depth",
-              "Friction, normal force & tension",
-              "Problem-solving method: FBDs & systematic approach"
+              "Setup, variables, data types",
+              "Control flow — if/for/while",
+              "Functions, arguments, return values",
+              "Lists, dicts, sets in depth"
             ]
           },
           {
-            "session": "Day 2",
-            "title": "Energy & Momentum",
+            "session": "Week 2",
+            "title": "Intermediate Python",
             "topics": [
-              "Work, power & kinetic energy",
-              "Conservation of mechanical energy",
-              "Momentum & impulse",
-              "Collisions — elastic & inelastic",
-              "Rotational motion basics"
+              "Object-Oriented Programming",
+              "Inheritance & polymorphism",
+              "File I/O & exception handling",
+              "Modules & packages"
+            ]
+          },
+          {
+            "session": "Week 3",
+            "title": "Applied Python",
+            "topics": [
+              "Working with APIs & JSON",
+              "Web scraping with requests & BeautifulSoup",
+              "Working with CSV & data files",
+              "Project: real-world automation script"
+            ]
+          },
+          {
+            "session": "Week 4",
+            "title": "Professional Python",
+            "topics": [
+              "Decorators, generators & context managers",
+              "Virtual environments & packaging",
+              "Writing tests with pytest",
+              "Capstone project & code review"
             ]
           }
         ],
-        "prerequisites": "Basic algebra. 11th grade physics helpful but not required.",
+        "prerequisites": "None",
         "outcomes": [
-          "Solve mechanics problems from first principles",
-          "Build genuine physical intuition",
-          "Prepared for university physics or JEE/NEET mechanics"
+          "Write clean, idiomatic Python",
+          "Build OOP-based programs",
+          "Work with APIs and data files",
+          "Write tested, packaged Python code"
         ],
         "includes": [
-          "Both day recordings",
-          "Problem sets with full solutions",
+          "12 live sessions + all recordings",
+          "All project source code",
           "Learner's Certificate"
         ],
         "certificate": "learner"
       }
     },
     {
-      "id": "dsa-standard",
+      "id": "dsa-sprint",
       "subject": "programming",
       "subjectLabel": "Data Structures & Algorithms",
       "icon": "GitBranch",
-      "type": "standard",
-      "deliveryMode": "Recorded",
-      "title": "DSA for Interviews — 6 Weeks",
-      "tagline": "Everything you need to crack coding interviews at product companies",
-      "price": 4999,
+      "type": "sprint",
+      "deliveryMode": "Live",
+      "title": "DSA Sprint — 4 Weeks",
+      "tagline": "Core patterns to crack coding interviews fast",
+      "price": 7999,
+      "recordedPrice": 3999,
       "currency": "INR",
-      "duration": "6 weeks",
+      "duration": "4 weeks",
       "level": "Intermediate",
       "instructor": "Prasant Mishra",
       "schedule": {
@@ -898,59 +844,398 @@
         "nextStart": "rolling"
       },
       "content": {
-        "overview": "A focused 6-week course covering every data structure and algorithm pattern that appears in technical interviews. Pattern-first teaching — you learn to recognise the problem type, not just memorise solutions.",
+        "overview": "A fast, pattern-focused sprint through the DSA topics that show up most in technical interviews. One month, 15 patterns, hands-on coding every session.",
+        "sessions": [
+          {
+            "session": "Week 1",
+            "title": "Arrays & Strings",
+            "topics": [
+              "Two pointers pattern",
+              "Sliding window",
+              "Prefix sums",
+              "Hash maps & sets"
+            ]
+          },
+          {
+            "session": "Week 2",
+            "title": "Trees & Graphs",
+            "topics": [
+              "Binary tree traversals",
+              "Binary search trees",
+              "DFS & BFS patterns",
+              "Graph representations"
+            ]
+          },
+          {
+            "session": "Week 3",
+            "title": "Recursion & DP",
+            "topics": [
+              "Recursion patterns & call stack",
+              "Memoization (top-down DP)",
+              "Classic DP: knapsack, LCS",
+              "Bottom-up DP tables"
+            ]
+          },
+          {
+            "session": "Week 4",
+            "title": "Advanced Patterns",
+            "topics": [
+              "Heaps & priority queues",
+              "Greedy algorithms",
+              "Backtracking",
+              "Mock interview session"
+            ]
+          }
+        ],
+        "prerequisites": "Python basics (variables, loops, functions, classes)",
+        "outcomes": [
+          "Recognise and apply 15+ algorithm patterns",
+          "Solve medium LeetCode problems consistently",
+          "Perform confidently in technical screens"
+        ],
+        "includes": [
+          "12 live sessions + all recordings",
+          "50 curated problem list",
+          "Pattern cheat sheet",
+          "Learner's Certificate"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "sql-sprint",
+      "subject": "technology",
+      "subjectLabel": "Data & SQL",
+      "icon": "Database",
+      "type": "sprint",
+      "deliveryMode": "Live",
+      "title": "SQL & Data Sprint — 4 Weeks",
+      "tagline": "Query, analyse and visualise data like a data engineer",
+      "price": 5999,
+      "recordedPrice": 2999,
+      "currency": "INR",
+      "duration": "4 weeks",
+      "level": "Beginner to Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Mon, Wed, Fri",
+        "time": "7:00 PM – 8:30 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "A focused sprint covering SQL from scratch to advanced queries, plus Python data analysis with pandas. Every session uses real datasets.",
+        "sessions": [
+          {
+            "session": "Week 1",
+            "title": "SQL Foundations",
+            "topics": [
+              "SELECT, WHERE, ORDER BY, LIMIT",
+              "Aggregations — GROUP BY, HAVING",
+              "JOINs — INNER, LEFT, RIGHT, FULL",
+              "Subqueries & CTEs"
+            ]
+          },
+          {
+            "session": "Week 2",
+            "title": "Advanced SQL",
+            "topics": [
+              "Window functions — ROW_NUMBER, RANK, LAG",
+              "Indexes & query optimisation",
+              "Database design & normalisation",
+              "Project: analytics dashboard in SQL"
+            ]
+          },
+          {
+            "session": "Week 3",
+            "title": "Pandas & Python",
+            "topics": [
+              "DataFrames & Series",
+              "Filtering, groupby, merging",
+              "Handling missing data",
+              "Reading from SQL into pandas"
+            ]
+          },
+          {
+            "session": "Week 4",
+            "title": "Analysis & Visualisation",
+            "topics": [
+              "Matplotlib & Seaborn basics",
+              "Exploratory data analysis workflow",
+              "Capstone: end-to-end analysis project",
+              "Presenting findings effectively"
+            ]
+          }
+        ],
+        "prerequisites": "Basic Python helpful but not required. No SQL experience needed.",
+        "outcomes": [
+          "Write complex SQL queries confidently",
+          "Use window functions for analytics",
+          "Analyse data with pandas",
+          "Visualise and present findings"
+        ],
+        "includes": [
+          "12 live sessions + all recordings",
+          "Real-world datasets",
+          "SQL cheat sheet",
+          "Learner's Certificate"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "ai-tools-sprint",
+      "subject": "ai",
+      "subjectLabel": "Artificial Intelligence",
+      "icon": "Brain",
+      "type": "sprint",
+      "deliveryMode": "Live",
+      "title": "AI Tools Sprint — 4 Weeks",
+      "tagline": "Prompt engineering, APIs and agents — build real AI products",
+      "price": 8999,
+      "recordedPrice": 4999,
+      "currency": "INR",
+      "duration": "4 weeks",
+      "level": "Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Tue, Thu, Sat",
+        "time": "8:00 PM – 9:30 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "A practical sprint on the tools and patterns driving the AI product explosion. Build five working AI projects across prompt engineering, RAG, agents, and deployment.",
+        "sessions": [
+          {
+            "session": "Week 1",
+            "title": "Prompt Engineering",
+            "topics": [
+              "Zero-shot, few-shot, chain-of-thought",
+              "System prompts & personas",
+              "Structured output with JSON mode",
+              "Prompt evaluation & iteration"
+            ]
+          },
+          {
+            "session": "Week 2",
+            "title": "AI APIs & RAG",
+            "topics": [
+              "OpenAI & Anthropic API in depth",
+              "Embeddings & vector search",
+              "RAG — chat over your own documents",
+              "Project: document Q&A app"
+            ]
+          },
+          {
+            "session": "Week 3",
+            "title": "Agents & Tool Use",
+            "topics": [
+              "Function calling & tool use",
+              "Multi-step agent loops",
+              "LangChain / LangGraph basics",
+              "Project: research agent"
+            ]
+          },
+          {
+            "session": "Week 4",
+            "title": "Production & Deployment",
+            "topics": [
+              "Cost optimisation & rate limits",
+              "Streaming responses",
+              "Deploying AI apps to production",
+              "Capstone: your AI product"
+            ]
+          }
+        ],
+        "prerequisites": "Basic Python. No prior AI experience needed.",
+        "outcomes": [
+          "Build production-ready AI applications",
+          "Implement RAG and agent patterns",
+          "Deploy AI products to the web",
+          "Optimise for cost and performance"
+        ],
+        "includes": [
+          "12 live sessions + all recordings",
+          "All project code",
+          "Prompt template library",
+          "Learner's Certificate"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "python-deep-dive",
+      "subject": "python",
+      "subjectLabel": "Python Programming",
+      "icon": "Code2",
+      "type": "deep-dive",
+      "deliveryMode": "Live+Recorded",
+      "title": "Python Mastery — 90 Days",
+      "tagline": "From beginner to job-ready Python developer",
+      "price": 19999,
+      "currency": "INR",
+      "duration": "90 days",
+      "level": "Beginner to Advanced",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "weekly-monday",
+        "time": "Sat & Sun · 10:00 AM – 12:00 PM IST"
+      },
+      "content": {
+        "overview": "A comprehensive 90-day program built for people who want to go from zero to genuinely job-ready. Weekly live sessions, graded assignments, code reviews, and a capstone project you can show employers.",
+        "sessions": [
+          {
+            "session": "Month 1",
+            "title": "Core Python",
+            "topics": [
+              "Python fundamentals in depth",
+              "Data structures & algorithms basics",
+              "Functions, decorators & closures",
+              "OOP — classes, inheritance, dunder methods",
+              "Exception handling & logging",
+              "Unit testing with pytest"
+            ]
+          },
+          {
+            "session": "Month 2",
+            "title": "Applied Python",
+            "topics": [
+              "File & database I/O (SQLite)",
+              "REST APIs & web scraping (requests, BeautifulSoup)",
+              "Data analysis with Pandas & NumPy",
+              "Automation scripts (OS, scheduling)",
+              "Virtual environments & packaging",
+              "Type hints & mypy"
+            ]
+          },
+          {
+            "session": "Month 3",
+            "title": "Professional Python",
+            "topics": [
+              "Algorithm design & complexity",
+              "Git & version control (collaborative workflows)",
+              "Web APIs with FastAPI",
+              "Docker basics & deployment",
+              "Capstone project — build & ship",
+              "Portfolio review & interview prep"
+            ]
+          }
+        ],
+        "prerequisites": "None — but commitment to 8–10 hours/week",
+        "outcomes": [
+          "Write production-quality, tested Python code",
+          "Build and deploy REST APIs with FastAPI",
+          "Analyse data with Pandas",
+          "Ship a real capstone project for your portfolio",
+          "Be interview-ready for junior Python developer roles"
+        ],
+        "includes": [
+          "Weekly live sessions (2 hrs each)",
+          "All session recordings (lifetime access)",
+          "Weekly graded assignments",
+          "1-on-1 code review every 2 weeks",
+          "Weekly doubt sessions (group)",
+          "Capstone project mentorship",
+          "Learner's Certificate",
+          "Alumni community access"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "dsa-deep-dive",
+      "subject": "programming",
+      "subjectLabel": "Data Structures & Algorithms",
+      "icon": "GitBranch",
+      "type": "deep-dive",
+      "deliveryMode": "Live+Recorded",
+      "title": "DSA Deep Dive — 8 Weeks",
+      "tagline": "Full interview-grade DSA — every pattern, every problem type",
+      "price": 14999,
+      "currency": "INR",
+      "duration": "8 weeks",
+      "level": "Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Tue, Thu, Sat",
+        "time": "8:00 PM – 10:00 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "Eight weeks of comprehensive DSA coverage — every data structure, every algorithm pattern, and three full mock interviews. Built for people targeting product companies and top-tier tech firms.",
         "sessions": [
           {
             "session": "Weeks 1–2",
             "title": "Arrays, Strings & Hashing",
             "topics": [
-              "Two pointers",
-              "Sliding window",
+              "Two pointers & sliding window",
               "Hash maps & hash sets",
-              "Prefix sums & difference arrays"
+              "Prefix sums & difference arrays",
+              "Binary search variants"
             ]
           },
           {
             "session": "Week 3",
-            "title": "Trees & Graphs",
+            "title": "Linked Lists & Stacks",
             "topics": [
-              "Binary trees — traversals & properties",
-              "Binary search trees",
-              "DFS & BFS",
-              "Graph representations & common patterns"
+              "Singly & doubly linked lists",
+              "Fast & slow pointers",
+              "Stack patterns",
+              "Monotonic stack"
             ]
           },
           {
             "session": "Week 4",
-            "title": "Recursion & Dynamic Programming",
+            "title": "Trees",
             "topics": [
-              "Recursion patterns & call stack",
-              "Memoization (top-down DP)",
-              "Bottom-up DP with tables",
-              "Classic DP: knapsack, LCS, coin change"
+              "Binary tree traversals",
+              "Binary search trees",
+              "Tree construction problems",
+              "Segment trees & Fenwick trees"
             ]
           },
           {
-            "session": "Weeks 5–6",
+            "session": "Week 5",
+            "title": "Graphs",
+            "topics": [
+              "DFS & BFS patterns",
+              "Union-Find",
+              "Topological sort",
+              "Shortest paths — Dijkstra, Bellman-Ford"
+            ]
+          },
+          {
+            "session": "Week 6",
+            "title": "Dynamic Programming",
+            "topics": [
+              "DP patterns — 1D, 2D, interval",
+              "Classic DP: knapsack, LCS, edit distance",
+              "DP on trees & graphs",
+              "Bitmask DP"
+            ]
+          },
+          {
+            "session": "Weeks 7–8",
             "title": "Advanced Topics & Mock Interviews",
             "topics": [
-              "Heaps & priority queues",
-              "Tries",
+              "Heaps, tries & advanced data structures",
               "Greedy algorithms",
               "Backtracking",
-              "3 full mock interviews with detailed written feedback"
+              "3 full mock interviews with written feedback"
             ]
           }
         ],
-        "prerequisites": "Python (or any language) basics — variables, loops, functions, classes",
+        "prerequisites": "Python basics. One or more of: DSA Sprint, or 50+ LeetCode problems solved.",
         "outcomes": [
-          "Solve medium LeetCode problems consistently",
-          "Recognise and apply 15+ algorithm patterns",
-          "Perform confidently under interview conditions",
-          "Be ready for technical screens at product companies"
+          "Solve hard LeetCode problems consistently",
+          "Recognise and apply 25+ algorithm patterns",
+          "Perform at a high level under interview pressure",
+          "Ready for FAANG and top product company screens"
         ],
         "includes": [
-          "Live sessions + all recordings",
+          "24 live sessions + all recordings",
           "100 curated problem list",
           "Pattern cheat sheet",
           "3 mock interviews with feedback",
@@ -960,15 +1245,1404 @@
       }
     },
     {
+      "id": "maths-deep-dive",
+      "subject": "maths",
+      "subjectLabel": "Mathematics",
+      "icon": "Sigma",
+      "type": "deep-dive",
+      "deliveryMode": "Live+Recorded",
+      "title": "Maths for ML — Deep Dive",
+      "tagline": "Calculus, Linear Algebra, Probability & Statistics — thoroughly",
+      "price": 12999,
+      "currency": "INR",
+      "duration": "8 weeks",
+      "level": "Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Sat & Sun",
+        "time": "10:00 AM – 12:00 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "Eight weeks of rigorous mathematical foundations for machine learning. Goes significantly deeper than the weekend cohort — with proofs, derivations, and applied exercises every week.",
+        "sessions": [
+          {
+            "session": "Weeks 1–2",
+            "title": "Calculus for ML",
+            "topics": [
+              "Limits, continuity, differentiability",
+              "Partial derivatives & the gradient",
+              "Chain rule & backpropagation derivation",
+              "Multivariable optimisation & Lagrange multipliers"
+            ]
+          },
+          {
+            "session": "Weeks 3–4",
+            "title": "Linear Algebra",
+            "topics": [
+              "Vector spaces, basis & dimension",
+              "Matrix factorizations (LU, QR, SVD)",
+              "Eigendecomposition in depth",
+              "PCA derivation from scratch"
+            ]
+          },
+          {
+            "session": "Weeks 5–6",
+            "title": "Probability & Statistics",
+            "topics": [
+              "Probability theory — sigma algebras, random variables",
+              "Common distributions & their properties",
+              "Bayesian inference & MLE/MAP",
+              "Hypothesis testing & confidence intervals"
+            ]
+          },
+          {
+            "session": "Weeks 7–8",
+            "title": "Information Theory & Applications",
+            "topics": [
+              "Entropy, KL divergence, mutual information",
+              "These concepts in neural networks",
+              "Reading ML paper math sections",
+              "Capstone: derive a classic ML algorithm"
+            ]
+          }
+        ],
+        "prerequisites": "12th grade maths. Maths for ML Weekend Cohort or equivalent.",
+        "outcomes": [
+          "Derive and understand core ML algorithms mathematically",
+          "Read ML papers comfortably",
+          "Apply maths directly in code (NumPy)",
+          "Have a solid foundation for PhD-level AI work"
+        ],
+        "includes": [
+          "16 live sessions + all recordings",
+          "Weekly problem sets with full solutions",
+          "NumPy code notebooks",
+          "Learner's Certificate"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "backend-deep-dive",
+      "subject": "technology",
+      "subjectLabel": "Backend Engineering",
+      "icon": "Server",
+      "type": "deep-dive",
+      "deliveryMode": "Live+Recorded",
+      "title": "Backend Engineering Deep Dive",
+      "tagline": "APIs, databases, caching and production systems — 10 weeks",
+      "price": 16999,
+      "currency": "INR",
+      "duration": "10 weeks",
+      "level": "Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Mon, Wed, Fri",
+        "time": "8:00 PM – 9:30 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "A thorough 10-week backend engineering program. Build production-grade APIs, master database design, caching, auth, and deployment — with real projects every two weeks.",
+        "sessions": [
+          {
+            "session": "Weeks 1–2",
+            "title": "FastAPI & REST",
+            "topics": [
+              "REST API design principles",
+              "FastAPI in depth — routing, dependencies, middleware",
+              "Request validation with Pydantic",
+              "Project 1: production-ready REST API"
+            ]
+          },
+          {
+            "session": "Weeks 3–4",
+            "title": "Databases",
+            "topics": [
+              "PostgreSQL in depth — schemas, indexes, transactions",
+              "ORM with SQLAlchemy / Prisma",
+              "Database design & normalisation",
+              "Query optimisation"
+            ]
+          },
+          {
+            "session": "Weeks 5–6",
+            "title": "Auth & Security",
+            "topics": [
+              "JWT authentication & refresh tokens",
+              "OAuth 2.0 flows",
+              "Role-based access control (RBAC)",
+              "OWASP top 10 for APIs"
+            ]
+          },
+          {
+            "session": "Weeks 7–8",
+            "title": "Caching & Async",
+            "topics": [
+              "Redis — caching, sessions, pub-sub",
+              "Background tasks & queues (Celery / BullMQ)",
+              "WebSockets & real-time",
+              "Project 2: real-time chat API"
+            ]
+          },
+          {
+            "session": "Weeks 9–10",
+            "title": "Deployment & Production",
+            "topics": [
+              "Docker & docker-compose",
+              "CI/CD with GitHub Actions",
+              "Cloud deployment (AWS / Vercel)",
+              "Capstone: full backend system"
+            ]
+          }
+        ],
+        "prerequisites": "Python basics. Basic understanding of APIs (HTTP, JSON).",
+        "outcomes": [
+          "Build and ship production REST APIs",
+          "Design and optimise relational databases",
+          "Implement auth systems securely",
+          "Deploy backend services to the cloud"
+        ],
+        "includes": [
+          "30 live sessions + all recordings",
+          "All project source code",
+          "Architecture reference guide",
+          "Learner's Certificate"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "ai-deep-dive",
+      "subject": "ai",
+      "subjectLabel": "Artificial Intelligence",
+      "icon": "Brain",
+      "type": "deep-dive",
+      "deliveryMode": "Live+Recorded",
+      "title": "AI & ML Engineering — 12 Weeks",
+      "tagline": "From fundamentals to building and deploying real models",
+      "price": 19999,
+      "currency": "INR",
+      "duration": "12 weeks",
+      "level": "Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "weekly-monday",
+        "time": "Sat · 2:00 PM – 5:00 PM IST"
+      },
+      "content": {
+        "overview": "A rigorous 12-week program for people serious about working in AI. Code-first, maths where necessary, project-driven throughout. You will train, evaluate, and deploy real models.",
+        "sessions": [
+          {
+            "session": "Weeks 1–3",
+            "title": "ML Foundations",
+            "topics": [
+              "Statistics & probability for ML",
+              "Linear & logistic regression from scratch",
+              "Feature engineering & selection",
+              "Model evaluation — metrics, overfitting, cross-validation"
+            ]
+          },
+          {
+            "session": "Weeks 4–6",
+            "title": "Core Algorithms",
+            "topics": [
+              "Decision trees & Random Forests",
+              "SVMs & kernel methods",
+              "Clustering — K-Means, DBSCAN",
+              "Dimensionality reduction — PCA, t-SNE"
+            ]
+          },
+          {
+            "session": "Weeks 7–9",
+            "title": "Deep Learning",
+            "topics": [
+              "Neural networks from scratch (NumPy)",
+              "PyTorch fundamentals",
+              "CNNs for vision, RNNs/LSTMs for sequences",
+              "Transfer learning & fine-tuning"
+            ]
+          },
+          {
+            "session": "Weeks 10–12",
+            "title": "Applied AI & Capstone",
+            "topics": [
+              "LLM APIs & fine-tuning (LoRA)",
+              "Model deployment — FastAPI + Docker + cloud",
+              "Capstone project: your own ML product",
+              "Portfolio, GitHub, interview prep"
+            ]
+          }
+        ],
+        "prerequisites": "Python basics, algebra-level maths. No prior ML experience needed.",
+        "outcomes": [
+          "Train and evaluate ML models end-to-end",
+          "Build neural networks with PyTorch",
+          "Fine-tune LLMs with LoRA",
+          "Deploy models to production",
+          "Ship a real AI product for your portfolio"
+        ],
+        "includes": [
+          "Weekly 3-hour live sessions",
+          "All recordings (lifetime access)",
+          "Weekly assignments with model answers",
+          "Code reviews",
+          "Capstone project mentorship",
+          "Learner's Certificate",
+          "Alumni network access"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "genai-deep-dive",
+      "subject": "ai",
+      "subjectLabel": "Artificial Intelligence",
+      "icon": "Brain",
+      "type": "deep-dive",
+      "deliveryMode": "Live+Recorded",
+      "title": "GenAI Deep Dive — 12 Weeks",
+      "tagline": "LLMs, RAG, agents, fine-tuning and production AI — end to end",
+      "price": 24999,
+      "currency": "INR",
+      "duration": "12 weeks",
+      "level": "Intermediate to Advanced",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Sat & Sun",
+        "time": "10:00 AM – 12:30 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "A comprehensive 12-week deep dive into generative AI — from how LLMs work to building and shipping production AI systems. The most complete GenAI program at this price point.",
+        "sessions": [
+          {
+            "session": "Weeks 1–2",
+            "title": "LLMs — How They Work",
+            "topics": [
+              "Transformer architecture in depth",
+              "Tokenization, embeddings, attention",
+              "Pre-training vs fine-tuning",
+              "Evaluating LLM outputs"
+            ]
+          },
+          {
+            "session": "Weeks 3–4",
+            "title": "Prompt Engineering & APIs",
+            "topics": [
+              "Advanced prompting techniques",
+              "OpenAI & Anthropic APIs in depth",
+              "Structured output & function calling",
+              "Cost & latency optimisation"
+            ]
+          },
+          {
+            "session": "Weeks 5–6",
+            "title": "RAG Systems",
+            "topics": [
+              "Embeddings & vector databases (Pinecone, Weaviate, pgvector)",
+              "Chunking strategies & retrieval patterns",
+              "Hybrid search — dense + sparse",
+              "Project: production-grade RAG app"
+            ]
+          },
+          {
+            "session": "Weeks 7–8",
+            "title": "Agents & Orchestration",
+            "topics": [
+              "Tool use & function calling",
+              "Multi-step agent loops",
+              "LangGraph — stateful agents",
+              "Project: autonomous research agent"
+            ]
+          },
+          {
+            "session": "Weeks 9–10",
+            "title": "Fine-Tuning",
+            "topics": [
+              "When to fine-tune vs prompt",
+              "LoRA & QLoRA in practice",
+              "Dataset curation & formatting",
+              "Fine-tuning Llama & Mistral"
+            ]
+          },
+          {
+            "session": "Weeks 11–12",
+            "title": "Production & Capstone",
+            "topics": [
+              "Observability — tracing & evals",
+              "Safety & guardrails",
+              "Deploying GenAI to production",
+              "Capstone: your own AI product"
+            ]
+          }
+        ],
+        "prerequisites": "Python. Basic familiarity with AI APIs (or AI Tools Sprint).",
+        "outcomes": [
+          "Build production-grade RAG and agent systems",
+          "Fine-tune open-source LLMs",
+          "Deploy GenAI products at scale",
+          "Evaluate and monitor AI systems"
+        ],
+        "includes": [
+          "24 live sessions + all recordings",
+          "All project code",
+          "Prompt & RAG template library",
+          "Capstone project mentorship",
+          "Learner's Certificate",
+          "Alumni network access"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "software-engineer",
+      "subject": "technology",
+      "subjectLabel": "Software Engineering",
+      "icon": "Code2",
+      "type": "full-course",
+      "deliveryMode": "Live+Recorded",
+      "title": "Software Engineer",
+      "tagline": "Everything you need to land and thrive in your first software engineering role",
+      "price": 39999,
+      "currency": "INR",
+      "duration": "~6 months",
+      "level": "Beginner",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Sat & Sun",
+        "time": "10:00 AM – 12:30 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "A comprehensive program that takes you from zero to job-ready Software Engineer. Covers programming, problem-solving, web fundamentals, Docker, cloud basics, and three real projects — everything a hiring manager expects.",
+        "sessions": [
+          {
+            "session": "Module 1 — Month 1",
+            "title": "Python & Programming Foundations",
+            "topics": [
+              "Python core — variables, functions, OOP",
+              "Data structures — lists, dicts, sets",
+              "Exception handling & testing with pytest",
+              "Git & collaborative workflows"
+            ]
+          },
+          {
+            "session": "Module 2 — Month 2",
+            "title": "Web & APIs",
+            "topics": [
+              "HTML, CSS & JavaScript basics",
+              "REST API fundamentals (HTTP, JSON)",
+              "Building a FastAPI backend",
+              "Project 1: full-stack mini app"
+            ]
+          },
+          {
+            "session": "Module 3 — Month 3",
+            "title": "Databases & Engineering Practices",
+            "topics": [
+              "SQL — queries, joins, indexing",
+              "Database design & normalisation",
+              "Linux command line essentials",
+              "Code quality — reviews, linting, CI"
+            ]
+          },
+          {
+            "session": "Module 4 — Month 4",
+            "title": "Docker & Cloud",
+            "topics": [
+              "Docker — containers, images, compose",
+              "AWS basics — EC2, S3, Lambda",
+              "Deploying apps end-to-end",
+              "Project 2: containerised app on AWS"
+            ]
+          },
+          {
+            "session": "Module 5 — Months 5–6",
+            "title": "DSA, Capstone & Interview Prep",
+            "topics": [
+              "Core DSA patterns for interviews",
+              "Project 3: capstone with full deployment",
+              "Portfolio & GitHub profile",
+              "Mock interviews & resume review"
+            ]
+          }
+        ],
+        "prerequisites": "None — absolute beginners welcome",
+        "outcomes": [
+          "Write clean, tested Python code professionally",
+          "Build and deploy REST APIs",
+          "Use Docker and AWS for deployment",
+          "Pass technical interviews at product companies",
+          "Have 3 real projects in your portfolio"
+        ],
+        "includes": [
+          "Weekly live sessions + all recordings",
+          "3 real capstone projects",
+          "Code review every 2 weeks",
+          "Weekly doubt sessions",
+          "Mock interview sessions",
+          "Resume & portfolio review",
+          "Alumni network access",
+          "Completion Certificate"
+        ],
+        "certificate": "completion"
+      }
+    },
+    {
+      "id": "software-engineer-ii",
+      "subject": "technology",
+      "subjectLabel": "Software Engineering",
+      "icon": "Code2",
+      "type": "full-course",
+      "deliveryMode": "Live+Recorded",
+      "title": "Senior Software Engineer",
+      "tagline": "Advanced engineering, system design and the skills that get you to senior",
+      "price": 59999,
+      "currency": "INR",
+      "duration": "~9 months",
+      "level": "Intermediate to Advanced",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Sat & Sun",
+        "time": "10:00 AM – 1:00 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "The program that takes you to senior — covering advanced programming, system design, Kubernetes, cloud architecture, and the engineering practices that separate senior engineers from juniors.",
+        "sessions": [
+          {
+            "session": "Module 1 — Month 1",
+            "title": "Advanced Python & JavaScript",
+            "topics": [
+              "Concurrency — async/await, threading, multiprocessing",
+              "Advanced OOP — metaclasses, descriptors",
+              "Performance profiling & optimisation",
+              "Advanced JavaScript & TypeScript"
+            ]
+          },
+          {
+            "session": "Module 2 — Month 2",
+            "title": "Advanced DSA & Algorithms",
+            "topics": [
+              "Advanced graph algorithms",
+              "Dynamic programming patterns",
+              "Amortised analysis & complexity",
+              "Interview-grade problem solving"
+            ]
+          },
+          {
+            "session": "Module 3 — Month 3",
+            "title": "System Design",
+            "topics": [
+              "High-level design — scalable systems",
+              "Low-level design — OOP & design patterns",
+              "Database sharding, replication, consistency",
+              "Case studies: URL shortener, Twitter, Uber"
+            ]
+          },
+          {
+            "session": "Module 4 — Month 4",
+            "title": "Backend Engineering at Scale",
+            "topics": [
+              "Microservices vs monolith",
+              "Message queues — Kafka, RabbitMQ",
+              "gRPC & API design at scale",
+              "Project: distributed backend system"
+            ]
+          },
+          {
+            "session": "Module 5 — Month 5",
+            "title": "Kubernetes & Advanced Cloud",
+            "topics": [
+              "Kubernetes — pods, deployments, services",
+              "Helm charts & cluster management",
+              "AWS intermediate — RDS, SQS, CloudFront",
+              "Infrastructure as Code (Terraform basics)"
+            ]
+          },
+          {
+            "session": "Module 6 — Months 6–9",
+            "title": "Projects & Interview Prep",
+            "topics": [
+              "SQL + NoSQL deep dive",
+              "4 capstone projects (increasing complexity)",
+              "Senior-level mock interviews",
+              "Portfolio & LinkedIn optimisation"
+            ]
+          }
+        ],
+        "prerequisites": "Software Engineer level — or equivalent 1–2 years of experience",
+        "outcomes": [
+          "Design scalable distributed systems",
+          "Write high-performance backend services",
+          "Lead technical discussions confidently",
+          "Pass senior-level interviews at top tech companies",
+          "Have 4 production-grade projects"
+        ],
+        "includes": [
+          "Weekly live sessions + all recordings",
+          "4 capstone projects with mentorship",
+          "Code review bi-weekly",
+          "System design practice sessions",
+          "Senior-level mock interviews",
+          "Alumni network access",
+          "Completion Certificate"
+        ],
+        "certificate": "completion"
+      }
+    },
+    {
+      "id": "systems-engineer",
+      "subject": "technology",
+      "subjectLabel": "Systems Engineering",
+      "icon": "Server",
+      "type": "full-course",
+      "deliveryMode": "Live+Recorded",
+      "title": "Systems Engineer",
+      "tagline": "Infrastructure, cloud, automation and reliability — your foundation in systems",
+      "price": 39999,
+      "currency": "INR",
+      "duration": "~6 months",
+      "level": "Beginner to Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Sat & Sun",
+        "time": "10:00 AM – 12:30 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "A comprehensive program for people who want to work with infrastructure, cloud, and systems — rather than writing application code. Covers Linux, scripting, Docker, cloud infrastructure, databases, and monitoring.",
+        "sessions": [
+          {
+            "session": "Module 1 — Month 1",
+            "title": "Linux & Networking",
+            "topics": [
+              "Linux file system, permissions, processes",
+              "Bash scripting for automation",
+              "Networking fundamentals — TCP/IP, DNS, HTTP",
+              "SSH, firewalls & security basics"
+            ]
+          },
+          {
+            "session": "Module 2 — Month 2",
+            "title": "Python for Automation",
+            "topics": [
+              "Python scripting — files, APIs, OS interaction",
+              "Automating infrastructure tasks",
+              "Configuration management concepts",
+              "Project 1: automated deployment script"
+            ]
+          },
+          {
+            "session": "Module 3 — Month 3",
+            "title": "Containers & Orchestration",
+            "topics": [
+              "Docker — images, containers, volumes, networking",
+              "Docker Compose — multi-service apps",
+              "Kubernetes fundamentals",
+              "Project 2: containerised 3-tier app"
+            ]
+          },
+          {
+            "session": "Module 4 — Month 4",
+            "title": "Cloud Infrastructure",
+            "topics": [
+              "AWS core services — EC2, VPC, S3, IAM",
+              "Load balancers, auto-scaling groups",
+              "RDS & ElastiCache",
+              "Infrastructure as Code with Terraform"
+            ]
+          },
+          {
+            "session": "Module 5 — Month 5",
+            "title": "CI/CD & Monitoring",
+            "topics": [
+              "GitHub Actions — build, test, deploy pipelines",
+              "Observability — logs, metrics, traces",
+              "Prometheus & Grafana",
+              "Alerting & on-call basics"
+            ]
+          },
+          {
+            "session": "Module 6 — Month 6",
+            "title": "Capstone & Job Prep",
+            "topics": [
+              "Capstone: production infrastructure project",
+              "Systems interview prep",
+              "Portfolio & GitHub optimisation",
+              "Mock technical interviews"
+            ]
+          }
+        ],
+        "prerequisites": "None — curiosity about how systems work is enough",
+        "outcomes": [
+          "Administer Linux systems confidently",
+          "Build and manage containerised infrastructure",
+          "Deploy applications to AWS",
+          "Set up CI/CD pipelines and monitoring"
+        ],
+        "includes": [
+          "Weekly live sessions + all recordings",
+          "3 real infrastructure projects",
+          "Code review bi-weekly",
+          "Weekly doubt sessions",
+          "Mock interview sessions",
+          "Completion Certificate"
+        ],
+        "certificate": "completion"
+      }
+    },
+    {
+      "id": "senior-systems-engineer",
+      "subject": "technology",
+      "subjectLabel": "Systems Engineering",
+      "icon": "Server",
+      "type": "full-course",
+      "deliveryMode": "Live+Recorded",
+      "title": "Senior Systems Engineer",
+      "tagline": "Distributed systems, SRE, reliability engineering and architecture at scale",
+      "price": 119999,
+      "currency": "INR",
+      "duration": "~12 months",
+      "level": "Advanced",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Sat & Sun",
+        "time": "10:00 AM – 1:00 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "The most advanced systems program at Qurious Academy. Covers distributed systems architecture, SRE fundamentals, reliability engineering, chaos engineering, and production operations at scale. Designed for engineers targeting Staff/Principal-level systems roles.",
+        "sessions": [
+          {
+            "session": "Module 1 — Months 1–2",
+            "title": "Distributed Systems",
+            "topics": [
+              "CAP theorem, consistency models",
+              "Distributed consensus — Raft & Paxos",
+              "Distributed transactions & SAGA pattern",
+              "Event sourcing & CQRS"
+            ]
+          },
+          {
+            "session": "Module 2 — Months 3–4",
+            "title": "High-Availability Architecture",
+            "topics": [
+              "Multi-region deployments",
+              "Blue-green & canary deployments",
+              "Database replication & failover",
+              "Load balancing at scale"
+            ]
+          },
+          {
+            "session": "Module 3 — Months 5–6",
+            "title": "SRE Fundamentals",
+            "topics": [
+              "SLOs, SLAs, error budgets",
+              "Incident management & post-mortems",
+              "Toil elimination & automation",
+              "On-call strategy & runbooks"
+            ]
+          },
+          {
+            "session": "Module 4 — Months 7–8",
+            "title": "Reliability Engineering",
+            "topics": [
+              "Chaos engineering — principles & practice",
+              "Game days & failure injection",
+              "Resilience patterns — circuit breakers, retries, bulkheads",
+              "Performance engineering & profiling at scale"
+            ]
+          },
+          {
+            "session": "Module 5 — Months 9–10",
+            "title": "Observability at Scale",
+            "topics": [
+              "Distributed tracing — OpenTelemetry, Jaeger",
+              "Metrics at scale — Prometheus, VictoriaMetrics",
+              "Log aggregation — Loki, ELK stack",
+              "Capacity planning & forecasting"
+            ]
+          },
+          {
+            "session": "Module 6 — Months 11–12",
+            "title": "Architecture & Leadership",
+            "topics": [
+              "Architectural decision records (ADRs)",
+              "Technical roadmapping",
+              "Staff-level interview prep",
+              "Capstone: design a production system from scratch"
+            ]
+          }
+        ],
+        "prerequisites": "Systems Engineer or equivalent 3+ years in infrastructure/platform engineering",
+        "outcomes": [
+          "Design and operate high-availability distributed systems",
+          "Lead SRE practices across engineering teams",
+          "Run chaos experiments and improve system resilience",
+          "Architect production systems at scale",
+          "Succeed in Staff/Principal systems interviews"
+        ],
+        "includes": [
+          "Weekly live sessions + all recordings",
+          "Architecture case studies",
+          "Chaos experiment playbooks",
+          "Staff-level mock interviews",
+          "1-on-1 mentorship sessions",
+          "Alumni network access",
+          "Completion Certificate"
+        ],
+        "certificate": "completion"
+      }
+    },
+    {
+      "id": "ai-engineer",
+      "subject": "ai",
+      "subjectLabel": "Artificial Intelligence",
+      "icon": "Brain",
+      "type": "full-course",
+      "deliveryMode": "Live+Recorded",
+      "title": "AI Engineer",
+      "tagline": "Train, deploy and maintain AI systems — from fundamentals to production",
+      "price": 44999,
+      "currency": "INR",
+      "duration": "~6 months",
+      "level": "Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Sat & Sun",
+        "time": "10:00 AM – 1:00 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "A complete program for engineers who want to build real AI systems — not just use AI APIs. Covers machine learning, deep learning, cloud AI services, and MLOps, with three real projects you can deploy.",
+        "sessions": [
+          {
+            "session": "Module 1 — Month 1",
+            "title": "Python & Maths for AI",
+            "topics": [
+              "Advanced Python for data science",
+              "NumPy, Pandas, Matplotlib",
+              "Linear algebra & calculus essentials",
+              "Probability & statistics for ML"
+            ]
+          },
+          {
+            "session": "Module 2 — Month 2",
+            "title": "Machine Learning Foundations",
+            "topics": [
+              "Supervised learning — regression, classification",
+              "Model evaluation — cross-validation, metrics",
+              "Feature engineering",
+              "scikit-learn in depth"
+            ]
+          },
+          {
+            "session": "Module 3 — Month 3",
+            "title": "Deep Learning",
+            "topics": [
+              "Neural networks from scratch",
+              "PyTorch — training, optimisation",
+              "CNNs for vision, transformers for NLP",
+              "Transfer learning & fine-tuning"
+            ]
+          },
+          {
+            "session": "Module 4 — Month 4",
+            "title": "NLP & LLMs",
+            "topics": [
+              "NLP fundamentals — tokenization, embeddings",
+              "Working with LLM APIs",
+              "Fine-tuning with LoRA",
+              "Project: NLP-powered product"
+            ]
+          },
+          {
+            "session": "Module 5 — Month 5",
+            "title": "Cloud AI & MLOps",
+            "topics": [
+              "AWS SageMaker & Google Vertex AI",
+              "Model registry & versioning (MLflow)",
+              "Model serving — FastAPI + Docker",
+              "Monitoring model performance in production"
+            ]
+          },
+          {
+            "session": "Module 6 — Month 6",
+            "title": "Capstone & Career",
+            "topics": [
+              "Capstone: end-to-end AI system",
+              "ML system design interviews",
+              "Portfolio & GitHub",
+              "Mock interviews for AI roles"
+            ]
+          }
+        ],
+        "prerequisites": "Python basics. Some maths background (12th grade level).",
+        "outcomes": [
+          "Train and evaluate ML models end-to-end",
+          "Build deep learning systems with PyTorch",
+          "Deploy AI models to production",
+          "Set up MLOps pipelines",
+          "Pass AI Engineer interviews"
+        ],
+        "includes": [
+          "Weekly live sessions + all recordings",
+          "3 real AI projects",
+          "Code review bi-weekly",
+          "ML system design practice",
+          "Mock interviews",
+          "Completion Certificate"
+        ],
+        "certificate": "completion"
+      }
+    },
+    {
+      "id": "genai-specialist",
+      "subject": "ai",
+      "subjectLabel": "Artificial Intelligence",
+      "icon": "Brain",
+      "type": "full-course",
+      "deliveryMode": "Live+Recorded",
+      "title": "GenAI Specialist",
+      "tagline": "LLMs, RAG, agents and fine-tuning — master the generative AI stack",
+      "price": 34999,
+      "currency": "INR",
+      "duration": "~4 months",
+      "level": "Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Sat & Sun",
+        "time": "10:00 AM – 12:30 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "The fastest path to becoming a GenAI specialist. Four months covering everything from LLM fundamentals to building and deploying production-grade RAG systems, agents, and fine-tuned models.",
+        "sessions": [
+          {
+            "session": "Module 1 — Month 1",
+            "title": "LLMs & Prompt Engineering",
+            "topics": [
+              "How LLMs work — transformers, attention, tokenization",
+              "Advanced prompting — CoT, few-shot, ReAct",
+              "OpenAI & Anthropic APIs in depth",
+              "Structured outputs & function calling"
+            ]
+          },
+          {
+            "session": "Module 2 — Month 2",
+            "title": "RAG Systems",
+            "topics": [
+              "Embeddings & vector databases",
+              "Retrieval strategies & re-ranking",
+              "Hybrid search (dense + sparse)",
+              "Project: production document Q&A"
+            ]
+          },
+          {
+            "session": "Module 3 — Month 3",
+            "title": "Agents & Fine-Tuning",
+            "topics": [
+              "Agent patterns — tool use, planning, memory",
+              "LangGraph — stateful multi-agent systems",
+              "LoRA & QLoRA fine-tuning",
+              "Dataset curation & evaluation"
+            ]
+          },
+          {
+            "session": "Module 4 — Month 4",
+            "title": "Production & Capstone",
+            "topics": [
+              "Safety, guardrails & evals",
+              "Observability — tracing & monitoring",
+              "Deploying GenAI at scale",
+              "Capstone: your own GenAI product"
+            ]
+          }
+        ],
+        "prerequisites": "Python basics. Basic familiarity with APIs.",
+        "outcomes": [
+          "Build production RAG and agent systems",
+          "Fine-tune open-source LLMs",
+          "Deploy GenAI products to the web",
+          "Evaluate and monitor AI output quality"
+        ],
+        "includes": [
+          "Weekly live sessions + all recordings",
+          "3 real GenAI projects",
+          "Prompt & RAG template library",
+          "Mock interviews for GenAI roles",
+          "Completion Certificate"
+        ],
+        "certificate": "completion"
+      }
+    },
+    {
+      "id": "senior-ai-engineer",
+      "subject": "ai",
+      "subjectLabel": "Artificial Intelligence",
+      "icon": "Brain",
+      "type": "full-course",
+      "deliveryMode": "Live+Recorded",
+      "title": "Senior AI Engineer",
+      "tagline": "Advanced ML, MLOps, multi-modal AI and AI at production scale",
+      "price": 64999,
+      "currency": "INR",
+      "duration": "~9 months",
+      "level": "Advanced",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Sat & Sun",
+        "time": "10:00 AM – 1:00 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "A rigorous 9-month program for engineers who want to move from working with AI to leading AI initiatives. Covers advanced architectures, MLOps, multi-modal systems, and research-to-production workflows.",
+        "sessions": [
+          {
+            "session": "Module 1 — Months 1–2",
+            "title": "Advanced Deep Learning",
+            "topics": [
+              "Transformer architecture in depth",
+              "Attention mechanisms — MHA, cross-attention, flash attention",
+              "Vision transformers (ViT) & CLIP",
+              "Diffusion models fundamentals"
+            ]
+          },
+          {
+            "session": "Module 2 — Months 3–4",
+            "title": "MLOps & Model Production",
+            "topics": [
+              "ML experiment tracking (MLflow, W&B)",
+              "Model versioning, registry & governance",
+              "Model serving at scale — Ray Serve, Triton",
+              "A/B testing models in production"
+            ]
+          },
+          {
+            "session": "Module 3 — Months 5–6",
+            "title": "Multi-Modal AI",
+            "topics": [
+              "Vision-language models — LLaVA, GPT-4V",
+              "Audio AI — Whisper & TTS",
+              "Multi-modal RAG systems",
+              "Project: multi-modal AI application"
+            ]
+          },
+          {
+            "session": "Module 4 — Months 7–8",
+            "title": "Research to Production",
+            "topics": [
+              "Reading and implementing ML papers",
+              "Custom CUDA kernels (intro)",
+              "Distributed training — data & model parallelism",
+              "Quantization & model compression"
+            ]
+          },
+          {
+            "session": "Module 5 — Month 9",
+            "title": "Leadership & Capstone",
+            "topics": [
+              "AI system design interviews (senior level)",
+              "Technical leadership in AI teams",
+              "Capstone: production AI system at scale",
+              "Portfolio & career strategy"
+            ]
+          }
+        ],
+        "prerequisites": "AI Engineer or equivalent — 2+ years building ML systems",
+        "outcomes": [
+          "Design and operate ML systems at production scale",
+          "Build multi-modal AI applications",
+          "Lead AI engineering teams",
+          "Implement and ship research papers",
+          "Pass senior AI Engineer interviews"
+        ],
+        "includes": [
+          "Weekly live sessions + all recordings",
+          "Research paper walkthroughs",
+          "Code review bi-weekly",
+          "Senior AI mock interviews",
+          "1-on-1 mentorship",
+          "Alumni network access",
+          "Completion Certificate"
+        ],
+        "certificate": "completion"
+      }
+    },
+    {
+      "id": "mts-i",
+      "subject": "technology",
+      "subjectLabel": "Software Engineering",
+      "icon": "Code2",
+      "type": "full-course",
+      "deliveryMode": "Live+Recorded",
+      "title": "MTS I — Member of Technical Staff I",
+      "tagline": "Target entry-level roles at product companies and big tech",
+      "price": 49999,
+      "currency": "INR",
+      "duration": "~6 months",
+      "level": "Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Sat & Sun",
+        "time": "10:00 AM – 12:30 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "Purpose-built for getting an MTS I (equivalent to L3/L4 at big tech) offer. Combines advanced DSA, system design basics, behavioural interview prep, and multiple mock interviews — everything calibrated to the bar that top tech companies set.",
+        "sessions": [
+          {
+            "session": "Module 1 — Month 1",
+            "title": "Advanced DSA",
+            "topics": [
+              "All major patterns — sliding window, two pointers, graphs, DP",
+              "Competitive programming problems",
+              "Time & space complexity analysis",
+              "100 curated problems with solutions"
+            ]
+          },
+          {
+            "session": "Module 2 — Month 2",
+            "title": "System Design Fundamentals",
+            "topics": [
+              "Scalability & performance concepts",
+              "Databases — SQL vs NoSQL, caching",
+              "Common components — load balancers, queues",
+              "Design: URL shortener, social feed, chat app"
+            ]
+          },
+          {
+            "session": "Module 3 — Month 3",
+            "title": "Core Engineering",
+            "topics": [
+              "Concurrency & multithreading",
+              "Object-oriented design patterns",
+              "API design best practices",
+              "Code quality & clean code principles"
+            ]
+          },
+          {
+            "session": "Module 4 — Month 4",
+            "title": "Behavioural & Leadership",
+            "topics": [
+              "STAR method for behavioural questions",
+              "Amazon leadership principles deep-dive",
+              "Google & Meta behavioural prep",
+              "Conflict resolution & collaboration stories"
+            ]
+          },
+          {
+            "session": "Module 5 — Months 5–6",
+            "title": "Mock Interviews & Refinement",
+            "topics": [
+              "5 full mock coding interviews with feedback",
+              "3 system design mock interviews",
+              "2 behavioural mock interviews",
+              "Resume review & LinkedIn optimisation"
+            ]
+          }
+        ],
+        "prerequisites": "Software Engineer level knowledge or 1+ year of coding experience",
+        "outcomes": [
+          "Solve hard DSA problems under time pressure",
+          "Confidently design entry-level systems",
+          "Excel in behavioural interviews",
+          "Land MTS I / L3 / L4 offers at top tech companies"
+        ],
+        "includes": [
+          "Weekly live sessions + all recordings",
+          "100 curated problem list",
+          "5 coding mock interviews",
+          "3 system design mock interviews",
+          "2 behavioural mock interviews",
+          "Resume & LinkedIn review",
+          "Completion Certificate"
+        ],
+        "certificate": "completion"
+      }
+    },
+    {
+      "id": "mts-ii",
+      "subject": "technology",
+      "subjectLabel": "Software Engineering",
+      "icon": "Code2",
+      "type": "full-course",
+      "deliveryMode": "Live+Recorded",
+      "title": "MTS II — Member of Technical Staff II",
+      "tagline": "Target mid-level roles at big tech — L5 and above",
+      "price": 79999,
+      "currency": "INR",
+      "duration": "~9 months",
+      "level": "Advanced",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Sat & Sun",
+        "time": "10:00 AM – 1:00 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "A rigorous 9-month program for engineers targeting L5 / MTS II at major tech companies. Goes deep on distributed systems, advanced system design, performance engineering, and the leadership signals senior interviewers look for.",
+        "sessions": [
+          {
+            "session": "Module 1 — Months 1–2",
+            "title": "Distributed Systems",
+            "topics": [
+              "Consistency models — eventual, strong, causal",
+              "Consensus algorithms — Raft, Paxos",
+              "Distributed transactions",
+              "Real systems: Dynamo, Spanner, Kafka"
+            ]
+          },
+          {
+            "session": "Module 2 — Months 3–4",
+            "title": "Advanced System Design",
+            "topics": [
+              "HLD + LLD at L5 bar",
+              "Large-scale storage systems",
+              "Real-time systems — Uber, WhatsApp, Netflix",
+              "Capacity estimation & back-of-the-envelope"
+            ]
+          },
+          {
+            "session": "Module 3 — Months 5–6",
+            "title": "Concurrency & Performance",
+            "topics": [
+              "Advanced concurrency patterns",
+              "Lock-free data structures",
+              "CPU caching & memory hierarchy",
+              "Performance profiling & tuning"
+            ]
+          },
+          {
+            "session": "Module 4 — Month 7",
+            "title": "Cloud Architecture",
+            "topics": [
+              "Multi-region cloud architecture",
+              "Service meshes & observability",
+              "Cost optimisation at scale",
+              "Cloud-native design patterns"
+            ]
+          },
+          {
+            "session": "Module 5 — Months 8–9",
+            "title": "Leadership & Mock Interviews",
+            "topics": [
+              "Engineering leadership at L5",
+              "Cross-team collaboration & influence",
+              "6 full mock interviews (coding + design + behavioural)",
+              "Compensation negotiation"
+            ]
+          }
+        ],
+        "prerequisites": "MTS I level or 3+ years at a product company",
+        "outcomes": [
+          "Design distributed systems at scale",
+          "Demonstrate leadership signals in interviews",
+          "Pass L5/MTS II bars at FAANG & top tech",
+          "Negotiate compensation effectively"
+        ],
+        "includes": [
+          "Weekly live sessions + all recordings",
+          "Distributed systems reading list",
+          "6 full mock interviews",
+          "Resume & LinkedIn review",
+          "Salary negotiation guide",
+          "Alumni network access",
+          "Completion Certificate"
+        ],
+        "certificate": "completion"
+      }
+    },
+    {
+      "id": "mts-iii",
+      "subject": "technology",
+      "subjectLabel": "Software Engineering",
+      "icon": "Code2",
+      "type": "full-course",
+      "deliveryMode": "Live+Recorded",
+      "title": "MTS III — Member of Technical Staff III",
+      "tagline": "Senior / L6 interviews — technical leadership and architecture mastery",
+      "price": 99999,
+      "currency": "INR",
+      "duration": "~12 months",
+      "level": "Expert",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Sat & Sun",
+        "time": "10:00 AM – 1:00 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "The most intensive interview prep program at Qurious Academy — designed for engineers targeting L6 / Senior Staff and above. Covers architectural decision-making, cross-team technical strategy, executive communication, and L6-calibrated mock interviews.",
+        "sessions": [
+          {
+            "session": "Module 1 — Months 1–3",
+            "title": "Architecture at Scale",
+            "topics": [
+              "Architectural patterns — event-driven, CQRS, hexagonal",
+              "Multi-region, globally distributed systems",
+              "Platform thinking — APIs as products",
+              "Technical debt management at org scale"
+            ]
+          },
+          {
+            "session": "Module 2 — Months 4–6",
+            "title": "Technical Strategy",
+            "topics": [
+              "Engineering strategy — OKRs, roadmapping",
+              "Build vs buy vs open-source decisions",
+              "Cross-functional influence without authority",
+              "Communicating technical vision to leadership"
+            ]
+          },
+          {
+            "session": "Module 3 — Months 7–9",
+            "title": "L6 System Design & Coding",
+            "topics": [
+              "L6-calibrated system design — ambiguity & trade-offs",
+              "Advanced coding — hard problems under pressure",
+              "Debugging production system design decisions",
+              "Real L6 interview debrief sessions"
+            ]
+          },
+          {
+            "session": "Module 4 — Months 10–12",
+            "title": "Leadership & Mock Interviews",
+            "topics": [
+              "L6 behavioural signals",
+              "8 full L6-calibrated mock interviews",
+              "Executive communication practice",
+              "Negotiation at senior levels"
+            ]
+          }
+        ],
+        "prerequisites": "MTS II level or 5+ years at a product company with tech leadership experience",
+        "outcomes": [
+          "Make and defend architectural decisions at scale",
+          "Drive cross-team technical initiatives",
+          "Pass L6 / Senior Staff bars",
+          "Lead engineering teams effectively"
+        ],
+        "includes": [
+          "Weekly live sessions + all recordings",
+          "Architecture case studies",
+          "8 L6-calibrated mock interviews",
+          "1-on-1 mentorship sessions",
+          "Negotiation coaching",
+          "Alumni network access",
+          "Completion Certificate"
+        ],
+        "certificate": "completion"
+      }
+    },
+    {
+      "id": "staff-software-engineer",
+      "subject": "technology",
+      "subjectLabel": "Software Engineering",
+      "icon": "Code2",
+      "type": "full-course",
+      "deliveryMode": "Live+Recorded",
+      "title": "Staff Software Engineer",
+      "tagline": "Org-level technical leadership, architecture and staff-level interview mastery",
+      "price": 119999,
+      "currency": "INR",
+      "duration": "~12 months",
+      "level": "Expert",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Sat & Sun",
+        "time": "10:00 AM – 1:00 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "A 12-month program for senior engineers aiming at Staff / L7 roles — where the job is no longer just about writing code, but about shaping engineering direction across teams. Covers technical roadmapping, architectural deep-dives, Staff-level interview prep, and real leadership case studies.",
+        "sessions": [
+          {
+            "session": "Module 1 — Months 1–3",
+            "title": "Org-Level System Design",
+            "topics": [
+              "Designing for org boundaries and team topology",
+              "Platform engineering — internal developer platforms",
+              "Migration strategy for large legacy systems",
+              "Staff-level system design case studies (Stripe, Airbnb)"
+            ]
+          },
+          {
+            "session": "Module 2 — Months 4–6",
+            "title": "Technical Roadmapping",
+            "topics": [
+              "Writing engineering strategy documents",
+              "Prioritisation frameworks for tech debt vs features",
+              "Making build/buy/vendor decisions at scale",
+              "Managing technical risk across org"
+            ]
+          },
+          {
+            "session": "Module 3 — Months 7–9",
+            "title": "Cross-Functional Leadership",
+            "topics": [
+              "Influencing without authority",
+              "Working with product, design & data",
+              "Communicating technical strategy to C-suite",
+              "Mentoring and growing senior engineers"
+            ]
+          },
+          {
+            "session": "Module 4 — Months 10–12",
+            "title": "Staff Interview Prep & Capstone",
+            "topics": [
+              "Staff-level coding & system design (Google L7, Stripe, Cloudflare style)",
+              "8 full Staff-calibrated mock interviews",
+              "Architectural deep-dives as interview format",
+              "Capstone: produce a real engineering strategy doc"
+            ]
+          }
+        ],
+        "prerequisites": "MTS III level or 7+ years with demonstrated technical leadership",
+        "outcomes": [
+          "Shape engineering direction across multiple teams",
+          "Write and drive org-level technical strategy",
+          "Pass Staff / L7 interviews at top tech companies",
+          "Mentor and grow senior engineering talent"
+        ],
+        "includes": [
+          "Weekly live sessions + all recordings",
+          "Engineering strategy document templates",
+          "8 Staff-calibrated mock interviews",
+          "1-on-1 mentorship",
+          "Negotiation coaching",
+          "Alumni network access",
+          "Completion Certificate"
+        ],
+        "certificate": "completion"
+      }
+    },
+    {
       "id": "python-standard",
       "subject": "python",
       "subjectLabel": "Python Programming",
       "icon": "Code2",
-      "type": "standard",
-      "deliveryMode": "Recorded",
+      "type": "deep-dive",
+      "deliveryMode": "Live+Recorded",
       "title": "Python for Data Science — 8 Weeks",
       "tagline": "NumPy, Pandas, Matplotlib and the full data workflow",
-      "price": 5999,
+      "price": 12999,
       "currency": "INR",
       "duration": "8 weeks",
       "level": "Intermediate",
@@ -1032,7 +2706,7 @@
           "Present findings clearly in Jupyter notebooks"
         ],
         "includes": [
-          "Live sessions + recordings",
+          "Live sessions + all recordings",
           "All datasets & notebooks",
           "Weekly assignments",
           "Capstone feedback",

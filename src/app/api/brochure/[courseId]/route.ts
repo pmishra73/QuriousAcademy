@@ -4,10 +4,13 @@ import { sendMail, ADMIN } from "@/lib/mailer";
 import { courses } from "@/lib/courses";
 
 const VALID_COURSE_IDS = new Set([
-  "python-masterclass", "python-cohort", "python-deep-dive", "python-standard",
-  "ai-masterclass", "ai-cohort", "ai-deep-dive",
-  "calculus-masterclass", "linear-algebra-masterclass", "maths-cohort",
-  "webdev-sprint", "react-sprint", "physics-cohort", "dsa-standard",
+  "python-masterclass", "ai-masterclass", "calculus-masterclass", "linear-algebra-masterclass",
+  "python-cohort", "ai-cohort", "maths-cohort", "physics-cohort",
+  "webdev-sprint", "react-sprint", "python-sprint", "dsa-sprint", "sql-sprint", "ai-tools-sprint",
+  "python-deep-dive", "dsa-deep-dive", "maths-deep-dive", "backend-deep-dive", "ai-deep-dive", "genai-deep-dive", "python-standard",
+  "software-engineer", "software-engineer-ii", "systems-engineer", "senior-systems-engineer",
+  "ai-engineer", "genai-specialist", "senior-ai-engineer",
+  "mts-i", "mts-ii", "mts-iii", "staff-software-engineer",
 ]);
 
 export async function POST(
