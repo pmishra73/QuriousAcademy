@@ -17,7 +17,7 @@ type Props = {
   onClose: () => void;
 };
 
-type Step = "gate" | "content";
+type Step = "gate" | "form" | "content";
 
 export default function ContentUnlockModal({ variant, onClose }: Props) {
   const [step, setStep] = useState<Step>("gate");
@@ -39,6 +39,21 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  const openSyllabus = () => {
+    // Record a lead silently if we already have details from session
+    if (form.name && form.email && form.phone) {
+      fetch("/api/unlock-content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, courseId: variant.id, courseTitle: variant.title }),
+      })
+        .then((r) => r.json())
+        .then((data) => { if (data.couponCode) setCoupon(data.couponCode); })
+        .catch(() => {});
+    }
+    setStep("content");
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,29 +132,75 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
         </div>
 
         {step === "gate" ? (
-          <div style={{ padding: 28 }}>
-            <div style={{ textAlign: "center", marginBottom: 24 }}>
-              <div style={{ display: "flex", justifyContent: "center", marginBottom: 16, color: cfg.color }}>
-                <CourseIcon name={variant.icon} size={40} />
+          <div style={{ padding: 32 }}>
+            <div style={{ textAlign: "center", marginBottom: 28 }}>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: 14, color: cfg.color }}>
+                <CourseIcon name={variant.icon} size={44} />
               </div>
-              <h2 style={{ fontSize: 21, marginBottom: 10, lineHeight: 1.3 }}>
-                See the full syllabus &amp; get 10% off
+              <h2 style={{ fontSize: 22, marginBottom: 10, lineHeight: 1.3 }}>
+                {variant.title}
               </h2>
-              <p style={{ fontSize: 14, color: "var(--text-muted)", lineHeight: 1.65 }}>
-                Get instant access to the complete session-by-session breakdown for <strong style={{ color: "var(--foreground)" }}>{variant.title}</strong> — every topic, outcome, and what's included. We'll also email you a <strong style={{ color: "#34d399" }}>10% discount coupon</strong> to use whenever you're ready to enrol.
+              <p style={{ fontSize: 14, color: "var(--text-muted)", lineHeight: 1.65, maxWidth: 340, margin: "0 auto" }}>
+                See exactly what you&apos;ll learn — every session, topic, and outcome. No sign-up needed.
               </p>
             </div>
 
-            {prefilled && (
-              <div style={{
-                marginBottom: 16, padding: "10px 14px", borderRadius: 8,
-                background: "rgba(91,124,250,0.08)", border: "1px solid rgba(91,124,250,0.2)",
-                fontSize: 13, color: "var(--primary)",
-              }}>
-                We remembered you from earlier — just hit the button below.
-              </div>
-            )}
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {/* Primary: free access */}
+              <button
+                onClick={openSyllabus}
+                style={{
+                  width: "100%", padding: "15px 20px",
+                  background: "var(--primary)", color: "white",
+                  border: "none", borderRadius: 10, fontSize: 15, fontWeight: 600,
+                  cursor: "pointer", fontFamily: "inherit", lineHeight: 1.4,
+                }}
+              >
+                View the complete syllabus →
+              </button>
 
+              {/* Divider */}
+              <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "2px 0" }}>
+                <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+                <span style={{ fontSize: 12, color: "var(--text-muted)" }}>or</span>
+                <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+              </div>
+
+              {/* Secondary: coupon offer */}
+              <button
+                onClick={() => prefilled ? submit({ preventDefault: () => {} } as React.FormEvent) : setStep("form")}
+                style={{
+                  width: "100%", padding: "14px 20px",
+                  background: "rgba(52,211,153,0.07)", color: "#34d399",
+                  border: "1px solid rgba(52,211,153,0.25)", borderRadius: 10,
+                  fontSize: 14, fontWeight: 500, cursor: "pointer", fontFamily: "inherit",
+                  lineHeight: 1.5,
+                }}
+              >
+                {prefilled
+                  ? "Use my saved details to claim 10% off →"
+                  : "Share your details and get 10% off this course"}
+              </button>
+              {!prefilled && (
+                <p style={{ fontSize: 12, color: "var(--text-muted)", textAlign: "center", margin: 0 }}>
+                  We&apos;ll email you a coupon code — no spam, just the discount.
+                </p>
+              )}
+            </div>
+          </div>
+
+        ) : step === "form" ? (
+          <div style={{ padding: 28 }}>
+            <button
+              onClick={() => setStep("gate")}
+              style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", fontSize: 13, marginBottom: 20, padding: 0, fontFamily: "inherit" }}
+            >
+              ← Back
+            </button>
+            <h3 style={{ fontSize: 18, marginBottom: 6 }}>Claim your 10% off</h3>
+            <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 20, lineHeight: 1.6 }}>
+              Leave your details and we&apos;ll email you a coupon for <strong style={{ color: "#34d399" }}>10% off {variant.title}</strong> — valid at checkout whenever you&apos;re ready.
+            </p>
             <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <div>
                 <label style={lbl}>Your Name *</label>
@@ -154,14 +215,14 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
                 <input style={inp} type="tel" value={form.phone} onChange={set("phone")} placeholder="+91 98765 43210" required />
               </div>
               <button type="submit" style={{
-                marginTop: 6, background: "var(--primary)", color: "white",
+                marginTop: 4, background: "var(--primary)", color: "white",
                 border: "none", borderRadius: 8, padding: "13px", fontSize: 15,
                 fontWeight: 600, cursor: "pointer", fontFamily: "inherit",
               }}>
-                {prefilled ? "Show me the syllabus →" : "Get syllabus + 10% off coupon →"}
+                Send me the coupon + show syllabus →
               </button>
               <p style={{ fontSize: 12, color: "var(--text-muted)", textAlign: "center" }}>
-                No spam — just the syllabus and your coupon code.
+                No spam. Coupon arrives on the email above.
               </p>
             </form>
           </div>
@@ -250,6 +311,32 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
                 ))}
               </div>
             </div>
+
+            {/* Inline coupon offer for students who skipped the form */}
+            {!coupon && !form.email && (
+              <div style={{
+                marginBottom: 20, padding: "16px 20px", borderRadius: 10,
+                background: "rgba(52,211,153,0.06)", border: "1px solid rgba(52,211,153,0.2)",
+              }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: "#34d399", marginBottom: 4 }}>
+                  Want 10% off when you enrol?
+                </div>
+                <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 12, lineHeight: 1.5 }}>
+                  Share your details and we&apos;ll email you a coupon code — no strings attached.
+                </p>
+                <button
+                  onClick={() => setStep("form")}
+                  style={{
+                    fontSize: 13, fontWeight: 500, padding: "8px 18px",
+                    background: "rgba(52,211,153,0.1)", color: "#34d399",
+                    border: "1px solid rgba(52,211,153,0.25)", borderRadius: 7,
+                    cursor: "pointer", fontFamily: "inherit",
+                  }}
+                >
+                  Claim 10% off →
+                </button>
+              </div>
+            )}
 
             {/* Coupon banner */}
             {coupon ? (
