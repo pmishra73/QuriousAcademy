@@ -57,10 +57,13 @@ export default function BrochurePage() {
       // Persist contact info in sessionStorage for this browser session
       try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(form)); } catch {}
 
+      // If it's a PDF, download it; otherwise open the HTML brochure in a new tab
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${courseId}-brochure.pdf`;
       a.target = "_blank";
+      if (url.endsWith(".pdf")) {
+        a.download = `${courseId}-brochure.pdf`;
+      }
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

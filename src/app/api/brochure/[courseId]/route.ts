@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sendMail, ADMIN } from "@/lib/mailer";
 import { courses } from "@/lib/courses";
+import { getMergedVariants } from "@/lib/courseOverrides";
+import { existsSync } from "fs";
+import { join } from "path";
 
 const VALID_COURSE_IDS = new Set([
   "python-masterclass", "ai-masterclass", "calculus-masterclass", "linear-algebra-masterclass",
@@ -30,9 +33,15 @@ export async function POST(
     return NextResponse.json({ error: "Brochure not available for this course." }, { status: 404 });
   }
 
-  const pdfUrl = `/brochures/${courseId}.pdf`;
+  // Use static PDF if it exists, otherwise serve the generated HTML brochure
+  const staticPdfPath = join(process.cwd(), "public", "brochures", `${courseId}.pdf`);
+  const hasPdf = existsSync(staticPdfPath);
+  const pdfUrl = hasPdf ? `/brochures/${courseId}.pdf` : `/api/brochure-html/${courseId}`;
+
+  const allVariants = await getMergedVariants();
+  const variant = allVariants.find((v) => v.id === courseId);
   const course = courses.find((c) => c.id === courseId);
-  const courseTitle = course?.title ?? courseId;
+  const courseTitle = variant?.title ?? course?.title ?? courseId;
   const now = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
 
   try {
