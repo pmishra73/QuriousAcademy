@@ -103,6 +103,33 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Want a site like this? */}
+        <div style={{
+          borderTop: "1px solid var(--border)",
+          paddingTop: 32,
+          marginBottom: 24,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 16,
+        }}>
+          <div>
+            <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6 }}>
+              Want a site like this for your business?{" "}
+              <a
+                href="https://prasantmishra.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "var(--primary)", textDecoration: "none", fontWeight: 500 }}
+                className="hover:underline"
+              >
+                Contact Prasant
+              </a>
+            </p>
+          </div>
+        </div>
+
         <div
           style={{
             borderTop: "1px solid var(--border)",

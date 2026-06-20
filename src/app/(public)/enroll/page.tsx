@@ -3,6 +3,7 @@ import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { courses } from "@/lib/courses";
 import { variants } from "@/lib/variants";
+import { getUpcomingDates } from "@/lib/dates";
 import Link from "next/link";
 
 // Extend window for Razorpay
@@ -53,7 +54,13 @@ function EnrollForm() {
   const courseBadge = variant?.icon ?? oldCourse?.badge ?? "📘";
 
   const [form, setForm] = useState({ name: "", email: "", phone: "", courseId });
+  const [batchDate, setBatchDate] = useState("");
   const [coupon, setCoupon] = useState("");
+
+  // Compute upcoming batches for the selected live variant
+  const selectedVariant = variants.find((v) => v.id === form.courseId);
+  const isLive = selectedVariant?.deliveryMode === "Live";
+  const upcomingBatches = selectedVariant && isLive ? getUpcomingDates(selectedVariant.schedule) : [];
   const [couponState, setCouponState] = useState<"idle" | "checking" | "valid" | "invalid">("idle");
   const [couponMsg, setCouponMsg] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -86,8 +93,11 @@ function EnrollForm() {
     }
   };
 
-  const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+  // Reset batch when course changes
+  const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm((f) => ({ ...f, [k]: e.target.value }));
+    if (k === "courseId") setBatchDate("");
+  };
 
   const inp: React.CSSProperties = {
     width: "100%", background: "var(--surface-2)", border: "1px solid var(--border)",
@@ -103,6 +113,10 @@ function EnrollForm() {
     e.preventDefault();
     if (!form.name || !form.email || !form.phone) {
       setErrMsg("Please fill in all fields before proceeding to payment.");
+      return;
+    }
+    if (isLive && upcomingBatches.length > 0 && !batchDate) {
+      setErrMsg("Please select a batch date to continue.");
       return;
     }
     if (!razorpayReady) {
@@ -148,6 +162,7 @@ function EnrollForm() {
               courseId: form.courseId,
               couponCode: couponState === "valid" ? coupon.trim() : "",
               finalAmount: order.finalAmount,
+              batchDate: batchDate || undefined,
             }),
           });
 
@@ -282,28 +297,76 @@ function EnrollForm() {
                     <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
                   ))}
                 </optgroup>
-                <optgroup label="Intensive Cohorts">
+                <optgroup label="Weekend Cohorts">
                   {variants.filter(v => v.type === "cohort").map(v => (
                     <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
                   ))}
                 </optgroup>
-                <optgroup label="Sprint Courses">
+                <optgroup label="Sprint Courses (4 weeks)">
                   {variants.filter(v => v.type === "sprint").map(v => (
                     <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
                   ))}
                 </optgroup>
-                <optgroup label="Full Courses">
-                  {variants.filter(v => v.type === "standard").map(v => (
+                <optgroup label="Deep Dives (6–12 weeks)">
+                  {variants.filter(v => v.type === "deep-dive").map(v => (
                     <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
                   ))}
                 </optgroup>
-                <optgroup label="Deep Dives (90+ days)">
-                  {variants.filter(v => v.type === "deep-dive").map(v => (
+                <optgroup label="Full Courses (6–8 months)">
+                  {variants.filter(v => v.type === "full-course").map(v => (
+                    <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="Interview Preparation">
+                  {variants.filter(v => v.type === "interview-prep").map(v => (
                     <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
                   ))}
                 </optgroup>
               </select>
             </div>
+
+            {/* Batch picker for live courses */}
+            {isLive && upcomingBatches.length > 0 && (
+              <div>
+                <label style={lbl}>Select Batch *</label>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {upcomingBatches.map((batch) => (
+                    <label key={batch} style={{
+                      display: "flex", alignItems: "center", gap: 10,
+                      padding: "12px 14px", borderRadius: 8, cursor: "pointer",
+                      border: `1px solid ${batchDate === batch ? "var(--primary)" : "var(--border)"}`,
+                      background: batchDate === batch ? "rgba(91,124,250,0.08)" : "var(--surface-2)",
+                      fontSize: 13,
+                    }}>
+                      <input
+                        type="radio"
+                        name="batchDate"
+                        value={batch}
+                        checked={batchDate === batch}
+                        onChange={(e) => setBatchDate(e.target.value)}
+                        style={{ accentColor: "var(--primary)" }}
+                      />
+                      <span>{batch}</span>
+                    </label>
+                  ))}
+                </div>
+                <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 6 }}>
+                  Live classes run on fixed schedules. Pick the batch that works for you.
+                </p>
+              </div>
+            )}
+
+            {/* Recorded option note for live courses that have a recorded variant */}
+            {isLive && selectedVariant?.recordedPrice && (
+              <div style={{
+                fontSize: 13, color: "var(--text-muted)", padding: "10px 14px",
+                background: "var(--surface-2)", borderRadius: 8,
+                border: "1px solid var(--border)", lineHeight: 1.6,
+              }}>
+                Can&apos;t make the live batch? A <strong>recorded version</strong> is available at ₹{selectedVariant.recordedPrice.toLocaleString("en-IN")}.{" "}
+                <a href="/contact" style={{ color: "var(--primary)", textDecoration: "none" }}>Contact us</a> to purchase.
+              </div>
+            )}
 
             {errMsg && (
               <div style={{
