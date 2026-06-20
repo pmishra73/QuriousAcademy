@@ -7,7 +7,7 @@
       "icon": "Code2",
       "type": "masterclass",
       "deliveryMode": "Live",
-      "title": "Python in 3 Hours",
+      "title": "Python",
       "tagline": "The essential 20% that does 80% of the work",
       "price": 799,
       "recordedPrice": 199,
@@ -78,7 +78,7 @@
       "icon": "Brain",
       "type": "masterclass",
       "deliveryMode": "Live",
-      "title": "AI Demystified in 3 Hours",
+      "title": "AI Demystified",
       "tagline": "What AI actually is — and how it actually works",
       "price": 999,
       "recordedPrice": 299,
@@ -148,7 +148,7 @@
       "icon": "Sigma",
       "type": "masterclass",
       "deliveryMode": "Live",
-      "title": "Calculus in 3 Hours",
+      "title": "Calculus",
       "tagline": "Derivatives and integrals — actually understood",
       "price": 799,
       "recordedPrice": 199,
@@ -218,7 +218,7 @@
       "icon": "Sigma",
       "type": "masterclass",
       "deliveryMode": "Live",
-      "title": "Linear Algebra for ML in 3 Hours",
+      "title": "Linear Algebra for ML",
       "tagline": "The maths behind neural networks — made visual",
       "price": 799,
       "recordedPrice": 199,
@@ -589,7 +589,7 @@
       "icon": "Globe",
       "type": "sprint",
       "deliveryMode": "Live",
-      "title": "Build Your First Website — 4 Weeks",
+      "title": "Build Your First Website",
       "tagline": "HTML, CSS, JavaScript — from blank page to deployed site",
       "price": 5999,
       "recordedPrice": 2999,
@@ -669,7 +669,7 @@
       "icon": "Globe",
       "type": "sprint",
       "deliveryMode": "Live",
-      "title": "React Foundations — 4 Weeks",
+      "title": "React Foundations",
       "tagline": "Build modern UIs with the world's most popular frontend library",
       "price": 7999,
       "recordedPrice": 3999,
@@ -749,7 +749,7 @@
       "icon": "Code2",
       "type": "sprint",
       "deliveryMode": "Live",
-      "title": "Python Sprint — 4 Weeks",
+      "title": "Core Python",
       "tagline": "Core Python mastery in one focused month",
       "price": 6999,
       "recordedPrice": 3499,
@@ -829,7 +829,7 @@
       "icon": "GitBranch",
       "type": "sprint",
       "deliveryMode": "Live",
-      "title": "DSA Sprint — 4 Weeks",
+      "title": "DSA Patterns",
       "tagline": "Core patterns to crack coding interviews fast",
       "price": 7999,
       "recordedPrice": 3999,
@@ -909,7 +909,7 @@
       "icon": "Database",
       "type": "sprint",
       "deliveryMode": "Live",
-      "title": "SQL & Data Sprint — 4 Weeks",
+      "title": "SQL & Data",
       "tagline": "Query, analyse and visualise data like a data engineer",
       "price": 5999,
       "recordedPrice": 2999,
@@ -990,7 +990,7 @@
       "icon": "Brain",
       "type": "sprint",
       "deliveryMode": "Live",
-      "title": "AI Tools Sprint — 4 Weeks",
+      "title": "AI Tools",
       "tagline": "Prompt engineering, APIs and agents — build real AI products",
       "price": 8999,
       "recordedPrice": 4999,
@@ -1071,12 +1071,12 @@
       "icon": "Code2",
       "type": "deep-dive",
       "deliveryMode": "Live+Recorded",
-      "title": "Python Mastery — 90 Days",
+      "title": "Python Mastery",
       "tagline": "From beginner to job-ready Python developer",
       "price": 19999,
       "currency": "INR",
       "duration": "90 days",
-      "level": "Beginner to Advanced",
+      "level": "Beginner to Intermediate",
       "instructor": "Prasant Mishra",
       "schedule": {
         "rule": "weekly-monday",
@@ -1150,7 +1150,7 @@
       "icon": "GitBranch",
       "type": "deep-dive",
       "deliveryMode": "Live+Recorded",
-      "title": "DSA Deep Dive — 8 Weeks",
+      "title": "DSA Deep Dive",
       "tagline": "Full interview-grade DSA — every pattern, every problem type",
       "price": 14999,
       "currency": "INR",
@@ -1331,7 +1331,7 @@
       "icon": "Server",
       "type": "deep-dive",
       "deliveryMode": "Live+Recorded",
-      "title": "Backend Engineering Deep Dive",
+      "title": "Backend Engineering",
       "tagline": "APIs, databases, caching and production systems — 10 weeks",
       "price": 16999,
       "currency": "INR",
@@ -1421,7 +1421,7 @@
       "icon": "Brain",
       "type": "deep-dive",
       "deliveryMode": "Live+Recorded",
-      "title": "AI & ML Engineering — 12 Weeks",
+      "title": "AI & ML Engineering",
       "tagline": "From fundamentals to building and deploying real models",
       "price": 19999,
       "currency": "INR",
@@ -1503,7 +1503,7 @@
       "icon": "Brain",
       "type": "deep-dive",
       "deliveryMode": "Live+Recorded",
-      "title": "GenAI Deep Dive — 12 Weeks",
+      "title": "GenAI Deep Dive",
       "tagline": "LLMs, RAG, agents, fine-tuning and production AI — end to end",
       "price": 24999,
       "currency": "INR",
@@ -1609,7 +1609,7 @@
       "tagline": "Everything you need to land and thrive in your first software engineering role",
       "price": 39999,
       "currency": "INR",
-      "duration": "~6 months",
+      "duration": "6–8 months",
       "level": "Beginner",
       "instructor": "Prasant Mishra",
       "schedule": {
@@ -1688,7 +1688,8 @@
           "Mock interview sessions",
           "Resume & portfolio review",
           "Alumni network access",
-          "Completion Certificate"
+          "Completion Certificate",
+          "Interview preparation sessions"
         ],
         "certificate": "completion"
       }
@@ -1704,7 +1705,7 @@
       "tagline": "Advanced engineering, system design and the skills that get you to senior",
       "price": 59999,
       "currency": "INR",
-      "duration": "~9 months",
+      "duration": "6–8 months",
       "level": "Intermediate to Advanced",
       "instructor": "Prasant Mishra",
       "schedule": {
@@ -1792,7 +1793,8 @@
           "System design practice sessions",
           "Senior-level mock interviews",
           "Alumni network access",
-          "Completion Certificate"
+          "Completion Certificate",
+          "Interview preparation sessions"
         ],
         "certificate": "completion"
       }
@@ -1808,7 +1810,7 @@
       "tagline": "Infrastructure, cloud, automation and reliability — your foundation in systems",
       "price": 39999,
       "currency": "INR",
-      "duration": "~6 months",
+      "duration": "6–8 months",
       "level": "Beginner to Intermediate",
       "instructor": "Prasant Mishra",
       "schedule": {
@@ -1894,7 +1896,8 @@
           "Code review bi-weekly",
           "Weekly doubt sessions",
           "Mock interview sessions",
-          "Completion Certificate"
+          "Completion Certificate",
+          "Interview preparation sessions"
         ],
         "certificate": "completion"
       }
@@ -1910,7 +1913,7 @@
       "tagline": "Distributed systems, SRE, reliability engineering and architecture at scale",
       "price": 119999,
       "currency": "INR",
-      "duration": "~12 months",
+      "duration": "6–8 months",
       "level": "Advanced",
       "instructor": "Prasant Mishra",
       "schedule": {
@@ -2014,7 +2017,7 @@
       "tagline": "Train, deploy and maintain AI systems — from fundamentals to production",
       "price": 44999,
       "currency": "INR",
-      "duration": "~6 months",
+      "duration": "6–8 months",
       "level": "Intermediate",
       "instructor": "Prasant Mishra",
       "schedule": {
@@ -2101,7 +2104,8 @@
           "Code review bi-weekly",
           "ML system design practice",
           "Mock interviews",
-          "Completion Certificate"
+          "Completion Certificate",
+          "Interview preparation sessions"
         ],
         "certificate": "completion"
       }
@@ -2117,7 +2121,7 @@
       "tagline": "LLMs, RAG, agents and fine-tuning — master the generative AI stack",
       "price": 34999,
       "currency": "INR",
-      "duration": "~4 months",
+      "duration": "6–8 months",
       "level": "Intermediate",
       "instructor": "Prasant Mishra",
       "schedule": {
@@ -2182,7 +2186,8 @@
           "3 real GenAI projects",
           "Prompt & RAG template library",
           "Mock interviews for GenAI roles",
-          "Completion Certificate"
+          "Completion Certificate",
+          "Interview preparation sessions"
         ],
         "certificate": "completion"
       }
@@ -2198,7 +2203,7 @@
       "tagline": "Advanced ML, MLOps, multi-modal AI and AI at production scale",
       "price": 64999,
       "currency": "INR",
-      "duration": "~9 months",
+      "duration": "6–8 months",
       "level": "Advanced",
       "instructor": "Prasant Mishra",
       "schedule": {
@@ -2276,7 +2281,8 @@
           "Senior AI mock interviews",
           "1-on-1 mentorship",
           "Alumni network access",
-          "Completion Certificate"
+          "Completion Certificate",
+          "Interview preparation sessions"
         ],
         "certificate": "completion"
       }
@@ -2288,11 +2294,11 @@
       "icon": "Code2",
       "type": "full-course",
       "deliveryMode": "Live+Recorded",
-      "title": "MTS I — Member of Technical Staff I",
+      "title": "MTS I",
       "tagline": "Target entry-level roles at product companies and big tech",
       "price": 49999,
       "currency": "INR",
-      "duration": "~6 months",
+      "duration": "6–8 months",
       "level": "Intermediate",
       "instructor": "Prasant Mishra",
       "schedule": {
@@ -2381,11 +2387,11 @@
       "icon": "Code2",
       "type": "full-course",
       "deliveryMode": "Live+Recorded",
-      "title": "MTS II — Member of Technical Staff II",
+      "title": "MTS II",
       "tagline": "Target mid-level roles at big tech — L5 and above",
       "price": 79999,
       "currency": "INR",
-      "duration": "~9 months",
+      "duration": "6–8 months",
       "level": "Advanced",
       "instructor": "Prasant Mishra",
       "schedule": {
@@ -2474,12 +2480,12 @@
       "icon": "Code2",
       "type": "full-course",
       "deliveryMode": "Live+Recorded",
-      "title": "MTS III — Member of Technical Staff III",
+      "title": "MTS III",
       "tagline": "Senior / L6 interviews — technical leadership and architecture mastery",
       "price": 99999,
       "currency": "INR",
-      "duration": "~12 months",
-      "level": "Expert",
+      "duration": "6–8 months",
+      "level": "Advanced",
       "instructor": "Prasant Mishra",
       "schedule": {
         "rule": "fixed-days",
@@ -2561,8 +2567,8 @@
       "tagline": "Org-level technical leadership, architecture and staff-level interview mastery",
       "price": 119999,
       "currency": "INR",
-      "duration": "~12 months",
-      "level": "Expert",
+      "duration": "6–8 months",
+      "level": "Advanced",
       "instructor": "Prasant Mishra",
       "schedule": {
         "rule": "fixed-days",
@@ -2640,7 +2646,7 @@
       "icon": "Code2",
       "type": "deep-dive",
       "deliveryMode": "Live+Recorded",
-      "title": "Python for Data Science — 8 Weeks",
+      "title": "Python for Data Science and Machine Learning",
       "tagline": "NumPy, Pandas, Matplotlib and the full data workflow",
       "price": 12999,
       "currency": "INR",
@@ -2713,6 +2719,536 @@
           "Learner's Certificate"
         ],
         "certificate": "learner"
+      }
+    },
+    {
+      "id": "go-sprint",
+      "subject": "programming",
+      "subjectLabel": "Go Programming",
+      "icon": "Code2",
+      "type": "sprint",
+      "deliveryMode": "Live",
+      "title": "Go",
+      "tagline": "Build fast, concurrent systems with Go — one focused month",
+      "price": 7999,
+      "recordedPrice": 3999,
+      "currency": "INR",
+      "duration": "4 weeks",
+      "level": "Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Mon, Wed, Fri",
+        "time": "8:00 PM – 9:30 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "A focused month on Go — the language built for simplicity and concurrency. Covers the full language, concurrency patterns, and building real networked services.",
+        "sessions": [
+          {
+            "session": "Week 1",
+            "title": "Go Foundations",
+            "topics": [
+              "Go syntax & type system",
+              "Structs, methods, interfaces",
+              "Error handling idioms",
+              "Packages & modules"
+            ]
+          },
+          {
+            "session": "Week 2",
+            "title": "Concurrency",
+            "topics": [
+              "Goroutines & the Go scheduler",
+              "Channels — buffered & unbuffered",
+              "select statement",
+              "sync primitives — Mutex, WaitGroup"
+            ]
+          },
+          {
+            "session": "Week 3",
+            "title": "Networked Services",
+            "topics": [
+              "Building HTTP servers with net/http",
+              "REST API with Gorilla/Chi",
+              "JSON encoding & decoding",
+              "Project: REST API service"
+            ]
+          },
+          {
+            "session": "Week 4",
+            "title": "Production Go",
+            "topics": [
+              "Testing & benchmarking",
+              "Context & cancellation",
+              "Profiling & performance",
+              "Capstone: concurrent CLI tool"
+            ]
+          }
+        ],
+        "prerequisites": "One programming language at a basic level (Python, Java, or C)",
+        "outcomes": [
+          "Write idiomatic Go",
+          "Build concurrent programs with goroutines & channels",
+          "Create HTTP APIs",
+          "Write tested, production-ready Go code"
+        ],
+        "includes": [
+          "12 live sessions + all recordings",
+          "All project source code",
+          "Learner's Certificate"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "java-sprint",
+      "subject": "programming",
+      "subjectLabel": "Java Programming",
+      "icon": "Code2",
+      "type": "sprint",
+      "deliveryMode": "Live",
+      "title": "Java",
+      "tagline": "Core Java, OOP and the JVM — one focused month",
+      "price": 6999,
+      "recordedPrice": 3499,
+      "currency": "INR",
+      "duration": "4 weeks",
+      "level": "Beginner to Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Tue, Thu, Sat",
+        "time": "8:00 PM – 9:30 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "A complete Java foundation in one month. Covers the language, object-oriented design, the JVM, and building a real Spring Boot API project.",
+        "sessions": [
+          {
+            "session": "Week 1",
+            "title": "Java Foundations",
+            "topics": [
+              "Syntax, data types, operators",
+              "Control flow — if, for, while, switch",
+              "Methods & variable scope",
+              "Arrays & strings"
+            ]
+          },
+          {
+            "session": "Week 2",
+            "title": "Object-Oriented Java",
+            "topics": [
+              "Classes, objects & constructors",
+              "Inheritance, polymorphism, abstraction",
+              "Interfaces & generics",
+              "Collections — List, Map, Set"
+            ]
+          },
+          {
+            "session": "Week 3",
+            "title": "Java Ecosystem",
+            "topics": [
+              "Exception handling",
+              "File I/O & streams",
+              "Lambda expressions & streams API",
+              "Maven build tool"
+            ]
+          },
+          {
+            "session": "Week 4",
+            "title": "Spring Boot",
+            "topics": [
+              "Spring Boot setup & dependency injection",
+              "REST API with Spring MVC",
+              "JPA & H2 database",
+              "Capstone: CRUD REST API"
+            ]
+          }
+        ],
+        "prerequisites": "None — basic programming logic helpful",
+        "outcomes": [
+          "Write clean, object-oriented Java",
+          "Use the Java Collections framework",
+          "Build REST APIs with Spring Boot",
+          "Understand the JVM and Java ecosystem"
+        ],
+        "includes": [
+          "12 live sessions + all recordings",
+          "All project source code",
+          "Learner's Certificate"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "c-sprint",
+      "subject": "programming",
+      "subjectLabel": "C Programming",
+      "icon": "Code2",
+      "type": "sprint",
+      "deliveryMode": "Live",
+      "title": "C",
+      "tagline": "The language that runs the world — memory, pointers, and systems",
+      "price": 5999,
+      "recordedPrice": 2999,
+      "currency": "INR",
+      "duration": "4 weeks",
+      "level": "Beginner to Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Mon, Wed, Fri",
+        "time": "7:00 PM – 8:30 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "A focused month on C — the foundation of systems programming. Learn memory management, pointers, and how computers actually work under the hood.",
+        "sessions": [
+          {
+            "session": "Week 1",
+            "title": "C Foundations",
+            "topics": [
+              "Compilation model & toolchain (gcc, make)",
+              "Data types, variables, operators",
+              "Control flow",
+              "Functions & the call stack"
+            ]
+          },
+          {
+            "session": "Week 2",
+            "title": "Pointers & Memory",
+            "topics": [
+              "Pointers — address of, dereference",
+              "Arrays vs pointers",
+              "Dynamic memory — malloc, free, realloc",
+              "Memory leaks & valgrind"
+            ]
+          },
+          {
+            "session": "Week 3",
+            "title": "Structs & Files",
+            "topics": [
+              "Structs & typedef",
+              "Linked lists in C",
+              "File I/O — fopen, fread, fwrite",
+              "Command-line arguments"
+            ]
+          },
+          {
+            "session": "Week 4",
+            "title": "Systems C",
+            "topics": [
+              "Preprocessor & macros",
+              "Bitwise operations",
+              "Writing a simple shell",
+              "Capstone: build a mini memory allocator"
+            ]
+          }
+        ],
+        "prerequisites": "Basic programming logic (any language). Curiosity about how computers work.",
+        "outcomes": [
+          "Understand pointers and manual memory management",
+          "Write systems-level C programs",
+          "Debug memory errors",
+          "Build a foundation for OS and embedded programming"
+        ],
+        "includes": [
+          "12 live sessions + all recordings",
+          "All project source code",
+          "Learner's Certificate"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "cpp-sprint",
+      "subject": "programming",
+      "subjectLabel": "C++ Programming",
+      "icon": "Code2",
+      "type": "sprint",
+      "deliveryMode": "Live",
+      "title": "C++",
+      "tagline": "Modern C++ for high-performance programming",
+      "price": 6999,
+      "recordedPrice": 3499,
+      "currency": "INR",
+      "duration": "4 weeks",
+      "level": "Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Tue, Thu, Sat",
+        "time": "7:00 PM – 8:30 PM IST",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "Modern C++ (C++17/20) in one month. Covers OOP, the STL, move semantics, and smart pointers — the features that make C++ both powerful and manageable.",
+        "sessions": [
+          {
+            "session": "Week 1",
+            "title": "C++ over C",
+            "topics": [
+              "References vs pointers",
+              "Classes, constructors, destructors",
+              "Operator overloading",
+              "Const correctness"
+            ]
+          },
+          {
+            "session": "Week 2",
+            "title": "OOP & Templates",
+            "topics": [
+              "Inheritance & virtual functions",
+              "Abstract classes & interfaces",
+              "Templates & generic programming",
+              "STL containers — vector, map, set, deque"
+            ]
+          },
+          {
+            "session": "Week 3",
+            "title": "Modern C++",
+            "topics": [
+              "Move semantics & rvalue references",
+              "Smart pointers — unique_ptr, shared_ptr",
+              "Lambda expressions",
+              "Range-based for & auto"
+            ]
+          },
+          {
+            "session": "Week 4",
+            "title": "STL Algorithms & Projects",
+            "topics": [
+              "STL algorithms — sort, find, transform",
+              "Iterators in depth",
+              "File I/O with streams",
+              "Capstone: data processing CLI tool"
+            ]
+          }
+        ],
+        "prerequisites": "C basics (or C Sprint). Basic understanding of pointers and memory.",
+        "outcomes": [
+          "Write modern, idiomatic C++17/20",
+          "Use STL containers and algorithms effectively",
+          "Manage memory safely with smart pointers",
+          "Build performant C++ applications"
+        ],
+        "includes": [
+          "12 live sessions + all recordings",
+          "All project source code",
+          "Learner's Certificate"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "chemistry-masterclass",
+      "subject": "science",
+      "subjectLabel": "Chemistry",
+      "icon": "FlaskConical",
+      "type": "masterclass",
+      "deliveryMode": "Live",
+      "title": "Chemistry",
+      "tagline": "Core chemistry concepts — actually understood",
+      "price": 799,
+      "recordedPrice": 199,
+      "currency": "INR",
+      "duration": "3 hours",
+      "level": "Beginner to Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "monthly-first-saturday",
+        "time": "12:00 PM IST"
+      },
+      "content": {
+        "overview": "A focused 3-hour session covering the core ideas in chemistry — atomic structure, chemical bonding, and reaction types — built around intuition and real-world examples.",
+        "sessions": [
+          {
+            "session": "Hour 1",
+            "title": "Atomic Structure & Periodicity",
+            "topics": [
+              "Bohr model to quantum model",
+              "Electron configuration & orbitals",
+              "Periodic table trends — ionisation energy, electronegativity",
+              "Why elements behave the way they do"
+            ]
+          },
+          {
+            "session": "Hour 2",
+            "title": "Chemical Bonding",
+            "topics": [
+              "Ionic, covalent & metallic bonding",
+              "Lewis structures & VSEPR theory",
+              "Molecular geometry — shapes & polarity",
+              "Intermolecular forces"
+            ]
+          },
+          {
+            "session": "Hour 3",
+            "title": "Reactions & Applications",
+            "topics": [
+              "Types of reactions — synthesis, decomposition, redox",
+              "Balancing equations & stoichiometry",
+              "Acids, bases & pH",
+              "Chemistry in daily life & industry"
+            ]
+          }
+        ],
+        "prerequisites": "Basic school-level science. No prior chemistry knowledge needed.",
+        "outcomes": [
+          "Understand atomic structure and periodicity",
+          "Predict molecular shapes using VSEPR",
+          "Balance chemical equations",
+          "Connect chemistry to everyday applications"
+        ],
+        "includes": [
+          "Full session recording (lifetime access)",
+          "Live doubt clearing session (1 hr)",
+          "Formula & concept reference PDF",
+          "Learner's Certificate"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "chemistry-cohort",
+      "subject": "science",
+      "subjectLabel": "Chemistry",
+      "icon": "FlaskConical",
+      "type": "cohort",
+      "deliveryMode": "Live",
+      "title": "Organic Chemistry Weekend",
+      "tagline": "Mechanisms, reactions and molecular thinking — one focused weekend",
+      "price": 2999,
+      "recordedPrice": 1499,
+      "currency": "INR",
+      "duration": "2 days · 12 hours",
+      "level": "Intermediate",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "biweekly-weekends",
+        "time": "9:00 AM – 3:00 PM IST"
+      },
+      "content": {
+        "overview": "Two intensive days on organic chemistry — the chemistry of carbon. Covers naming, functional groups, reaction mechanisms, and stereochemistry with a focus on pattern recognition over memorisation.",
+        "sessions": [
+          {
+            "session": "Day 1",
+            "title": "Structure & Functional Groups",
+            "topics": [
+              "IUPAC nomenclature",
+              "Functional groups — alkanes, alkenes, alkynes, alcohols, carbonyls",
+              "Hybridisation & molecular geometry",
+              "Isomers — structural & stereoisomers"
+            ]
+          },
+          {
+            "session": "Day 2",
+            "title": "Reaction Mechanisms",
+            "topics": [
+              "Nucleophiles & electrophiles",
+              "SN1 vs SN2 — when and why",
+              "Elimination reactions — E1 vs E2",
+              "Carbonyl chemistry — additions & condensations",
+              "Problem-solving strategy for mechanisms"
+            ]
+          }
+        ],
+        "prerequisites": "General chemistry basics (equivalent to 11th grade). Atomic structure & bonding.",
+        "outcomes": [
+          "Name organic compounds confidently",
+          "Predict reaction products from mechanisms",
+          "Understand stereochemistry",
+          "Solve organic chemistry problems systematically"
+        ],
+        "includes": [
+          "Both day recordings (lifetime access)",
+          "Live 2-hour doubt clearing session",
+          "Mechanism summary sheet",
+          "Practice problems with solutions",
+          "Learner's Certificate"
+        ],
+        "certificate": "learner"
+      }
+    },
+    {
+      "id": "interview-prep",
+      "subject": "technology",
+      "subjectLabel": "Interview Preparation",
+      "icon": "Target",
+      "type": "interview-prep",
+      "deliveryMode": "Live",
+      "title": "Interview Preparation",
+      "tagline": "Targeted prep for your specific role, stack and timeline",
+      "price": 14999,
+      "currency": "INR",
+      "duration": "4–8 weeks",
+      "level": "Intermediate to Advanced",
+      "instructor": "Prasant Mishra",
+      "schedule": {
+        "rule": "fixed-days",
+        "days": "Flexible",
+        "time": "By appointment",
+        "nextStart": "rolling"
+      },
+      "content": {
+        "overview": "Personalised interview preparation built around your target role, tech stack and timeline. Covers DSA, system design, and behavioural rounds — calibrated to the specific company and level you're targeting.",
+        "sessions": [
+          {
+            "session": "Week 1",
+            "title": "Role Assessment & Gap Analysis",
+            "topics": [
+              "Your current level vs target role bar",
+              "Identifying weak areas in DSA, design, or behavioural",
+              "Custom study plan based on your timeline",
+              "Setting realistic expectations"
+            ]
+          },
+          {
+            "session": "Weeks 2–3",
+            "title": "DSA Targeted Practice",
+            "topics": [
+              "Company-specific DSA patterns (based on Glassdoor, LeetCode discuss)",
+              "Weekly problem sets from your target company's question bank",
+              "Timed practice sessions",
+              "Review & common mistakes"
+            ]
+          },
+          {
+            "session": "Week 4",
+            "title": "System Design",
+            "topics": [
+              "HLD calibrated to your target level",
+              "Design problems commonly asked at your target company",
+              "Communication & presentation framework",
+              "Mock design interview"
+            ]
+          },
+          {
+            "session": "Weeks 5–8",
+            "title": "Mock Interviews & Refinement",
+            "topics": [
+              "Full mock coding interviews",
+              "Mock system design interviews",
+              "Behavioural mock (STAR method)",
+              "Detailed feedback & improvement plan"
+            ]
+          }
+        ],
+        "prerequisites": "Basic coding skills. Works best if you have a specific company or role in mind.",
+        "outcomes": [
+          "Perform at your target company's interview bar",
+          "Clear coding, design and behavioural rounds confidently",
+          "Get a structured feedback loop to improve quickly"
+        ],
+        "includes": [
+          "Personalised study plan",
+          "Company-specific problem sets",
+          "Mock interviews with written feedback",
+          "Behavioural interview coaching",
+          "Completion Certificate"
+        ],
+        "certificate": "completion"
       }
     }
   ]

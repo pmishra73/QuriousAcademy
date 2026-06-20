@@ -6,7 +6,7 @@ export type CourseVariant = {
   subject: string;
   subjectLabel: string;
   icon: string;
-  type: "masterclass" | "cohort" | "sprint" | "standard" | "deep-dive" | "full-course";
+  type: "masterclass" | "cohort" | "sprint" | "standard" | "deep-dive" | "full-course" | "interview-prep";
   recordedPrice?: number;
   deliveryMode: "Live" | "Live+Recorded" | "Recorded";
   title: string;
@@ -78,6 +78,14 @@ export const typeConfig = {
     border: "rgba(244,63,94,0.2)",
     icon: "🏆",
   },
+  "interview-prep": {
+    label: "Interview Prep",
+    sublabel: "Role & stack personalised",
+    color: "#f59e0b",
+    bg: "rgba(245,158,11,0.1)",
+    border: "rgba(245,158,11,0.2)",
+    icon: "🎯",
+  },
 } as const;
 
 export const sectionOrder: CourseVariant["type"][] = [
@@ -86,6 +94,7 @@ export const sectionOrder: CourseVariant["type"][] = [
   "sprint",
   "deep-dive",
   "full-course",
+  "interview-prep",
   "standard",
 ];
 
