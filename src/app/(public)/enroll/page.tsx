@@ -1,10 +1,17 @@
 "use client";
 import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import * as LucideIcons from "lucide-react";
 import { courses } from "@/lib/courses";
 import { variants } from "@/lib/variants";
 import { getUpcomingDates } from "@/lib/dates";
 import Link from "next/link";
+
+function CourseIcon({ name, size = 32 }: { name: string; size?: number }) {
+  const Icon = (LucideIcons as unknown as Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>>)[name];
+  if (!Icon) return <span style={{ fontSize: size }}>{name.includes(" ") || name.length < 3 ? name : "📘"}</span>;
+  return <Icon size={size} strokeWidth={1.5} />;
+}
 
 // Extend window for Razorpay
 declare global {
@@ -412,7 +419,7 @@ function EnrollForm() {
         <div style={{ position: "sticky", top: 80 }}>
           {form.courseId ? (
             <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: 24 }}>
-              <div style={{ fontSize: 32, marginBottom: 14 }}>{courseBadge}</div>
+              <div style={{ fontSize: 32, marginBottom: 14, color: "var(--primary)" }}><CourseIcon name={courseBadge} size={32} /></div>
               <h3 style={{ fontSize: 18, marginBottom: 6 }}>{courseTitle}</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: 10, margin: "16px 0", paddingBottom: 16, borderBottom: "1px solid var(--border)" }}>
                 {[

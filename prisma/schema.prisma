@@ -189,6 +189,22 @@ model Announcement {
   teacher   User     @relation(fields: [teacherId], references: [id])
 }
 
+// ─── Course Overrides ────────────────────────────────────────────────────────
+// Stores admin-managed overrides on top of the base courses.json data.
+// Any field left null means "use the JSON default".
+
+model CourseOverride {
+  courseId      String   @id
+  hidden        Boolean  @default(false)
+  title         String?
+  tagline       String?
+  price         Int?
+  recordedPrice Int?
+  level         String?
+  scheduleDates String[] // ISO date strings for manually set batch dates
+  updatedAt     DateTime @updatedAt
+}
+
 // ─── Messages ────────────────────────────────────────────────────────────────
 
 enum MessageType {

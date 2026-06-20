@@ -4,8 +4,9 @@ import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import Link from "next/link";
 import * as LucideIcons from "lucide-react";
-import { variants, typeConfig, sectionOrder, getVariantsByType, getUpcomingForVariant } from "@/lib/variants";
+import { typeConfig, sectionOrder } from "@/lib/variants";
 import type { CourseVariant } from "@/lib/variants";
+import type { MergedVariant } from "@/lib/courseOverrides";
 import ContentUnlockModal from "@/components/ContentUnlockModal";
 
 function CourseIcon({ name, size = 20 }: { name: string; size?: number }) {
@@ -62,9 +63,9 @@ function levelStyle(level: string) {
   return levelColors[level.toLowerCase()] ?? { color: "var(--text-muted)", bg: "var(--surface-2)", border: "var(--border)" };
 }
 
-function VariantCard({ v, onUnlock }: { v: CourseVariant; onUnlock: (v: CourseVariant) => void }) {
+function VariantCard({ v, onUnlock }: { v: MergedVariant; onUnlock: (v: CourseVariant) => void }) {
   const cfg = typeConfig[v.type];
-  const dates = getUpcomingForVariant(v);
+  const dates = v.effectiveScheduleDates ?? [];
   const levels = v.level.split(/[,/]|\s+to\s+/i).map((l) => l.trim()).filter(Boolean);
 
   return (
@@ -191,11 +192,16 @@ function CoursesPageInner() {
   const [activeType, setActiveType] = useState("all");
   const [unlockTarget, setUnlockTarget] = useState<CourseVariant | null>(null);
   const [hoveredType, setHoveredType] = useState<string | null>(null);
+  const [variants, setVariants] = useState<MergedVariant[]>([]);
 
   useEffect(() => {
     const s = searchParams.get("subject");
     if (s) setActiveSubject(s);
   }, [searchParams]);
+
+  useEffect(() => {
+    fetch("/api/courses").then((r) => r.json()).then(setVariants);
+  }, []);
 
   const subjects = ["all", ...Array.from(new Set(variants.map((v) => v.subject)))];
   const subjectLabels: Record<string, string> = {
@@ -206,7 +212,7 @@ function CoursesPageInner() {
 
   const filteredVariants = (type: CourseVariant["type"]) => {
     if (activeType !== "all" && type !== activeType) return [];
-    return getVariantsByType(type).filter((v) => activeSubject === "all" || v.subject === activeSubject);
+    return variants.filter((v) => v.type === type && (activeSubject === "all" || v.subject === activeSubject));
   };
 
   return (
