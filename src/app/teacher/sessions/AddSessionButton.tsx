@@ -2,11 +2,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function AddSessionButton({ courseIds }: { courseIds: string[] }) {
+export default function AddSessionButton({ courses }: { courses: { id: string; title: string }[] }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({ courseId: courseIds[0] ?? "", title: "", scheduledAt: "", meetingLink: "", notes: "" });
+  const [form, setForm] = useState({ courseId: courses[0]?.id ?? "", title: "", scheduledAt: "", meetingLink: "", notes: "" });
 
   function set(k: string, v: string) { setForm((f) => ({ ...f, [k]: v })); }
 
@@ -39,7 +39,7 @@ export default function AddSessionButton({ courseIds }: { courseIds: string[] })
               <div>
                 <label style={{ fontSize: 12, color: "var(--text-muted)", display: "block", marginBottom: 5 }}>Course</label>
                 <select value={form.courseId} onChange={(e) => set("courseId", e.target.value)} style={{ ...inputStyle }}>
-                  {courseIds.map((id) => <option key={id} value={id}>{id}</option>)}
+                  {courses.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
                 </select>
               </div>
               <div>

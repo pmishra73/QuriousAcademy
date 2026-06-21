@@ -9,6 +9,7 @@ const navItems = [
   { href: "/teacher/sessions", label: "Sessions", icon: "📅" },
   { href: "/teacher/students", label: "Students", icon: "🎓" },
   { href: "/teacher/blogs", label: "Blogs", icon: "✍️" },
+  { href: "/teacher/videos", label: "Videos", icon: "🎬" },
   { href: "/teacher/resources", label: "Resources", icon: "📎" },
   { href: "/teacher/announcements", label: "Announcements", icon: "📣" },
   { href: "/teacher/profile", label: "My Profile", icon: "⚙" },
