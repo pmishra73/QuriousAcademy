@@ -33,6 +33,7 @@ model User {
   attendances   Attendance[]
   notes         StudentNote[]
   announcements Announcement[]
+  videos        Video[]
 }
 
 // ─── Institutes ───────────────────────────────────────────────────────────────
@@ -219,9 +220,26 @@ model BlogPost {
   category    String
   author      String
   authorId    String?
+  instituteId String?
   published   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+// ─── Videos ──────────────────────────────────────────────────────────────────
+
+model Video {
+  id          String   @id @default(cuid())
+  courseId    String
+  teacherId   String
+  instituteId String?
+  title       String
+  url         String
+  description String?
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  teacher     User     @relation(fields: [teacherId], references: [id])
 }
 
 // ─── Course Overrides ────────────────────────────────────────────────────────

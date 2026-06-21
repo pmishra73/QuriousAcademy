@@ -1,18 +1,30 @@
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { variants } from "@/lib/variants";
 import AddSessionButton from "./AddSessionButton";
 
 export default async function TeacherSessionsPage() {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id;
+  const role = (session?.user as { role?: string })?.role;
+  const isAdmin = role === "admin";
 
-  const assignments = await db.courseAssignment.findMany({ where: { teacherId: userId } });
-  const courseIds = assignments.map((a) => a.courseId);
+  let courseIds: string[];
+  if (isAdmin) {
+    courseIds = variants.map((v) => v.id);
+  } else {
+    const assignments = await db.courseAssignment.findMany({ where: { teacherId: userId } });
+    courseIds = assignments.map((a) => a.courseId);
+  }
 
-  const sessions = await db.session.findMany({
+  const courses = variants
+    .filter((v) => courseIds.includes(v.id))
+    .map((v) => ({ id: v.id, title: v.title }));
+
+  const sessions = courseIds.length > 0 ? await db.session.findMany({
     where: { courseId: { in: courseIds } },
     orderBy: { scheduledAt: "asc" },
-  });
+  }) : [];
 
   const statusColor: Record<string, { bg: string; color: string; border: string }> = {
     scheduled:  { bg: "rgba(91,124,250,0.1)",  color: "#5b7cfa", border: "rgba(91,124,250,0.25)" },
@@ -27,7 +39,7 @@ export default async function TeacherSessionsPage() {
           <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>Sessions</h1>
           <p style={{ fontSize: 13, color: "var(--text-muted)" }}>{sessions.length} sessions across your courses</p>
         </div>
-        <AddSessionButton courseIds={courseIds} />
+        <AddSessionButton courses={courses} />
       </div>
 
       {sessions.length === 0 ? (

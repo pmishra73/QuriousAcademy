@@ -12,7 +12,6 @@ const navItems = [
   { href: "/admin/teachers", label: "Teachers", icon: "👤" },
   { href: "/admin/institutes", label: "Institutes", icon: "🏫" },
   { href: "/admin/messages", label: "Messages", icon: "✉️" },
-  { href: "/admin/blogs", label: "Blogs", icon: "✍️" },
   { href: "/admin/content", label: "Content", icon: "📄" },
   { href: "/admin/profile", label: "My Profile", icon: "⚙" },
 ];
