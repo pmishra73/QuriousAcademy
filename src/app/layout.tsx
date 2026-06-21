@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, Source_Serif_4 } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" className={`${dmSans.variable} ${sourceSerif.variable}`}>
       <body className="min-h-screen flex flex-col">
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );
