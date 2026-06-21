@@ -15,20 +15,39 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String
-  password  String
-  role      Role
-  photo     String?
-  bio       String?
-  active    Boolean  @default(true)
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  email       String   @unique
+  name        String
+  password    String
+  role        Role
+  photo       String?
+  bio         String?
+  slug        String?  @unique
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  instituteId String?
+  institute   Institute? @relation(fields: [instituteId], references: [id])
 
   courses       CourseAssignment[]
   attendances   Attendance[]
   notes         StudentNote[]
   announcements Announcement[]
+}
+
+// ─── Institutes ───────────────────────────────────────────────────────────────
+
+model Institute {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  bio       String?
+  logo      String?
+  website   String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  teachers  User[]
 }
 
 // ─── Courses ─────────────────────────────────────────────────────────────────
