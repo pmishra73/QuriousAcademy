@@ -4,6 +4,7 @@ import { variants } from "@/lib/variants";
 import Link from "next/link";
 
 export default async function TeacherHome() {
+  try {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id;
   const role = (session?.user as { role?: string })?.role;
@@ -82,4 +83,9 @@ export default async function TeacherHome() {
       )}
     </div>
   );
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("TeacherHome error:", msg, err instanceof Error ? err.stack : "");
+    return <div style={{ padding: 32, color: "red", fontFamily: "monospace", whiteSpace: "pre-wrap" }}>Error: {msg}</div>;
+  }
 }
