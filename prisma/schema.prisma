@@ -242,6 +242,38 @@ model Video {
   teacher     User     @relation(fields: [teacherId], references: [id])
 }
 
+// ─── Content Change Requests ─────────────────────────────────────────────────
+
+enum ChangeRequestStatus {
+  pending_admin        // user submitted, waiting for admin first review
+  pending_owner        // admin approved, waiting for content owner to confirm
+  owner_confirmed      // owner confirmed they'll make the change, admin final review
+  approved             // admin approved final — coupon sent to requestor
+  rejected             // rejected at any stage
+}
+
+model ContentChangeRequest {
+  id              String               @id @default(cuid())
+  contentType     String               // "blog" | "video"
+  contentId       String
+  contentTitle    String
+  ownerId         String               // teacherId who owns the content
+
+  // Requestor
+  requestorName   String
+  requestorEmail  String
+  suggestion      String
+
+  // Workflow state
+  status          ChangeRequestStatus  @default(pending_admin)
+  adminNote       String?
+  ownerNote       String?
+  rejectedBy      String?              // "admin" | "owner"
+
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+}
+
 // ─── Course Overrides ────────────────────────────────────────────────────────
 // Stores admin-managed overrides on top of the base courses.json data.
 // Any field left null means "use the JSON default".

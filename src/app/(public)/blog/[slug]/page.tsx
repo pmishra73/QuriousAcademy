@@ -1,6 +1,7 @@
 import { getAllSlugs, getPost } from "@/lib/posts";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import SuggestEditButton from "@/components/SuggestEditButton";
 
 export async function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
@@ -74,6 +75,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           className="prose"
           dangerouslySetInnerHTML={{ __html: post.contentHtml }}
         />
+      </section>
+
+      {/* Suggest edit */}
+      <section style={{ padding: "0 24px 40px" }}>
+        <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", justifyContent: "flex-end" }}>
+          <SuggestEditButton contentType="blog" contentId={slug} contentTitle={post.title} ownerId="" />
+        </div>
       </section>
 
       {/* Footer CTA */}
