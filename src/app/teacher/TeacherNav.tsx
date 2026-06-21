@@ -12,6 +12,7 @@ const navItems = [
   { href: "/teacher/videos", label: "Videos", icon: "🎬" },
   { href: "/teacher/resources", label: "Resources", icon: "📎" },
   { href: "/teacher/announcements", label: "Announcements", icon: "📣" },
+  { href: "/teacher/change-requests", label: "Edit Requests", icon: "✏️" },
   { href: "/teacher/profile", label: "My Profile", icon: "⚙" },
 ];
 
