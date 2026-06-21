@@ -1,41 +1,46 @@
-import { getAllSlugs, getPost } from "@/lib/posts";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getBlog } from "@/lib/blog-blob";
 import { db } from "@/lib/db";
 import SuggestEditButton from "@/components/SuggestEditButton";
 
 export const dynamic = "force-dynamic";
 
 const catText: Record<string, string> = {
-  Programming: "#7c9dfc",
-  Mathematics: "#a78bfa",
-  "AI & ML": "#34d399",
-  Science: "#fbbf24",
-  Technology: "#fb923c",
+  Programming: "#7c9dfc", Mathematics: "#a78bfa", "AI & ML": "#34d399",
+  Science: "#fbbf24", Technology: "#fb923c",
 };
 const catBg: Record<string, string> = {
-  Programming: "rgba(91,124,250,0.1)",
-  Mathematics: "rgba(139,111,247,0.1)",
-  "AI & ML": "rgba(52,211,153,0.1)",
-  Science: "rgba(251,191,36,0.1)",
-  Technology: "rgba(249,115,22,0.1)",
+  Programming: "rgba(91,124,250,0.1)", Mathematics: "rgba(139,111,247,0.1)",
+  "AI & ML": "rgba(52,211,153,0.1)", Science: "rgba(251,191,36,0.1)", Technology: "rgba(249,115,22,0.1)",
 };
+
+function embedUrl(raw: string): string | null {
+  try {
+    const u = new URL(raw);
+    if (u.hostname.includes("youtube.com") || u.hostname.includes("youtu.be")) {
+      const id = u.searchParams.get("v") || u.pathname.split("/").pop();
+      return `https://www.youtube.com/embed/${id}`;
+    }
+    if (u.hostname.includes("vimeo.com")) {
+      return `https://player.vimeo.com/video/${u.pathname.split("/").pop()}`;
+    }
+  } catch { /* ignore */ }
+  return null;
+}
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  let post;
-  try {
-    post = await getPost(slug);
-  } catch {
-    notFound();
-  }
-
-  const prasant = await db.user.findFirst({ where: { role: "admin" }, select: { id: true } });
-  const ownerId = prasant?.id ?? "";
+  const post = await getBlog(slug);
+  if (!post || !post.published) notFound();
 
   const color = catText[post.category] ?? "var(--primary)";
   const bg = catBg[post.category] ?? "rgba(91,124,250,0.1)";
+
+  const prasant = await db.user.findFirst({ where: { role: "admin" }, select: { id: true } });
+  const ownerId = post.authorId || prasant?.id || "";
+  const embed = post.videoUrl ? embedUrl(post.videoUrl) : null;
 
   return (
     <div>
@@ -46,37 +51,44 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             ← Back to Resources
           </Link>
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 12, padding: "4px 12px", borderRadius: 100, background: bg, color, fontWeight: 600 }}>
-              {post.category}
-            </span>
-            <span style={{ fontSize: 12, color: "var(--text-muted)" }}>{post.readTime} read</span>
+            <span style={{ fontSize: 12, padding: "4px 12px", borderRadius: 100, background: bg, color, fontWeight: 600 }}>{post.category}</span>
+            {post.videoUrl && <span style={{ fontSize: 12, color: "#34d399" }}>▶ Includes video</span>}
           </div>
           <h1 style={{ fontSize: "clamp(28px,4vw,46px)", lineHeight: 1.25, marginBottom: 20 }}>{post.title}</h1>
           <p style={{ fontSize: 16, color: "var(--text-dim)", lineHeight: 1.7, marginBottom: 28 }}>{post.excerpt}</p>
           <div style={{ display: "flex", alignItems: "center", gap: 16, paddingTop: 20, borderTop: "1px solid var(--border)" }}>
-            <div style={{
-              width: 36, height: 36, borderRadius: "50%",
-              background: "linear-gradient(135deg,var(--primary),var(--violet))",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 14, fontWeight: 700, color: "white", flexShrink: 0,
-            }}>P</div>
+            <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,var(--primary),var(--violet))", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: "white", flexShrink: 0 }}>
+              {post.author[0]}
+            </div>
             <div>
               <div style={{ fontSize: 14, fontWeight: 500 }}>by {post.author}</div>
               <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
-                {new Date(post.date).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}
+                {new Date(post.createdAt).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}
               </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Embedded video */}
+      {embed && (
+        <section style={{ padding: "40px 24px 0" }}>
+          <div style={{ maxWidth: 720, margin: "0 auto" }}>
+            <div style={{ position: "relative", paddingTop: "56.25%", borderRadius: 12, overflow: "hidden", background: "#0a0e1a" }}>
+              <iframe
+                src={embed}
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
+                allowFullScreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              />
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Article body */}
-      <section style={{ padding: "56px 24px 80px" }}>
-        <div
-          style={{ maxWidth: 720, margin: "0 auto" }}
-          className="prose"
-          dangerouslySetInnerHTML={{ __html: post.contentHtml }}
-        />
+      <section style={{ padding: "48px 24px 40px" }}>
+        <div style={{ maxWidth: 720, margin: "0 auto" }} className="prose" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
       </section>
 
       {/* Suggest edit */}
