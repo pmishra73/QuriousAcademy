@@ -118,6 +118,7 @@ enum CouponReason {
   syllabus_unlock
   course_completion
   promotional
+  content_edit_thanks
 }
 
 model Coupon {
