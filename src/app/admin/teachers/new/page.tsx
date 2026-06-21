@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -13,14 +13,25 @@ const lbl: React.CSSProperties = {
   marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 600,
 };
 
+type Institute = { id: string; name: string };
+
 export default function NewTeacherPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ name: "", email: "", password: "", bio: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", bio: "", slug: "", instituteId: "" });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [institutes, setInstitutes] = useState<Institute[]>([]);
 
-  const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+  useEffect(() => {
+    fetch("/api/admin/institutes").then((r) => r.json()).then(setInstitutes).catch(() => {});
+  }, []);
+
+  const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  function autoSlug(name: string) {
+    return name.toLowerCase().replace(/\s+/g, "").replace(/[^a-z0-9-]/g, "");
+  }
 
   async function handleSubmit(ev: React.FormEvent) {
     ev.preventDefault();
@@ -29,7 +40,7 @@ export default function NewTeacherPage() {
     const res = await fetch("/api/admin/teachers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify({ ...form, instituteId: form.instituteId || null }),
     });
     const data = await res.json();
     setSaving(false);
@@ -48,7 +59,15 @@ export default function NewTeacherPage() {
       <form onSubmit={handleSubmit} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: 28, display: "flex", flexDirection: "column", gap: 18 }}>
         <div>
           <label style={lbl}>Full Name *</label>
-          <input style={inp} value={form.name} onChange={set("name")} placeholder="e.g. Ananya Sharma" required />
+          <input
+            style={inp}
+            value={form.name}
+            onChange={(e) => {
+              setForm((f) => ({ ...f, name: e.target.value, slug: f.slug || autoSlug(e.target.value) }));
+            }}
+            placeholder="e.g. Ananya Sharma"
+            required
+          />
         </div>
         <div>
           <label style={lbl}>Email Address *</label>
@@ -58,27 +77,35 @@ export default function NewTeacherPage() {
           <label style={lbl}>Temporary Password *</label>
           <input style={inp} type="text" value={form.password} onChange={set("password")} placeholder="They can change this after login" required />
           <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 5 }}>
-            Share this with the teacher so they can log in at /login and update it from their profile.
+            Share this with the teacher so they can log in and update it from their profile.
           </p>
         </div>
         <div>
+          <label style={lbl}>Subdomain Slug <span style={{ fontWeight: 400, textTransform: "none" }}>— their page URL</span></label>
+          <div style={{ display: "flex", alignItems: "center", background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 8, overflow: "hidden" }}>
+            <span style={{ padding: "10px 12px", fontSize: 13, color: "var(--text-muted)", borderRight: "1px solid var(--border)", whiteSpace: "nowrap" }}>slug.</span>
+            <input style={{ ...inp, border: "none", borderRadius: 0, flex: 1 }} value={form.slug} onChange={set("slug")} placeholder="ananyasharma" />
+          </div>
+          <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 5 }}>
+            Lowercase letters and numbers only. Creates a page at <strong>{form.slug || "slug"}.quriousacademy.com</strong>
+          </p>
+        </div>
+        <div>
+          <label style={lbl}>Institute <span style={{ fontWeight: 400, textTransform: "none" }}>optional</span></label>
+          <select style={inp} value={form.instituteId} onChange={set("instituteId")}>
+            <option value="">Independent teacher</option>
+            {institutes.map((i) => <option key={i.id} value={i.id}>{i.name}</option>)}
+          </select>
+        </div>
+        <div>
           <label style={lbl}>Bio <span style={{ fontWeight: 400, textTransform: "none" }}>optional</span></label>
-          <textarea
-            style={{ ...inp, minHeight: 80, resize: "vertical" }}
-            value={form.bio}
-            onChange={set("bio")}
-            placeholder="Short bio shown on the public course pages"
-          />
+          <textarea style={{ ...inp, minHeight: 80, resize: "vertical" }} value={form.bio} onChange={set("bio")} placeholder="Short bio shown on public pages" />
         </div>
 
         {error && <p style={{ color: "#ef4444", fontSize: 13 }}>{error}</p>}
 
         <div style={{ display: "flex", gap: 10, paddingTop: 4 }}>
-          <button
-            type="submit"
-            disabled={saving}
-            style={{ background: "var(--primary)", color: "white", border: "none", borderRadius: 8, padding: "11px 24px", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}
-          >
+          <button type="submit" disabled={saving} style={{ background: "var(--primary)", color: "white", border: "none", borderRadius: 8, padding: "11px 24px", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
             {saving ? "Creating…" : "Create Teacher Account"}
           </button>
           <Link href="/admin/teachers" style={{ padding: "11px 20px", borderRadius: 8, border: "1px solid var(--border)", color: "var(--text-muted)", fontSize: 14, textDecoration: "none" }}>

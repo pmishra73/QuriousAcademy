@@ -10,6 +10,7 @@ const navItems = [
   { href: "/admin/leads", label: "Leads & Coupons", icon: "🎁" },
   { href: "/admin/courses", label: "Courses", icon: "📚" },
   { href: "/admin/teachers", label: "Teachers", icon: "👤" },
+  { href: "/admin/institutes", label: "Institutes", icon: "🏫" },
   { href: "/admin/messages", label: "Messages", icon: "✉️" },
   { href: "/admin/blogs", label: "Blogs", icon: "✍️" },
   { href: "/admin/content", label: "Content", icon: "📄" },
