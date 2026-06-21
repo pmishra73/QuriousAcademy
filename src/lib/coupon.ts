@@ -6,7 +6,7 @@ export function generateCouponCode(): string {
 }
 
 export async function createCoupon(opts: {
-  reason: "syllabus_unlock" | "course_completion" | "promotional";
+  reason: "syllabus_unlock" | "course_completion" | "promotional" | "content_edit_thanks";
   leadId?: string;
   completionEnrollmentId?: string;
   discount?: number;
