@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { useState } from "react";
 
 const navItems = [
@@ -14,10 +14,8 @@ const navItems = [
   { href: "/teacher/profile", label: "My Profile", icon: "⚙" },
 ];
 
-function AdminBackLink({ collapsed }: { collapsed: boolean }) {
-  const { data: session } = useSession();
-  const role = (session?.user as { role?: string })?.role;
-  if (role !== "admin") return null;
+function AdminBackLink({ collapsed, isAdmin }: { collapsed: boolean; isAdmin?: boolean }) {
+  if (!isAdmin) return null;
   return (
     <Link href="/admin" title={collapsed ? "Back to Admin" : undefined} style={{
       display: "flex", alignItems: "center", gap: collapsed ? 0 : 10,
@@ -33,7 +31,7 @@ function AdminBackLink({ collapsed }: { collapsed: boolean }) {
   );
 }
 
-export default function TeacherNav({ onCollapse }: { onCollapse?: (c: boolean) => void }) {
+export default function TeacherNav({ onCollapse, isAdmin }: { onCollapse?: (c: boolean) => void; isAdmin?: boolean }) {
   const path = usePathname();
   const [collapsed, setCollapsed] = useState(false);
 
@@ -94,7 +92,7 @@ export default function TeacherNav({ onCollapse }: { onCollapse?: (c: boolean) =
 
       {/* Footer */}
       <div style={{ padding: "10px 8px", borderTop: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: 4 }}>
-        <AdminBackLink collapsed={collapsed} />
+        <AdminBackLink collapsed={collapsed} isAdmin={isAdmin} />
         <button onClick={() => signOut({ callbackUrl: "/" })} title={collapsed ? "Sign out" : undefined}
           style={{
             display: "flex", alignItems: "center", gap: collapsed ? 0 : 10, justifyContent: collapsed ? "center" : "flex-start",

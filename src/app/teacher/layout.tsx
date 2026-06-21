@@ -6,5 +6,5 @@ export default async function TeacherLayout({ children }: { children: React.Reac
   const session = await auth();
   const role = (session?.user as { role?: string })?.role;
   if (!session || (role !== "teacher" && role !== "admin")) redirect("/login?from=teacher");
-  return <TeacherShell>{children}</TeacherShell>;
+  return <TeacherShell isAdmin={role === "admin"}>{children}</TeacherShell>;
 }
