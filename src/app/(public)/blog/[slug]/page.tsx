@@ -1,11 +1,10 @@
 import { getAllSlugs, getPost } from "@/lib/posts";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { db } from "@/lib/db";
 import SuggestEditButton from "@/components/SuggestEditButton";
 
-export async function generateStaticParams() {
-  return getAllSlugs().map((slug) => ({ slug }));
-}
+export const dynamic = "force-dynamic";
 
 const catText: Record<string, string> = {
   Programming: "#7c9dfc",
@@ -31,6 +30,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   } catch {
     notFound();
   }
+
+  const prasant = await db.user.findFirst({ where: { role: "admin" }, select: { id: true } });
+  const ownerId = prasant?.id ?? "";
 
   const color = catText[post.category] ?? "var(--primary)";
   const bg = catBg[post.category] ?? "rgba(91,124,250,0.1)";
@@ -80,7 +82,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       {/* Suggest edit */}
       <section style={{ padding: "0 24px 40px" }}>
         <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", justifyContent: "flex-end" }}>
-          <SuggestEditButton contentType="blog" contentId={slug} contentTitle={post.title} ownerId="" />
+          <SuggestEditButton contentType="blog" contentId={slug} contentTitle={post.title} ownerId={ownerId} />
         </div>
       </section>
 
