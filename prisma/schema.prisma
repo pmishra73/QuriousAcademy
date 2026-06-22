@@ -29,11 +29,12 @@ model User {
   instituteId String?
   institute   Institute? @relation(fields: [instituteId], references: [id])
 
-  courses       CourseAssignment[]
-  attendances   Attendance[]
-  notes         StudentNote[]
-  announcements Announcement[]
-  videos        Video[]
+  courses         CourseAssignment[]
+  attendances     Attendance[]
+  notes           StudentNote[]
+  announcements   Announcement[]
+  resources       Resource[]
+  courseApprovals CourseApproval[]
 }
 
 // ─── Institutes ───────────────────────────────────────────────────────────────
@@ -188,14 +189,38 @@ model StudentNote {
 }
 
 // ─── Resources ───────────────────────────────────────────────────────────────
+// Unified atomic content units owned by a teacher.
+// Course content (Parts/Chapters/Lessons/blocks) is stored in Vercel Blob.
+
+enum ResourceType {
+  blog            // points to Vercel Blob via blobSlug
+  video           // YouTube / Vimeo URL
+  live_recording  // Zoom / Meet recording URL, tagged as live class
+  image           // direct image URL or Vercel Blob URL
+  link            // external hyperlink
+  document        // PDF or doc URL
+}
+
+enum ResourceTag {
+  live_class
+  recorded
+  supplementary
+}
 
 model Resource {
-  id        String   @id @default(cuid())
-  courseId  String
-  title     String
-  url       String
-  type      String
-  createdAt DateTime @default(now())
+  id          String       @id @default(cuid())
+  type        ResourceType
+  tag         ResourceTag?
+  title       String
+  description String?
+  ownerId     String
+  instituteId String?
+  url         String?      // for video / live_recording / image / link / document
+  blobSlug    String?      // for blog type — slug in Vercel Blob
+  published   Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  owner       User         @relation(fields: [ownerId], references: [id])
 }
 
 // ─── Announcements ───────────────────────────────────────────────────────────
@@ -227,20 +252,41 @@ model BlogPost {
   updatedAt   DateTime @updatedAt
 }
 
-// ─── Videos ──────────────────────────────────────────────────────────────────
+// ─── Course Approvals ────────────────────────────────────────────────────────
+// Tracks teacher-built course content approval workflow.
 
-model Video {
-  id          String   @id @default(cuid())
-  courseId    String
+enum ApprovalStatus {
+  draft
+  pending
+  approved
+  rejected
+}
+
+model CourseApproval {
+  courseId    String         @id   // matches courseId in courses.json
   teacherId   String
-  instituteId String?
-  title       String
-  url         String
-  description String?
-  published   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  teacher     User     @relation(fields: [teacherId], references: [id])
+  status      ApprovalStatus @default(draft)
+  adminNote   String?
+  submittedAt DateTime?
+  reviewedAt  DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  teacher     User           @relation(fields: [teacherId], references: [id])
+}
+
+// ─── Lesson Progress ─────────────────────────────────────────────────────────
+// Tracks which lessons a student has completed within a course.
+
+model LessonProgress {
+  id           String    @id @default(cuid())
+  studentEmail String
+  courseId     String
+  lessonId     String    // matches lesson.id in CourseContent JSON blob
+  completed    Boolean   @default(false)
+  completedAt  DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@unique([studentEmail, courseId, lessonId])
 }
 
 // ─── Content Change Requests ─────────────────────────────────────────────────
