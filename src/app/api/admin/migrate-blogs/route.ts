@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
       access: "public",
       contentType: "application/json",
       addRandomSuffix: false,
+      storeId: process.env.BLOB_STORE_ID,
     });
 
     results.push(`${slug} → ${url}`);
