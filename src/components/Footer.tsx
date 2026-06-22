@@ -103,31 +103,37 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Want a site like this? */}
+        {/* Business CTA */}
         <div style={{
           borderTop: "1px solid var(--border)",
-          paddingTop: 32,
-          marginBottom: 24,
-          display: "flex",
+          paddingTop: 40,
+          marginBottom: 40,
+          display: "grid",
+          gridTemplateColumns: "1fr auto",
+          gap: 24,
           alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: 16,
         }}>
           <div>
-            <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6 }}>
-              Want a site like this for your business?{" "}
-              <a
-                href="https://prasantmishra.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: "var(--primary)", textDecoration: "none", fontWeight: 500 }}
-                className="hover:underline"
-              >
-                Contact Prasant
-              </a>
+            <p style={{ fontSize: 14, fontWeight: 600, color: "var(--foreground)", marginBottom: 6 }}>
+              Run a coaching business or institute?
+            </p>
+            <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6, maxWidth: 520 }}>
+              Get your own platform like this — with course builder, student portal, live sessions, and payments. Built and managed by Prasant.
             </p>
           </div>
+          <a
+            href="https://prasantmishra.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-block", whiteSpace: "nowrap",
+              background: "linear-gradient(135deg,#5b7cfa,#8b6ff7)",
+              color: "white", padding: "11px 22px", borderRadius: 8,
+              fontSize: 13, fontWeight: 600, textDecoration: "none",
+            }}
+          >
+            Get in touch →
+          </a>
         </div>
 
         <div
