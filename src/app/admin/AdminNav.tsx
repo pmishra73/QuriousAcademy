@@ -9,6 +9,7 @@ const navItems = [
   { href: "/admin/enrollments", label: "Enrollments", icon: "🎓" },
   { href: "/admin/leads", label: "Leads & Coupons", icon: "🎁" },
   { href: "/admin/courses", label: "Courses", icon: "📚" },
+  { href: "/admin/courses/approvals", label: "Approvals", icon: "✅" },
   { href: "/admin/teachers", label: "Teachers", icon: "👤" },
   { href: "/admin/institutes", label: "Institutes", icon: "🏫" },
   { href: "/admin/messages", label: "Messages", icon: "✉️" },

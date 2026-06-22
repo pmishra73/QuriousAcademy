@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 type BlogPost = { id: string; title: string; category: string; author: string; published: boolean; hidden?: boolean; createdAt: string };
-type Video = { id: string; title: string; courseId: string; published: boolean; hidden?: boolean; createdAt: string; teacher: { name: string } };
+type Resource = { id: string; type: string; tag?: string; title: string; published: boolean; createdAt: string; owner: { name: string } };
 type CR = {
   id: string; contentType: string; contentTitle: string;
   requestorName: string; requestorEmail: string; suggestion: string;
@@ -102,7 +102,7 @@ function CRCard({ cr, onAction }: { cr: CR; onAction: () => void }) {
 export default function AdminContentPage() {
   const [tab, setTab] = useState<"blogs" | "videos" | "requests">("blogs");
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
-  const [videos, setVideos] = useState<Video[]>([]);
+  const [videos, setVideos] = useState<Resource[]>([]);
   const [requests, setRequests] = useState<CR[]>([]);
 
   async function loadBlogs() {
@@ -110,7 +110,7 @@ export default function AdminContentPage() {
     setBlogs(await res.json());
   }
   async function loadVideos() {
-    const res = await fetch("/api/teacher/videos");
+    const res = await fetch("/api/teacher/resources");
     setVideos(await res.json());
   }
   async function loadRequests() {
@@ -130,12 +130,12 @@ export default function AdminContentPage() {
     loadBlogs();
   }
   async function toggleVideoPublish(id: string, published: boolean) {
-    await fetch(`/api/teacher/videos/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ published: !published }) });
+    await fetch(`/api/teacher/resources/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ published: !published }) });
     loadVideos();
   }
   async function deleteVideo(id: string) {
     if (!confirm("Delete this video?")) return;
-    await fetch(`/api/teacher/videos/${id}`, { method: "DELETE" });
+    await fetch(`/api/teacher/resources/${id}`, { method: "DELETE" });
     loadVideos();
   }
 
@@ -225,8 +225,8 @@ export default function AdminContentPage() {
                 {videos.map((v) => (
                   <tr key={v.id} style={{ borderBottom: "1px solid var(--border)" }}>
                     <td style={{ padding: "12px 20px", fontSize: 13, fontWeight: 500 }}>{v.title}</td>
-                    <td style={{ padding: "12px 20px", fontSize: 12, color: "var(--text-dim)" }}>{v.courseId}</td>
-                    <td style={{ padding: "12px 20px", fontSize: 12, color: "var(--text-dim)" }}>{v.teacher?.name}</td>
+                    <td style={{ padding: "12px 20px", fontSize: 12, color: "var(--text-dim)" }}>{v.type}</td>
+                    <td style={{ padding: "12px 20px", fontSize: 12, color: "var(--text-dim)" }}>{v.owner?.name}</td>
                     <td style={{ padding: "12px 20px" }}>
                       <button onClick={() => toggleVideoPublish(v.id, v.published)} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 100, border: `1px solid ${v.published ? "rgba(52,211,153,0.3)" : "var(--border)"}`, background: v.published ? "rgba(52,211,153,0.1)" : "var(--surface-2)", color: v.published ? "#34d399" : "var(--text-muted)", cursor: "pointer", fontFamily: "inherit" }}>
                         {v.published ? "Visible" : "Hidden"}
