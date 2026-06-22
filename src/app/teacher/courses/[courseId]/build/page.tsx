@@ -26,7 +26,7 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
 
   useEffect(() => {
     fetch(`/api/teacher/courses/${courseId}/content`).then(r => r.json()).then(setContent);
-    fetch("/api/teacher/resources").then(r => r.json()).then(d => setResources(Array.isArray(d) ? d.filter((r: Resource) => r.type !== "blog") : []));
+    fetch("/api/teacher/resources").then(r => r.json()).then(d => setResources(Array.isArray(d) ? d : []));
     fetch("/api/admin/courses/approvals").then(r => r.json()).then(list => {
       if (Array.isArray(list)) {
         const a = list.find((x: { courseId: string }) => x.courseId === courseId);
