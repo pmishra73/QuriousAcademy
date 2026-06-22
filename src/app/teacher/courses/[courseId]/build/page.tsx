@@ -88,7 +88,7 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
   function addResourceBlock(resource: Resource) {
     const lesson = selectedLesson();
     if (!lesson) return;
-    const block: ContentBlock = { id: uid(), type: resource.type as ContentBlock["type"], resourceId: resource.id };
+    const block = { id: uid(), type: resource.type, resourceId: resource.id } as ContentBlock;
     updateBlocks([...lesson.blocks, block]);
   }
 
