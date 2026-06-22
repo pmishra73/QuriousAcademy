@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-type BlogPost = { id: string; title: string; category: string; author: string; published: boolean; hidden?: boolean; createdAt: string };
+type BlogPost = { slug: string; title: string; category: string; author: string; published: boolean; createdAt: string };
 type Resource = { id: string; type: string; tag?: string; title: string; published: boolean; createdAt: string; owner: { name: string } };
 type CR = {
   id: string; contentType: string; contentTitle: string;
@@ -106,8 +106,9 @@ export default function AdminContentPage() {
   const [requests, setRequests] = useState<CR[]>([]);
 
   async function loadBlogs() {
-    const res = await fetch("/api/admin/blogs");
-    setBlogs(await res.json());
+    const res = await fetch("/api/teacher/blogs-blob");
+    const data = await res.json();
+    setBlogs(Array.isArray(data) ? data : []);
   }
   async function loadVideos() {
     const res = await fetch("/api/teacher/resources");
@@ -120,13 +121,13 @@ export default function AdminContentPage() {
 
   useEffect(() => { loadBlogs(); loadVideos(); loadRequests(); }, []);
 
-  async function toggleBlogPublish(id: string, published: boolean) {
-    await fetch(`/api/admin/blogs/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ published: !published }) });
+  async function toggleBlogPublish(slug: string, published: boolean) {
+    await fetch(`/api/teacher/blogs-blob/${slug}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ published: !published }) });
     loadBlogs();
   }
-  async function deleteBlog(id: string) {
+  async function deleteBlog(slug: string) {
     if (!confirm("Delete this blog post?")) return;
-    await fetch(`/api/admin/blogs/${id}`, { method: "DELETE" });
+    await fetch(`/api/teacher/blogs-blob/${slug}`, { method: "DELETE" });
     loadBlogs();
   }
   async function toggleVideoPublish(id: string, published: boolean) {
@@ -182,22 +183,22 @@ export default function AdminContentPage() {
               </thead>
               <tbody>
                 {blogs.map((b) => (
-                  <tr key={b.id} style={{ borderBottom: "1px solid var(--border)" }}>
+                  <tr key={b.slug} style={{ borderBottom: "1px solid var(--border)" }}>
                     <td style={{ padding: "12px 20px", fontSize: 13, fontWeight: 500 }}>{b.title}</td>
                     <td style={{ padding: "12px 20px" }}>
                       <span style={{ fontSize: 11, padding: "2px 10px", borderRadius: 100, background: "var(--surface-2)", color: "var(--text-muted)", border: "1px solid var(--border)" }}>{b.category}</span>
                     </td>
                     <td style={{ padding: "12px 20px", fontSize: 12, color: "var(--text-dim)" }}>{b.author}</td>
                     <td style={{ padding: "12px 20px" }}>
-                      <button onClick={() => toggleBlogPublish(b.id, b.published)} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 100, border: `1px solid ${b.published ? "rgba(52,211,153,0.3)" : "var(--border)"}`, background: b.published ? "rgba(52,211,153,0.1)" : "var(--surface-2)", color: b.published ? "#34d399" : "var(--text-muted)", cursor: "pointer", fontFamily: "inherit" }}>
+                      <button onClick={() => toggleBlogPublish(b.slug, b.published)} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 100, border: `1px solid ${b.published ? "rgba(52,211,153,0.3)" : "var(--border)"}`, background: b.published ? "rgba(52,211,153,0.1)" : "var(--surface-2)", color: b.published ? "#34d399" : "var(--text-muted)", cursor: "pointer", fontFamily: "inherit" }}>
                         {b.published ? "Visible" : "Hidden"}
                       </button>
                     </td>
                     <td style={{ padding: "12px 20px", fontSize: 12, color: "var(--text-muted)" }}>{new Date(b.createdAt).toLocaleDateString("en-IN")}</td>
                     <td style={{ padding: "12px 20px" }}>
                       <div style={{ display: "flex", gap: 12 }}>
-                        <Link href={`/admin/blogs/${b.id}`} style={{ fontSize: 12, color: "var(--primary)" }}>Edit</Link>
-                        <button onClick={() => deleteBlog(b.id)} style={{ fontSize: 12, color: "#ef4444", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit" }}>Delete</button>
+                        <Link href={`/teacher/blogs/${b.slug}`} style={{ fontSize: 12, color: "var(--primary)" }}>Edit</Link>
+                        <button onClick={() => deleteBlog(b.slug)} style={{ fontSize: 12, color: "#ef4444", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit" }}>Delete</button>
                       </div>
                     </td>
                   </tr>

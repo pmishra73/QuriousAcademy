@@ -92,7 +92,10 @@ export async function POST(req: NextRequest) {
           <p style="color:#555;line-height:1.7">
             We'll send you the class joining link, schedule details, and any pre-read material within the next few hours.
           </p>
-          <div style="margin:24px 0;padding:16px 20px;background:#f7f7f7;border-radius:8px;font-size:13px;color:#666">
+          <a href="https://quriousacademy.com/learn/${courseId}?email=${encodeURIComponent(studentEmail)}" style="display:inline-block;margin:8px 0 20px;background:#5b7cfa;color:white;padding:12px 24px;border-radius:8px;font-weight:600;font-size:14px;text-decoration:none">
+            Start Learning →
+          </a>
+          <div style="margin:16px 0;padding:16px 20px;background:#f7f7f7;border-radius:8px;font-size:13px;color:#666">
             <div>Payment ID: <strong>${razorpay_payment_id}</strong></div>
             <div>Order ID: <strong>${razorpay_order_id}</strong></div>
           </div>
