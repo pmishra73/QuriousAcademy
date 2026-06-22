@@ -45,7 +45,7 @@ export default async function LearnPage({ params, searchParams }: {
   const resources = resourceIds.length > 0
     ? await db.resource.findMany({ where: { id: { in: resourceIds } }, select: { id: true, type: true, title: true, url: true, blobSlug: true } })
     : [];
-  const resourceMap = Object.fromEntries(resources.map(r => [r.id, r]));
+  const resourceMap = Object.fromEntries(resources.map(r => [r.id, { ...r, url: r.url ?? undefined, blobSlug: r.blobSlug ?? undefined }]));
 
   // Fetch progress
   const progress = email
