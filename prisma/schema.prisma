@@ -120,6 +120,13 @@ enum CouponReason {
   course_completion
   promotional
   content_edit_thanks
+  waitlist_activation
+}
+
+enum CourseStatus {
+  active
+  coming_soon
+  hidden
 }
 
 model Coupon {
@@ -326,15 +333,26 @@ model ContentChangeRequest {
 // Any field left null means "use the JSON default".
 
 model CourseOverride {
-  courseId      String   @id
-  hidden        Boolean  @default(false)
+  courseId      String       @id
+  status        CourseStatus @default(active)
   title         String?
   tagline       String?
   price         Int?
   recordedPrice Int?
   level         String?
-  scheduleDates String[] // ISO date strings for manually set batch dates
-  updatedAt     DateTime @updatedAt
+  scheduleDates String[]
+  updatedAt     DateTime     @updatedAt
+}
+
+model CourseWaitlist {
+  id         String    @id @default(cuid())
+  courseId   String
+  name       String
+  email      String
+  notifiedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@unique([courseId, email])
 }
 
 // ─── Messages ────────────────────────────────────────────────────────────────

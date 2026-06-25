@@ -11,7 +11,7 @@ export async function PATCH(req: Request) {
   const { courseId, ...fields } = await req.json();
   if (!courseId) return NextResponse.json({ error: "courseId required" }, { status: 400 });
 
-  const allowed = ["hidden", "title", "tagline", "price", "recordedPrice", "level", "scheduleDates"];
+  const allowed = ["status", "title", "tagline", "price", "recordedPrice", "level", "scheduleDates"];
   const data: Record<string, unknown> = {};
   for (const key of allowed) {
     if (key in fields) data[key] = fields[key];

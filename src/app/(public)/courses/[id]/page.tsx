@@ -1,6 +1,8 @@
 import { variants, typeConfig } from "@/lib/variants";
 import { courses, getCourse } from "@/lib/courses";
 import { getAllBlogsMeta } from "@/lib/blog-blob";
+import { db } from "@/lib/db";
+import NotifyMeButton from "@/components/NotifyMeButton";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import VariantDetailClient from "./VariantDetailClient";
@@ -31,6 +33,9 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ i
   if (variant) {
     const cfg = typeConfig[variant.type];
     const levels = variant.level.split(/[,/]|\s+to\s+/i).map((l) => l.trim()).filter(Boolean);
+    const override = await db.courseOverride.findUnique({ where: { courseId: id } }).catch(() => null);
+    const courseStatus = (override?.status ?? "active") as "active" | "coming_soon" | "hidden";
+    if (courseStatus === "hidden") notFound();
     const allPosts = await getAllBlogsMeta().catch(() => []);
     const relatedPosts = allPosts.filter(
       (p) => p.category === subjectToCategory[variant.subject] && p.published
@@ -87,10 +92,19 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ i
               <div style={{ background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 16, padding: 28, minWidth: 260, position: "sticky", top: 80 }}>
                 <div style={{ fontSize: 30, fontWeight: 700, marginBottom: 4 }}>₹{variant.price.toLocaleString("en-IN")}</div>
                 <div style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 20 }}>One-time payment · No EMI fees</div>
-                <Link href={`/enroll?course=${variant.id}`}
-                  style={{ display: "block", textAlign: "center", background: "var(--primary)", color: "white", padding: "13px", borderRadius: 8, fontWeight: 500, fontSize: 14, marginBottom: 10 }}>
-                  Enroll Now →
-                </Link>
+                {courseStatus === "coming_soon" ? (
+                  <div style={{ marginBottom: 10 }}>
+                    <div style={{ display: "block", textAlign: "center", background: "var(--surface)", color: "var(--text-muted)", border: "1px solid var(--border)", padding: "13px", borderRadius: 8, fontSize: 14, marginBottom: 10, fontWeight: 500 }}>
+                      🔒 Coming Soon
+                    </div>
+                    <NotifyMeButton courseId={variant.id} courseTitle={variant.title} />
+                  </div>
+                ) : (
+                  <Link href={`/enroll?course=${variant.id}`}
+                    style={{ display: "block", textAlign: "center", background: "var(--primary)", color: "white", padding: "13px", borderRadius: 8, fontWeight: 500, fontSize: 14, marginBottom: 10 }}>
+                    Enroll Now →
+                  </Link>
+                )}
                 {/* Syllabus unlock button — needs client interaction */}
                 <VariantDetailClient variant={variant} cfg={cfg} />
                 <p style={{ fontSize: 11, color: "var(--text-muted)", textAlign: "center", marginTop: 10, lineHeight: 1.5 }}>

@@ -4,18 +4,21 @@ import type { CourseVariant } from "./variants";
 import { getUpcomingDates } from "./dates";
 import type { ScheduleRule } from "./dates";
 
+export type CourseStatus = "active" | "coming_soon" | "hidden";
+
 export type MergedVariant = CourseVariant & {
-  hidden: boolean;
+  status: CourseStatus;
+  hidden: boolean; // kept for backwards compat — true when status === "hidden"
   effectiveScheduleDates: string[];
 };
 
 export async function getMergedVariants(): Promise<MergedVariant[]> {
-  let overrides: Record<string, { hidden: boolean; title: string | null; tagline: string | null; price: number | null; recordedPrice: number | null; level: string | null; scheduleDates: string[] }> = {};
+  let overrides: Record<string, { status: CourseStatus; title: string | null; tagline: string | null; price: number | null; recordedPrice: number | null; level: string | null; scheduleDates: string[] }> = {};
 
   try {
     const rows = await db.courseOverride.findMany();
     for (const row of rows) {
-      overrides[row.courseId] = row;
+      overrides[row.courseId] = { ...row, status: row.status as CourseStatus };
     }
   } catch {
     // DB unavailable — use JSON defaults
@@ -23,6 +26,7 @@ export async function getMergedVariants(): Promise<MergedVariant[]> {
 
   return baseVariants.map((v) => {
     const ov = overrides[v.id];
+    const status: CourseStatus = ov?.status ?? "active";
     const merged: MergedVariant = {
       ...v,
       title: ov?.title ?? v.title,
@@ -30,7 +34,8 @@ export async function getMergedVariants(): Promise<MergedVariant[]> {
       price: ov?.price ?? v.price,
       recordedPrice: ov?.recordedPrice ?? v.recordedPrice,
       level: ov?.level ?? v.level,
-      hidden: ov?.hidden ?? false,
+      status,
+      hidden: status === "hidden",
       effectiveScheduleDates:
         ov && ov.scheduleDates.length > 0
           ? ov.scheduleDates
@@ -42,5 +47,5 @@ export async function getMergedVariants(): Promise<MergedVariant[]> {
 
 export async function getVisibleVariants(): Promise<MergedVariant[]> {
   const all = await getMergedVariants();
-  return all.filter((v) => !v.hidden);
+  return all.filter((v) => v.status !== "hidden");
 }

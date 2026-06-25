@@ -4,11 +4,10 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const links = [
-  { href: "/courses", label: "Courses", icon: "📚" },
   { href: "/about", label: "About", icon: "✦" },
-  { href: "/blog", label: "Resources", icon: "📖" },
-  { href: "/faq", label: "FAQ", icon: "💬" },
+  { href: "/blog", label: "Blogs", icon: "📖" },
   { href: "/contact", label: "Contact", icon: "✉" },
+  { href: "/faq", label: "FAQ", icon: "💬" },
 ];
 
 const partnerLinks = [
@@ -138,16 +137,18 @@ export default function Nav() {
             style={{
               fontSize: 13,
               color: "white",
-              padding: "8px 18px",
-              borderRadius: 7,
+              padding: "10px 22px",
+              borderRadius: 8,
               background: "var(--primary)",
-              fontWeight: 600,
+              fontWeight: 700,
+              fontSize: 15,
               transition: "all 0.15s",
               whiteSpace: "nowrap",
+              boxShadow: "0 2px 12px rgba(91,124,250,0.35)",
             }}
             className="hidden md:block"
           >
-            Explore Courses
+            Explore Courses →
           </Link>
 
           {/* Mobile hamburger */}
