@@ -32,31 +32,32 @@ export default function Nav() {
     >
       <div
         style={{
-          maxWidth: 1200,
+          maxWidth: 1440,
           margin: "0 auto",
-          padding: "0 20px",
-          height: 64,
+          padding: "0 40px",
+          height: 68,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: 12,
+          gap: 16,
         }}
       >
         {/* Logo */}
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0, textDecoration: "none" }}>
           <div
             style={{
-              width: 32,
-              height: 32,
+              width: 38,
+              height: 38,
               background: "linear-gradient(135deg, #5b7cfa 0%, #8b6ff7 100%)",
-              borderRadius: 8,
+              borderRadius: 9,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: 16,
+              fontSize: 18,
               fontWeight: 700,
               color: "white",
               fontFamily: "var(--font-dm-serif)",
+              flexShrink: 0,
             }}
           >
             Q
@@ -64,7 +65,7 @@ export default function Nav() {
           <span
             style={{
               fontFamily: "var(--font-dm-serif)",
-              fontSize: 18,
+              fontSize: 20,
               color: "var(--foreground)",
               letterSpacing: "-0.03em",
               whiteSpace: "nowrap",
@@ -83,9 +84,9 @@ export default function Nav() {
                 key={l.href}
                 href={l.href}
                 style={{
-                  padding: "7px 13px",
+                  padding: "7px 14px",
                   borderRadius: 8,
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: active ? 600 : 400,
                   color: active ? "var(--foreground)" : "var(--text-dim)",
                   background: active ? "var(--surface-2)" : "transparent",
@@ -98,7 +99,10 @@ export default function Nav() {
               </Link>
             );
           })}
-          <div style={{ width: 1, height: 18, background: "var(--border)", margin: "0 6px", flexShrink: 0 }} />
+
+          {/* Wider gap + separator before partner links */}
+          <div style={{ width: 1, height: 18, background: "var(--border)", margin: "0 16px", flexShrink: 0 }} />
+
           {partnerLinks.map((l) => (
             <Link
               key={l.href}
@@ -106,7 +110,7 @@ export default function Nav() {
               style={{
                 padding: "5px 12px",
                 borderRadius: 100,
-                fontSize: 12,
+                fontSize: 13,
                 fontWeight: 600,
                 color: l.color,
                 background: path === l.href ? l.bg : "transparent",
@@ -130,55 +134,71 @@ export default function Nav() {
           ))}
         </nav>
 
-        {/* CTA */}
-        <div style={{ display: "flex", gap: 8, alignItems: "center", flexShrink: 0 }}>
+        {/* Right CTAs */}
+        <div style={{ display: "flex", gap: 10, alignItems: "center", flexShrink: 0 }} className="hidden md:flex">
+          <Link
+            href="/teach"
+            style={{
+              fontSize: 13,
+              color: "var(--text-dim)",
+              padding: "9px 18px",
+              borderRadius: 8,
+              border: "1px solid var(--border)",
+              background: "transparent",
+              fontWeight: 500,
+              whiteSpace: "nowrap",
+              transition: "all 0.15s",
+            }}
+          >
+            Teach with Us
+          </Link>
           <Link
             href="/courses"
             style={{
               fontSize: 15,
               color: "white",
-              padding: "10px 22px",
+              padding: "10px 24px",
               borderRadius: 8,
               background: "var(--primary)",
               fontWeight: 700,
               transition: "all 0.15s",
               whiteSpace: "nowrap",
-              boxShadow: "0 2px 12px rgba(91,124,250,0.35)",
+              boxShadow: "0 2px 14px rgba(91,124,250,0.4)",
             }}
-            className="hidden md:block"
           >
             Explore Courses →
           </Link>
-
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setOpen(!open)}
-            className="md:hidden"
-            style={{
-              background: open ? "var(--surface-2)" : "none",
-              border: open ? "1px solid var(--border)" : "1px solid transparent",
-              borderRadius: 8,
-              cursor: "pointer",
-              color: "var(--foreground)",
-              padding: "6px 8px",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            aria-label="Toggle menu"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              {open ? (
-                <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-              ) : (
-                <>
-                  <line x1="3" y1="6" x2="17" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  <line x1="3" y1="10" x2="17" y2="10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  <line x1="3" y1="14" x2="17" y2="14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                </>
-              )}
-            </svg>
-          </button>
         </div>
+
+        {/* Mobile hamburger */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="md:hidden"
+          style={{
+            background: open ? "var(--surface-2)" : "none",
+            border: open ? "1px solid var(--border)" : "1px solid transparent",
+            borderRadius: 8,
+            cursor: "pointer",
+            color: "var(--foreground)",
+            padding: "6px 8px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          aria-label="Toggle menu"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            {open ? (
+              <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            ) : (
+              <>
+                <line x1="3" y1="6" x2="17" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="3" y1="10" x2="17" y2="10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="3" y1="14" x2="17" y2="14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </>
+            )}
+          </svg>
+        </button>
       </div>
 
       {/* Mobile menu */}
@@ -191,7 +211,6 @@ export default function Nav() {
           }}
           className="md:hidden"
         >
-          {/* Nav links as pill grid */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 12, paddingTop: 8 }}>
             {links.map((l) => {
               const active = path === l.href || (l.href !== "/" && path.startsWith(l.href));
@@ -201,13 +220,9 @@ export default function Nav() {
                   href={l.href}
                   onClick={() => setOpen(false)}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    padding: "11px 14px",
-                    borderRadius: 10,
-                    fontSize: 14,
-                    fontWeight: active ? 600 : 500,
+                    display: "flex", alignItems: "center", gap: 8,
+                    padding: "11px 14px", borderRadius: 10,
+                    fontSize: 14, fontWeight: active ? 600 : 500,
                     color: active ? "var(--foreground)" : "var(--text-dim)",
                     background: active ? "var(--surface-2)" : "transparent",
                     border: `1px solid ${active ? "var(--border)" : "transparent"}`,
@@ -221,46 +236,21 @@ export default function Nav() {
           </div>
 
           <div style={{ borderTop: "1px solid var(--border)", paddingTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
-            {/* Main CTA */}
-            <Link
-              href="/courses"
-              onClick={() => setOpen(false)}
-              style={{
-                display: "block", textAlign: "center",
-                padding: "12px", borderRadius: 10,
-                fontSize: 14, fontWeight: 700,
-                color: "white", background: "var(--primary)",
-              }}
-            >
+            <Link href="/courses" onClick={() => setOpen(false)}
+              style={{ display: "block", textAlign: "center", padding: "12px", borderRadius: 10, fontSize: 14, fontWeight: 700, color: "white", background: "var(--primary)" }}>
               Explore Courses →
             </Link>
-
-            {/* Partner links */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
               {partnerLinks.map((l) => (
                 <Link key={l.href} href={l.href} onClick={() => setOpen(false)}
-                  style={{
-                    display: "block", textAlign: "center",
-                    padding: "10px", borderRadius: 10,
-                    fontSize: 12, fontWeight: 600, color: l.color,
-                    background: l.bg, border: `1px solid ${l.border}`,
-                  }}>
+                  style={{ display: "block", textAlign: "center", padding: "10px", borderRadius: 10, fontSize: 12, fontWeight: 600, color: l.color, background: l.bg, border: `1px solid ${l.border}` }}>
                   {l.label}
                 </Link>
               ))}
             </div>
-
-            <Link
-              href="/teach"
-              onClick={() => setOpen(false)}
-              style={{
-                display: "block", textAlign: "center",
-                padding: "10px", borderRadius: 10,
-                fontSize: 13, color: "var(--text-dim)",
-                border: "1px solid var(--border)",
-              }}
-            >
-              Teach on Qurious Academy
+            <Link href="/teach" onClick={() => setOpen(false)}
+              style={{ display: "block", textAlign: "center", padding: "10px", borderRadius: 10, fontSize: 13, color: "var(--text-dim)", border: "1px solid var(--border)" }}>
+              Teach with Us
             </Link>
           </div>
         </div>
