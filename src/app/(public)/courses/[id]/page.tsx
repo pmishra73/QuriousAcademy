@@ -1,15 +1,11 @@
 import { variants, typeConfig } from "@/lib/variants";
 import { courses, getCourse } from "@/lib/courses";
-import { getAllPostsMeta } from "@/lib/posts";
+import { getAllBlogsMeta } from "@/lib/blog-blob";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import VariantDetailClient from "./VariantDetailClient";
 
-export function generateStaticParams() {
-  const variantIds = variants.map((v) => ({ id: v.id }));
-  const oldIds = courses.map((c) => ({ id: c.id })).filter((c) => !variants.find((v) => v.id === c.id));
-  return [...variantIds, ...oldIds];
-}
+export const dynamic = "force-dynamic";
 
 const subjectToCategory: Record<string, string> = {
   python: "Programming", programming: "Programming",
@@ -35,8 +31,9 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ i
   if (variant) {
     const cfg = typeConfig[variant.type];
     const levels = variant.level.split(/[,/]|\s+to\s+/i).map((l) => l.trim()).filter(Boolean);
-    const relatedPosts = getAllPostsMeta().filter(
-      (p) => p.category === subjectToCategory[variant.subject]
+    const allPosts = await getAllBlogsMeta().catch(() => []);
+    const relatedPosts = allPosts.filter(
+      (p) => p.category === subjectToCategory[variant.subject] && p.published
     ).slice(0, 3);
 
     return (
@@ -187,7 +184,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ i
                     {relatedPosts.map((p) => (
                       <Link key={p.slug} href={`/blog/${p.slug}`} style={{ display: "block", textDecoration: "none" }}>
                         <div style={{ fontSize: 13, fontWeight: 500, color: "var(--foreground)", lineHeight: 1.4, marginBottom: 3 }}>{p.title}</div>
-                        <div style={{ fontSize: 11, color: "var(--text-muted)" }}>{p.readTime} read</div>
+                        <div style={{ fontSize: 11, color: "var(--text-muted)" }}>{new Date(p.createdAt).toLocaleDateString("en-IN", { month: "short", year: "numeric" })}</div>
                       </Link>
                     ))}
                   </div>
