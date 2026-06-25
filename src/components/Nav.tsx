@@ -101,32 +101,22 @@ export default function Nav() {
           })}
 
           {/* Wider gap + separator before partner links */}
-          <div style={{ width: 1, height: 18, background: "var(--border)", margin: "0 16px", flexShrink: 0 }} />
+          <div style={{ width: 1, height: 18, background: "var(--border)", margin: "0 24px", flexShrink: 0 }} />
 
           {partnerLinks.map((l) => (
             <Link
               key={l.href}
               href={l.href}
               style={{
-                padding: "5px 12px",
+                padding: "5px 14px",
                 borderRadius: 100,
                 fontSize: 13,
                 fontWeight: 600,
                 color: l.color,
-                background: path === l.href ? l.bg : "transparent",
-                border: `1px solid ${path === l.href ? l.border : "transparent"}`,
+                background: l.bg,
+                border: `1px solid ${l.border}`,
                 transition: "all 0.15s",
                 whiteSpace: "nowrap",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.background = l.bg;
-                (e.currentTarget as HTMLElement).style.borderColor = l.border;
-              }}
-              onMouseLeave={(e) => {
-                if (path !== l.href) {
-                  (e.currentTarget as HTMLElement).style.background = "transparent";
-                  (e.currentTarget as HTMLElement).style.borderColor = "transparent";
-                }
               }}
             >
               {l.label}
