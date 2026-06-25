@@ -165,12 +165,22 @@ function VariantCard({ v, onUnlock }: { v: MergedVariant; onUnlock: (v: CourseVa
           }}>
             See Syllabus ↓
           </button>
-          <Link href={`/enroll?course=${v.id}`} style={{
-            fontSize: 12, fontWeight: 600, padding: "8px 14px", borderRadius: 7,
-            background: "var(--primary)", color: "white", whiteSpace: "nowrap",
-          }}>
-            Enroll →
-          </Link>
+          {v.status === "coming_soon" ? (
+            <Link href={`/courses/${v.id}`} style={{
+              fontSize: 12, fontWeight: 600, padding: "8px 14px", borderRadius: 7,
+              background: "rgba(251,191,36,0.12)", color: "#fbbf24",
+              border: "1px solid rgba(251,191,36,0.3)", whiteSpace: "nowrap",
+            }}>
+              Coming Soon →
+            </Link>
+          ) : (
+            <Link href={`/enroll?course=${v.id}`} style={{
+              fontSize: 12, fontWeight: 600, padding: "8px 14px", borderRadius: 7,
+              background: "var(--primary)", color: "white", whiteSpace: "nowrap",
+            }}>
+              Enroll →
+            </Link>
+          )}
         </div>
       </div>
     </div>
