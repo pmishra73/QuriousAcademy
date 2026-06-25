@@ -135,13 +135,12 @@ export default function Nav() {
           <Link
             href="/courses"
             style={{
-              fontSize: 13,
+              fontSize: 15,
               color: "white",
               padding: "10px 22px",
               borderRadius: 8,
               background: "var(--primary)",
               fontWeight: 700,
-              fontSize: 15,
               transition: "all 0.15s",
               whiteSpace: "nowrap",
               boxShadow: "0 2px 12px rgba(91,124,250,0.35)",
