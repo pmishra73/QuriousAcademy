@@ -10,7 +10,7 @@ export default function Footer() {
         marginTop: "auto",
       }}
     >
-      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+      <div style={{ maxWidth: 1440, margin: "0 auto", padding: "0 40px" }}>
         <div
           style={{
             display: "grid",
@@ -122,7 +122,7 @@ export default function Footer() {
             </p>
           </div>
           <a
-            href="https://prasantmishra.com"
+            href="https://pmishra73.github.io/"
             target="_blank"
             rel="noopener noreferrer"
             style={{
