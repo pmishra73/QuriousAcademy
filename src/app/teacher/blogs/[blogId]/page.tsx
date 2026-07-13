@@ -16,13 +16,14 @@ const lbl: React.CSSProperties = {
 
 const CATEGORIES = ["General", "Programming", "Mathematics", "AI & ML", "Science", "Technology", "Data Structures", "Interview Prep", "Career"];
 
-type Form = { slug: string; title: string; excerpt: string; body: string; category: string; videoUrl: string; published: boolean };
+type Form = { slug: string; title: string; excerpt: string; body: string; category: string; videoUrl: string; published: boolean; linkedinRequested: boolean };
 
 export default function TeacherEditBlogPage({ params }: { params: Promise<{ blogId: string }> }) {
   const { blogId } = use(params);
   const isNew = blogId === "new";
   const router = useRouter();
-  const [form, setForm] = useState<Form>({ slug: "", title: "", excerpt: "", body: "", category: "General", videoUrl: "", published: false });
+  const [form, setForm] = useState<Form>({ slug: "", title: "", excerpt: "", body: "", category: "General", videoUrl: "", published: false, linkedinRequested: false });
+  const [linkedinApprovalStatus, setLinkedinApprovalStatus] = useState<string | undefined>();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [preview, setPreview] = useState(false);
@@ -31,8 +32,9 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
 
   useEffect(() => {
     if (!isNew) {
-      fetch(`/api/teacher/blogs-blob/${blogId}`).then(r => r.json()).then((p: Form) => {
-        setForm({ slug: p.slug, title: p.title, excerpt: p.excerpt ?? "", body: p.body, category: p.category, videoUrl: p.videoUrl ?? "", published: p.published });
+      fetch(`/api/teacher/blogs-blob/${blogId}`).then(r => r.json()).then((p: Form & { linkedinApprovalStatus?: string }) => {
+        setForm({ slug: p.slug, title: p.title, excerpt: p.excerpt ?? "", body: p.body, category: p.category, videoUrl: p.videoUrl ?? "", published: p.published, linkedinRequested: p.linkedinRequested ?? false });
+        setLinkedinApprovalStatus(p.linkedinApprovalStatus);
       });
     }
   }, [blogId, isNew]);
@@ -131,6 +133,19 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
           </div>
 
           <div>
+            <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
+              <input type="checkbox" checked={form.linkedinRequested} onChange={e => setForm(f => ({ ...f, linkedinRequested: e.target.checked }))} />
+              Request LinkedIn post after publishing
+            </label>
+            <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>
+              An admin reviews and approves before it goes out on the company LinkedIn page.
+              {linkedinApprovalStatus === "pending" && <span style={{ color: "#fbbf24" }}> · Awaiting admin approval.</span>}
+              {linkedinApprovalStatus === "approved" && <span style={{ color: "#34d399" }}> · Approved — queued to post.</span>}
+              {linkedinApprovalStatus === "rejected" && <span style={{ color: "#ef4444" }}> · Rejected by admin.</span>}
+            </div>
+          </div>
+
+          <div>
             <label style={lbl}>Excerpt</label>
             <input style={inp} value={form.excerpt} onChange={set("excerpt")} placeholder="Short description shown in blog listings" />
           </div>
@@ -144,7 +159,7 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
                 return <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>Embedded above the article body on the public page.</div>;
               }
               if (!video) {
-                return <div style={{ fontSize: 11, color: "#fbbf24", marginTop: 4 }}>Doesn't look like a YouTube or Vimeo URL — it won't embed.</div>;
+                return <div style={{ fontSize: 11, color: "#fbbf24", marginTop: 4 }}>Doesn&apos;t look like a YouTube or Vimeo URL — it won&apos;t embed.</div>;
               }
               if (video.type === "youtube") {
                 return (

@@ -35,6 +35,14 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     ...(body.category !== undefined && { category: body.category }),
     ...(body.videoUrl !== undefined && { videoUrl: body.videoUrl || undefined }),
     ...(body.published !== undefined && { published: body.published }),
+    ...(body.linkedinRequested !== undefined && {
+      linkedinRequested: body.linkedinRequested,
+      linkedinApprovalStatus: body.linkedinRequested
+        ? (existing.linkedinApprovalStatus === "approved" || existing.linkedinApprovalStatus === "rejected" ? existing.linkedinApprovalStatus : "pending")
+        : "none",
+    }),
+    ...(role === "admin" && body.linkedinApprovalStatus !== undefined && { linkedinApprovalStatus: body.linkedinApprovalStatus }),
+    ...(role === "admin" && body.linkedinAdminNote !== undefined && { linkedinAdminNote: body.linkedinAdminNote }),
     updatedAt: new Date().toISOString(),
   };
 

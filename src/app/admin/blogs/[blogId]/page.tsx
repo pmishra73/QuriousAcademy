@@ -13,24 +13,29 @@ const lbl: React.CSSProperties = {
   marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 600,
 };
 
-type Post = { id: string; slug: string; title: string; excerpt: string; body: string; category: string; author: string; published: boolean };
+type Post = {
+  slug: string; title: string; excerpt: string; body: string; category: string; published: boolean;
+  linkedinRequested?: boolean; linkedinApprovalStatus?: "none" | "pending" | "approved" | "rejected"; linkedinPostUrl?: string;
+};
 
 export default function AdminEditBlogPage({ params }: { params: Promise<{ blogId: string }> }) {
-  const { blogId } = use(params);
-  const isNew = blogId === "new";
+  const { blogId: slugParam } = use(params);
+  const isNew = slugParam === "new";
   const router = useRouter();
   const [form, setForm] = useState({ slug: "", title: "", excerpt: "", body: "", category: "General", published: false });
+  const [linkedin, setLinkedin] = useState<Pick<Post, "linkedinRequested" | "linkedinApprovalStatus" | "linkedinPostUrl">>({});
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (!isNew) {
-      fetch(`/api/admin/blogs/${blogId}`).then(r => r.json()).then((p: Post) => {
+      fetch(`/api/teacher/blogs-blob/${slugParam}`).then(r => r.json()).then((p: Post) => {
         setForm({ slug: p.slug, title: p.title, excerpt: p.excerpt, body: p.body, category: p.category, published: p.published });
+        setLinkedin({ linkedinRequested: p.linkedinRequested, linkedinApprovalStatus: p.linkedinApprovalStatus, linkedinPostUrl: p.linkedinPostUrl });
       });
     }
-  }, [blogId, isNew]);
+  }, [slugParam, isNew]);
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }));
@@ -39,8 +44,8 @@ export default function AdminEditBlogPage({ params }: { params: Promise<{ blogId
     ev.preventDefault();
     setSaving(true); setError("");
     const res = isNew
-      ? await fetch("/api/admin/blogs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) })
-      : await fetch(`/api/admin/blogs/${blogId}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
+      ? await fetch("/api/teacher/blogs-blob", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) })
+      : await fetch(`/api/teacher/blogs-blob/${slugParam}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
     const data = await res.json();
     setSaving(false);
     if (!res.ok) { setError(data.error ?? "Something went wrong."); return; }
@@ -50,8 +55,17 @@ export default function AdminEditBlogPage({ params }: { params: Promise<{ blogId
   async function handleDelete() {
     if (!confirm("Delete this post? This cannot be undone.")) return;
     setDeleting(true);
-    await fetch(`/api/admin/blogs/${blogId}`, { method: "DELETE" });
+    await fetch(`/api/teacher/blogs-blob/${slugParam}`, { method: "DELETE" });
     router.push("/admin/blogs");
+  }
+
+  async function setLinkedInApproval(status: "approved" | "rejected") {
+    setLinkedin(l => ({ ...l, linkedinApprovalStatus: status }));
+    await fetch(`/api/teacher/blogs-blob/${slugParam}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ linkedinApprovalStatus: status }),
+    });
   }
 
   return (
@@ -61,6 +75,26 @@ export default function AdminEditBlogPage({ params }: { params: Promise<{ blogId
         <span style={{ color: "var(--border)" }}>/</span>
         <h1 style={{ fontSize: 20, fontWeight: 700 }}>{isNew ? "New Post" : "Edit Post"}</h1>
       </div>
+
+      {!isNew && linkedin.linkedinRequested && (
+        <div style={{ background: "rgba(10,102,194,0.06)", border: "1px solid rgba(10,102,194,0.25)", borderRadius: 10, padding: "14px 18px", marginBottom: 20, display: "flex", alignItems: "center", gap: 14 }}>
+          <span style={{ fontSize: 13, flex: 1 }}>
+            The author requested this post be posted to LinkedIn.{" "}
+            {linkedin.linkedinApprovalStatus === "approved" && <strong style={{ color: "#34d399" }}>Approved — queued for the next auto-post window.</strong>}
+            {linkedin.linkedinApprovalStatus === "rejected" && <strong style={{ color: "#ef4444" }}>Rejected.</strong>}
+            {linkedin.linkedinApprovalStatus === "pending" && <strong style={{ color: "#fbbf24" }}>Awaiting your review.</strong>}
+            {linkedin.linkedinPostUrl && (
+              <> · <a href={linkedin.linkedinPostUrl} target="_blank" rel="noreferrer" style={{ color: "var(--primary)" }}>View live post ↗</a></>
+            )}
+          </span>
+          {linkedin.linkedinApprovalStatus === "pending" && (
+            <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+              <button type="button" onClick={() => setLinkedInApproval("approved")} style={{ fontSize: 12, padding: "6px 14px", borderRadius: 6, border: "1px solid rgba(52,211,153,0.3)", background: "rgba(52,211,153,0.1)", color: "#34d399", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }}>Approve</button>
+              <button type="button" onClick={() => setLinkedInApproval("rejected")} style={{ fontSize: 12, padding: "6px 14px", borderRadius: 6, border: "1px solid rgba(239,68,68,0.3)", background: "rgba(239,68,68,0.1)", color: "#ef4444", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }}>Reject</button>
+            </div>
+          )}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>

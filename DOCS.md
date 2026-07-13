@@ -89,6 +89,22 @@ AUTH_SECRET=qurious-academy-secret-change-in-prod       # NextAuth v5 alias
 
 # ─── Admin Seed (one-time setup) ─────────────────────────────────────────────
 SEED_SECRET=qa-seed-2026    # Used to protect POST /api/admin/seed
+
+# ─── LinkedIn (blog auto-posting + student sign-in) ──────────────────────────
+LINKEDIN_CLIENT_ID=your-linkedin-app-client-id
+LINKEDIN_CLIENT_SECRET=your-linkedin-app-client-secret
+# One LinkedIn Developer App with two products enabled:
+#  - "Community Management API" (needs LinkedIn review) — required for org auto-posting
+#  - "Sign In with LinkedIn using OpenID Connect" (self-serve) — required for student login
+
+# ─── Cron auth (Vercel Cron → /api/cron/*) ───────────────────────────────────
+CRON_SECRET=generate-a-random-value    # Vercel sends this as `Authorization: Bearer <value>`
+
+# ─── Student OAuth (optional — buttons hide themselves if unset) ────────────
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
 ```
 
 > **Before going live:** swap Razorpay test keys for live keys, and change `NEXTAUTH_SECRET` to a strong random value (`openssl rand -base64 32`).
