@@ -12,13 +12,12 @@ const lbl: React.CSSProperties = {
   marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 600,
 };
 
-type Settings = { connected: boolean; organizationUrn: string | null; minGapMinutes: number; lastPostedAt: string | null };
+type Settings = { connected: boolean; organizationUrn: string | null };
 
 function LinkedInSettingsInner() {
   const params = useSearchParams();
   const [settings, setSettings] = useState<Settings | null>(null);
   const [orgUrn, setOrgUrn] = useState("");
-  const [gap, setGap] = useState(30);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -26,7 +25,6 @@ function LinkedInSettingsInner() {
     fetch("/api/admin/linkedin/settings").then(r => r.json()).then((d: Settings) => {
       setSettings(d);
       setOrgUrn(d.organizationUrn ?? "");
-      setGap(d.minGapMinutes);
     });
   }, []);
 
@@ -35,14 +33,14 @@ function LinkedInSettingsInner() {
     const res = await fetch("/api/admin/linkedin/settings", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ organizationUrn: orgUrn, minGapMinutes: gap }),
+      body: JSON.stringify({ organizationUrn: orgUrn }),
     });
     setSaving(false);
     if (res.ok) { setSaved(true); setTimeout(() => setSaved(false), 2000); }
   }
 
   async function disconnect() {
-    if (!confirm("Disconnect LinkedIn? Approved posts will stop auto-publishing until reconnected.")) return;
+    if (!confirm("Disconnect LinkedIn? You won't be able to post approved posts until reconnected.")) return;
     await fetch("/api/admin/linkedin/settings", { method: "DELETE" });
     setSettings(s => s ? { ...s, connected: false } : s);
   }
@@ -54,8 +52,9 @@ function LinkedInSettingsInner() {
     <div style={{ maxWidth: 560 }}>
       <h1 style={{ fontSize: 20, fontWeight: 700, marginBottom: 6 }}>LinkedIn Integration</h1>
       <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 24 }}>
-        Blog posts a teacher marks &ldquo;Request LinkedIn post&rdquo; and you approve are automatically
-        posted to your connected LinkedIn company page, spaced out by the gap below.
+        Blog posts a teacher marks &ldquo;Request LinkedIn post&rdquo; show up in the blog list for you
+        to approve. Once approved, post it to your connected LinkedIn company page whenever you&apos;re
+        ready — nothing posts automatically.
       </p>
 
       {error && (
@@ -82,11 +81,6 @@ function LinkedInSettingsInner() {
             }}>
               {settings.connected ? "Connected" : "Not connected"}
             </span>
-            {settings.lastPostedAt && (
-              <span style={{ fontSize: 12, color: "var(--text-muted)" }}>
-                Last post: {new Date(settings.lastPostedAt).toLocaleString()}
-              </span>
-            )}
           </div>
 
           {!settings.connected ? (
@@ -105,11 +99,6 @@ function LinkedInSettingsInner() {
             <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>
               Found under your LinkedIn Page admin tools, or via the Organizations API.
             </div>
-          </div>
-
-          <div>
-            <label style={lbl}>Minimum minutes between auto-posts</label>
-            <input style={{ ...inp, maxWidth: 140 }} type="number" min={0} value={gap} onChange={e => setGap(Number(e.target.value))} />
           </div>
 
           <button type="button" onClick={save} disabled={saving} style={{ alignSelf: "flex-start", background: saved ? "#34d399" : "var(--primary)", color: "white", border: "none", borderRadius: 8, padding: "11px 24px", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>

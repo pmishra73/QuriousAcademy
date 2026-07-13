@@ -402,8 +402,6 @@ model LinkedInIntegration {
   accessToken       String?
   refreshToken      String?
   tokenExpiresAt    DateTime?
-  minGapMinutes     Int       @default(30)
-  lastPostedAt      DateTime?
   connectedByUserId String?
   updatedAt         DateTime  @updatedAt
 }

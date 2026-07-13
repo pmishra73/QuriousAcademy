@@ -3,7 +3,7 @@ import { remark } from "remark";
 import remarkHtml from "remark-html";
 
 export type LinkedInApprovalStatus = "none" | "pending" | "approved" | "rejected";
-export type LinkedInPostStatus = "idle" | "queued" | "posted" | "failed";
+export type LinkedInPostStatus = "idle" | "posted" | "failed";
 
 export type BlogMeta = {
   slug: string;
