@@ -10,6 +10,29 @@ function uid() { return Math.random().toString(36).slice(2, 9); }
 const inp: React.CSSProperties = { width: "100%", background: "var(--surface-2)", border: "1px solid var(--border)", color: "var(--foreground)", borderRadius: 6, padding: "7px 10px", fontSize: 13, outline: "none", fontFamily: "inherit", boxSizing: "border-box" };
 const btn = (color = "var(--primary)", text = "white"): React.CSSProperties => ({ background: color, color: text, border: "none", borderRadius: 6, padding: "6px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" });
 
+function NewItemInput({ value, onChange, onCommit, onCancel, style }: {
+  value: string;
+  onChange: (v: string) => void;
+  onCommit: () => void;
+  onCancel: () => void;
+  style: React.CSSProperties;
+}) {
+  return (
+    <input
+      autoFocus
+      value={value}
+      onChange={e => onChange(e.target.value)}
+      onKeyDown={e => {
+        if (e.key === "Enter") onCommit();
+        else if (e.key === "Escape") onCancel();
+      }}
+      onBlur={() => { if (!value.trim()) onCancel(); }}
+      placeholder="Name and press Enter…"
+      style={style}
+    />
+  );
+}
+
 type Resource = { id: string; type: string; tag?: string; title: string; url?: string; blobSlug?: string };
 
 export default function CourseBuilderPage({ params }: { params: Promise<{ courseId: string }> }) {
@@ -73,23 +96,6 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
   function cancelCreating() {
     setCreating(null);
     setDraftTitle("");
-  }
-
-  function NewItemInput({ style }: { style: React.CSSProperties }) {
-    return (
-      <input
-        autoFocus
-        value={draftTitle}
-        onChange={e => setDraftTitle(e.target.value)}
-        onKeyDown={e => {
-          if (e.key === "Enter") commitCreating();
-          else if (e.key === "Escape") cancelCreating();
-        }}
-        onBlur={() => { if (!draftTitle.trim()) cancelCreating(); }}
-        placeholder="Name and press Enter…"
-        style={style}
-      />
-    );
   }
 
   function updatePartTitle(partId: string, title: string) {
@@ -220,7 +226,7 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
               {/* Chapters */}
               {creating?.level === "chapter" && creating.partId === part.id && (
                 <div style={{ marginLeft: 14, padding: "3px 0" }}>
-                  <NewItemInput style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--primary)", outline: "none", borderRadius: 4, fontSize: 12, fontWeight: 600, color: "var(--foreground)", fontFamily: "inherit", padding: "3px 6px", boxSizing: "border-box" }} />
+                  <NewItemInput value={draftTitle} onChange={setDraftTitle} onCommit={commitCreating} onCancel={cancelCreating} style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--primary)", outline: "none", borderRadius: 4, fontSize: 12, fontWeight: 600, color: "var(--foreground)", fontFamily: "inherit", padding: "3px 6px", boxSizing: "border-box" }} />
                 </div>
               )}
               {part.chapters.map(ch => (
@@ -252,7 +258,7 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
                   })}
                   {creating?.level === "lesson" && creating.partId === part.id && creating.chapterId === ch.id && (
                     <div style={{ marginLeft: 14, padding: "2px 0" }}>
-                      <NewItemInput style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--primary)", outline: "none", borderRadius: 4, fontSize: 12, color: "var(--foreground)", fontFamily: "inherit", padding: "3px 6px", boxSizing: "border-box" }} />
+                      <NewItemInput value={draftTitle} onChange={setDraftTitle} onCommit={commitCreating} onCancel={cancelCreating} style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--primary)", outline: "none", borderRadius: 4, fontSize: 12, color: "var(--foreground)", fontFamily: "inherit", padding: "3px 6px", boxSizing: "border-box" }} />
                     </div>
                   )}
                 </div>
@@ -261,7 +267,7 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
           ))}
           {creating?.level === "part" && (
             <div style={{ marginTop: 8 }}>
-              <NewItemInput style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--primary)", outline: "none", borderRadius: 6, padding: "8px", fontSize: 12, color: "var(--foreground)", fontFamily: "inherit", boxSizing: "border-box" }} />
+              <NewItemInput value={draftTitle} onChange={setDraftTitle} onCommit={commitCreating} onCancel={cancelCreating} style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--primary)", outline: "none", borderRadius: 6, padding: "8px", fontSize: 12, color: "var(--foreground)", fontFamily: "inherit", boxSizing: "border-box" }} />
             </div>
           )}
           <button onClick={() => startCreating({ level: "part" })} style={{ width: "100%", marginTop: 8, background: "var(--surface-2)", border: "1px dashed var(--border)", borderRadius: 6, padding: "8px", fontSize: 12, color: "var(--text-muted)", cursor: "pointer", fontFamily: "inherit" }}>
