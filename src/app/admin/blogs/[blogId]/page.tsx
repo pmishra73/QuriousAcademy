@@ -15,7 +15,8 @@ const lbl: React.CSSProperties = {
 
 type Post = {
   slug: string; title: string; excerpt: string; body: string; category: string; published: boolean;
-  linkedinRequested?: boolean; linkedinApprovalStatus?: "none" | "pending" | "approved" | "rejected"; linkedinPostUrl?: string;
+  linkedinRequested?: boolean; linkedinApprovalStatus?: "none" | "pending" | "approved" | "rejected";
+  linkedinStatus?: "idle" | "posted" | "failed"; linkedinPostUrl?: string;
 };
 
 export default function AdminEditBlogPage({ params }: { params: Promise<{ blogId: string }> }) {
@@ -23,16 +24,17 @@ export default function AdminEditBlogPage({ params }: { params: Promise<{ blogId
   const isNew = slugParam === "new";
   const router = useRouter();
   const [form, setForm] = useState({ slug: "", title: "", excerpt: "", body: "", category: "General", published: false });
-  const [linkedin, setLinkedin] = useState<Pick<Post, "linkedinRequested" | "linkedinApprovalStatus" | "linkedinPostUrl">>({});
+  const [linkedin, setLinkedin] = useState<Pick<Post, "linkedinRequested" | "linkedinApprovalStatus" | "linkedinStatus" | "linkedinPostUrl">>({});
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [posting, setPosting] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (!isNew) {
       fetch(`/api/teacher/blogs-blob/${slugParam}`).then(r => r.json()).then((p: Post) => {
         setForm({ slug: p.slug, title: p.title, excerpt: p.excerpt, body: p.body, category: p.category, published: p.published });
-        setLinkedin({ linkedinRequested: p.linkedinRequested, linkedinApprovalStatus: p.linkedinApprovalStatus, linkedinPostUrl: p.linkedinPostUrl });
+        setLinkedin({ linkedinRequested: p.linkedinRequested, linkedinApprovalStatus: p.linkedinApprovalStatus, linkedinStatus: p.linkedinStatus, linkedinPostUrl: p.linkedinPostUrl });
       });
     }
   }, [slugParam, isNew]);
@@ -68,6 +70,19 @@ export default function AdminEditBlogPage({ params }: { params: Promise<{ blogId
     });
   }
 
+  async function postToLinkedIn() {
+    setPosting(true);
+    const res = await fetch("/api/admin/linkedin/publish", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug: slugParam }),
+    });
+    const data = await res.json();
+    setPosting(false);
+    if (!res.ok) { alert(data.error ?? "Failed to post to LinkedIn."); return; }
+    setLinkedin(l => ({ ...l, linkedinStatus: "posted", linkedinPostUrl: data.postUrl }));
+  }
+
   return (
     <div style={{ maxWidth: 720 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
@@ -80,7 +95,8 @@ export default function AdminEditBlogPage({ params }: { params: Promise<{ blogId
         <div style={{ background: "rgba(10,102,194,0.06)", border: "1px solid rgba(10,102,194,0.25)", borderRadius: 10, padding: "14px 18px", marginBottom: 20, display: "flex", alignItems: "center", gap: 14 }}>
           <span style={{ fontSize: 13, flex: 1 }}>
             The author requested this post be posted to LinkedIn.{" "}
-            {linkedin.linkedinApprovalStatus === "approved" && <strong style={{ color: "#34d399" }}>Approved — queued for the next auto-post window.</strong>}
+            {linkedin.linkedinApprovalStatus === "approved" && linkedin.linkedinStatus === "posted" && <strong style={{ color: "#34d399" }}>Posted.</strong>}
+            {linkedin.linkedinApprovalStatus === "approved" && linkedin.linkedinStatus !== "posted" && <strong style={{ color: "#34d399" }}>Approved — post it whenever you&apos;re ready.</strong>}
             {linkedin.linkedinApprovalStatus === "rejected" && <strong style={{ color: "#ef4444" }}>Rejected.</strong>}
             {linkedin.linkedinApprovalStatus === "pending" && <strong style={{ color: "#fbbf24" }}>Awaiting your review.</strong>}
             {linkedin.linkedinPostUrl && (
@@ -92,6 +108,11 @@ export default function AdminEditBlogPage({ params }: { params: Promise<{ blogId
               <button type="button" onClick={() => setLinkedInApproval("approved")} style={{ fontSize: 12, padding: "6px 14px", borderRadius: 6, border: "1px solid rgba(52,211,153,0.3)", background: "rgba(52,211,153,0.1)", color: "#34d399", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }}>Approve</button>
               <button type="button" onClick={() => setLinkedInApproval("rejected")} style={{ fontSize: 12, padding: "6px 14px", borderRadius: 6, border: "1px solid rgba(239,68,68,0.3)", background: "rgba(239,68,68,0.1)", color: "#ef4444", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }}>Reject</button>
             </div>
+          )}
+          {linkedin.linkedinApprovalStatus === "approved" && linkedin.linkedinStatus !== "posted" && (
+            <button type="button" onClick={postToLinkedIn} disabled={posting} style={{ fontSize: 12, padding: "6px 14px", borderRadius: 6, border: "1px solid #0a66c2", background: "#0a66c2", color: "white", cursor: "pointer", fontFamily: "inherit", fontWeight: 600, flexShrink: 0 }}>
+              {posting ? "Posting…" : "Post to LinkedIn"}
+            </button>
           )}
         </div>
       )}
