@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import PasswordInput from "@/components/PasswordInput";
 
 const inp: React.CSSProperties = {
   width: "100%", background: "var(--surface-2)", border: "1px solid var(--border)",
@@ -75,7 +76,7 @@ export default function NewTeacherPage() {
         </div>
         <div>
           <label style={lbl}>Temporary Password *</label>
-          <input style={inp} type="text" value={form.password} onChange={set("password")} placeholder="They can change this after login" required />
+          <PasswordInput style={inp} value={form.password} onChange={set("password")} placeholder="They can change this after login" required />
           <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 5 }}>
             Share this with the teacher so they can log in and update it from their profile.
           </p>

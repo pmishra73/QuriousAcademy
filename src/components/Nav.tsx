@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import StudentNavLink from "./StudentNavLink";
 
 const links = [
   { href: "/about", label: "About", icon: "✦" },
@@ -126,6 +127,7 @@ export default function Nav() {
 
         {/* Right CTAs */}
         <div style={{ display: "flex", gap: 10, alignItems: "center", flexShrink: 0 }} className="hidden md:flex">
+          <StudentNavLink />
           <Link
             href="/teach"
             style={{

@@ -14,6 +14,7 @@ const navItems = [
   { href: "/admin/institutes", label: "Institutes", icon: "🏫" },
   { href: "/admin/messages", label: "Messages", icon: "✉️" },
   { href: "/admin/content", label: "Content", icon: "📄" },
+  { href: "/admin/settings/linkedin", label: "LinkedIn", icon: "in" },
   { href: "/admin/profile", label: "My Profile", icon: "⚙" },
 ];
 

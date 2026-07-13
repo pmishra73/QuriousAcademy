@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -14,9 +14,9 @@ const lbl: React.CSSProperties = {
 };
 
 type Institute = { id: string; slug: string; name: string; bio: string | null; logo: string | null; website: string | null; active: boolean; teachers: { id: string; name: string; slug: string | null }[] };
-type Teacher = { id: string; name: string; instituteId: string | null };
+type Teacher = { id: string; name: string; email: string; slug: string | null; instituteId: string | null };
 
-export default function InstituteEditClient({ institute, allTeachers }: { institute: Institute; allTeachers: Teacher[] }) {
+export default function InstituteEditClient({ institute }: { institute: Institute }) {
   const router = useRouter();
   const [form, setForm] = useState({
     name: institute.name,
@@ -30,6 +30,24 @@ export default function InstituteEditClient({ institute, allTeachers }: { instit
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState("");
   const [teacherSaving, setTeacherSaving] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<Teacher[]>([]);
+  const [searching, setSearching] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    const q = query.trim();
+    debounceRef.current = setTimeout(async () => {
+      if (!q) { setResults([]); setSearching(false); return; }
+      setSearching(true);
+      const res = await fetch(`/api/admin/teachers?q=${encodeURIComponent(q)}`);
+      const data = await res.json();
+      setResults(Array.isArray(data) ? data : []);
+      setSearching(false);
+    }, q ? 300 : 0);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [query]);
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -64,6 +82,7 @@ export default function InstituteEditClient({ institute, allTeachers }: { instit
       body: JSON.stringify({ instituteId: isLinked ? null : institute.id }),
     });
     setTeacherSaving(null);
+    if (!isLinked) { setQuery(""); setResults([]); }
     router.refresh();
   }
 
@@ -118,28 +137,64 @@ export default function InstituteEditClient({ institute, allTeachers }: { instit
 
       <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: 28 }}>
         <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Teachers</h2>
-        <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 16 }}>Link teachers to this institute. Teachers without their own slug won't have individual pages, but their courses will appear on the institute page.</p>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {allTeachers.map((t) => {
-            const linked = linkedIds.has(t.id);
+        <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 16 }}>Teachers linked to this institute. Teachers without their own slug won&apos;t have individual pages, but their courses will appear on the institute page.</p>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
+          {institute.teachers.map((t) => {
             const busy = teacherSaving === t.id;
             return (
-              <div key={t.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", background: linked ? "rgba(91,124,250,0.06)" : "var(--surface-2)", border: `1px solid ${linked ? "rgba(91,124,250,0.25)" : "var(--border)"}`, borderRadius: 8 }}>
-                <span style={{ flex: 1, fontSize: 13, fontWeight: linked ? 600 : 400 }}>{t.name}</span>
-                {t.instituteId && t.instituteId !== institute.id && (
-                  <span style={{ fontSize: 11, color: "var(--text-muted)" }}>other institute</span>
-                )}
+              <div key={t.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", background: "rgba(91,124,250,0.06)", border: "1px solid rgba(91,124,250,0.25)", borderRadius: 8 }}>
+                <span style={{ flex: 1, fontSize: 13, fontWeight: 600 }}>{t.name}</span>
                 <button
-                  onClick={() => toggleTeacher(t.id, linked)}
-                  disabled={busy || (!!t.instituteId && t.instituteId !== institute.id)}
-                  style={{ fontSize: 12, padding: "5px 14px", borderRadius: 6, border: "1px solid var(--border)", background: linked ? "rgba(239,68,68,0.1)" : "var(--primary)", color: linked ? "#ef4444" : "white", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }}
+                  onClick={() => toggleTeacher(t.id, true)}
+                  disabled={busy}
+                  style={{ fontSize: 12, padding: "5px 14px", borderRadius: 6, border: "1px solid var(--border)", background: "rgba(239,68,68,0.1)", color: "#ef4444", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }}
                 >
-                  {busy ? "…" : linked ? "Remove" : "Add"}
+                  {busy ? "…" : "Remove"}
                 </button>
               </div>
             );
           })}
-          {allTeachers.length === 0 && <p style={{ fontSize: 13, color: "var(--text-muted)" }}>No teacher accounts yet. Add teachers first.</p>}
+          {institute.teachers.length === 0 && <p style={{ fontSize: 13, color: "var(--text-muted)" }}>No teachers linked yet — search below to add one.</p>}
+        </div>
+
+        <div style={{ borderTop: "1px solid var(--border)", paddingTop: 18 }}>
+          <label style={{ fontSize: 11, color: "var(--text-muted)", display: "block", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 600 }}>
+            Add a teacher — search by name or slug
+          </label>
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="e.g. Ananya, or her page slug"
+            style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--border)", color: "var(--foreground)", borderRadius: 8, padding: "10px 14px", fontSize: 14, outline: "none", fontFamily: "inherit", boxSizing: "border-box" }}
+          />
+          {query.trim() && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 12 }}>
+              {searching && <p style={{ fontSize: 12, color: "var(--text-muted)" }}>Searching…</p>}
+              {!searching && results.length === 0 && <p style={{ fontSize: 12, color: "var(--text-muted)" }}>No matching teachers.</p>}
+              {results.map((t) => {
+                const linked = linkedIds.has(t.id);
+                const busy = teacherSaving === t.id;
+                const elsewhere = !!t.instituteId && t.instituteId !== institute.id;
+                return (
+                  <div key={t.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 8 }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 500 }}>{t.name}</div>
+                      <div style={{ fontSize: 11, color: "var(--text-muted)" }}>{t.email}{t.slug ? ` · ${t.slug}` : ""}</div>
+                    </div>
+                    {elsewhere && <span style={{ fontSize: 11, color: "var(--text-muted)" }}>other institute</span>}
+                    <button
+                      onClick={() => toggleTeacher(t.id, linked)}
+                      disabled={busy || linked || elsewhere}
+                      style={{ fontSize: 12, padding: "5px 14px", borderRadius: 6, border: "1px solid var(--border)", background: linked ? "var(--surface)" : "var(--primary)", color: linked ? "var(--text-muted)" : "white", cursor: linked || elsewhere ? "default" : "pointer", fontFamily: "inherit", fontWeight: 600 }}
+                    >
+                      {busy ? "…" : linked ? "Added" : "Add"}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </div>
