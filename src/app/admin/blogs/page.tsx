@@ -5,6 +5,7 @@ import Link from "next/link";
 type Post = {
   slug: string; title: string; category: string; author: string; published: boolean; createdAt: string;
   linkedinRequested?: boolean; linkedinApprovalStatus?: "none" | "pending" | "approved" | "rejected";
+  linkedinStatus?: "idle" | "posted" | "failed"; linkedinPostUrl?: string;
 };
 
 const badgeStyle = (bg: string, color: string): React.CSSProperties => ({
@@ -14,6 +15,7 @@ const badgeStyle = (bg: string, color: string): React.CSSProperties => ({
 export default function AdminBlogsPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [posting, setPosting] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/teacher/blogs-blob").then(r => r.json()).then(d => { setPosts(Array.isArray(d) ? d : []); setLoading(false); });
@@ -36,6 +38,19 @@ export default function AdminBlogsPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ linkedinApprovalStatus: status }),
     });
+  }
+
+  async function postToLinkedIn(post: Post) {
+    setPosting(post.slug);
+    const res = await fetch("/api/admin/linkedin/publish", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug: post.slug }),
+    });
+    const data = await res.json();
+    setPosting(null);
+    if (!res.ok) { alert(data.error ?? "Failed to post to LinkedIn."); return; }
+    setPosts(ps => ps.map(p => p.slug === post.slug ? { ...p, linkedinStatus: "posted", linkedinPostUrl: data.postUrl } : p));
   }
 
   async function deletePost(slug: string) {
@@ -75,7 +90,17 @@ export default function AdminBlogsPage() {
                   <button onClick={() => setLinkedInStatus(p, "rejected")} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 6, border: "1px solid rgba(239,68,68,0.3)", background: "rgba(239,68,68,0.1)", color: "#ef4444", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }}>Reject</button>
                 </div>
               )}
-              {p.linkedinApprovalStatus === "approved" && <span style={badgeStyle("rgba(52,211,153,0.1)", "#34d399")}>LinkedIn: approved</span>}
+              {p.linkedinApprovalStatus === "approved" && p.linkedinStatus === "posted" && (
+                <a href={p.linkedinPostUrl} target="_blank" rel="noreferrer" style={badgeStyle("rgba(52,211,153,0.1)", "#34d399")}>LinkedIn: posted ↗</a>
+              )}
+              {p.linkedinApprovalStatus === "approved" && p.linkedinStatus !== "posted" && (
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={badgeStyle("rgba(52,211,153,0.1)", "#34d399")}>LinkedIn: approved</span>
+                  <button onClick={() => postToLinkedIn(p)} disabled={posting === p.slug} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 6, border: "1px solid #0a66c2", background: "#0a66c2", color: "white", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }}>
+                    {posting === p.slug ? "Posting…" : "Post to LinkedIn"}
+                  </button>
+                </div>
+              )}
               {p.linkedinApprovalStatus === "rejected" && <span style={badgeStyle("rgba(239,68,68,0.1)", "#ef4444")}>LinkedIn: rejected</span>}
 
               <button
