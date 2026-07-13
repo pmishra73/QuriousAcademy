@@ -43,6 +43,10 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     }),
     ...(role === "admin" && body.linkedinApprovalStatus !== undefined && { linkedinApprovalStatus: body.linkedinApprovalStatus }),
     ...(role === "admin" && body.linkedinAdminNote !== undefined && { linkedinAdminNote: body.linkedinAdminNote }),
+    ...(role === "admin" && body.linkedinStatus !== undefined && {
+      linkedinStatus: body.linkedinStatus,
+      ...(body.linkedinStatus === "posted" && { linkedinPostedAt: new Date().toISOString() }),
+    }),
     updatedAt: new Date().toISOString(),
   };
 
