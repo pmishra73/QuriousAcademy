@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import PasswordInput from "@/components/PasswordInput";
 
 export default function ChangePasswordForm({ accentColor = "var(--primary)" }: { accentColor?: string }) {
   const [current, setCurrent] = useState("");
@@ -44,7 +45,7 @@ export default function ChangePasswordForm({ accentColor = "var(--primary)" }: {
       ].map(({ label, value, set }) => (
         <div key={label}>
           <label style={{ fontSize: 12, color: "var(--text-muted)", display: "block", marginBottom: 6 }}>{label}</label>
-          <input type="password" required value={value} onChange={(e) => set(e.target.value)} style={inputStyle} />
+          <PasswordInput required value={value} onChange={(e) => set(e.target.value)} style={inputStyle} />
         </div>
       ))}
 

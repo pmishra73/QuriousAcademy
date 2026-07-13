@@ -3,6 +3,9 @@ import { notFound } from "next/navigation";
 import { getBlog } from "@/lib/blog-blob";
 import { db } from "@/lib/db";
 import SuggestEditButton from "@/components/SuggestEditButton";
+import ShareButtons from "@/components/ShareButtons";
+import YouTubeEmbed from "@/components/YouTubeEmbed";
+import { parseVideo } from "@/lib/video-embed";
 
 export const dynamic = "force-dynamic";
 
@@ -15,20 +18,6 @@ const catBg: Record<string, string> = {
   "AI & ML": "rgba(52,211,153,0.1)", Science: "rgba(251,191,36,0.1)", Technology: "rgba(249,115,22,0.1)",
 };
 
-function embedUrl(raw: string): string | null {
-  try {
-    const u = new URL(raw);
-    if (u.hostname.includes("youtube.com") || u.hostname.includes("youtu.be")) {
-      const id = u.searchParams.get("v") || u.pathname.split("/").pop();
-      return `https://www.youtube.com/embed/${id}`;
-    }
-    if (u.hostname.includes("vimeo.com")) {
-      return `https://player.vimeo.com/video/${u.pathname.split("/").pop()}`;
-    }
-  } catch { /* ignore */ }
-  return null;
-}
-
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
@@ -40,7 +29,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   const prasant = await db.user.findFirst({ where: { role: "admin" }, select: { id: true } });
   const ownerId = post.authorId || prasant?.id || "";
-  const embed = post.videoUrl ? embedUrl(post.videoUrl) : null;
+  const embed = post.videoUrl ? parseVideo(post.videoUrl) : null;
+  const postUrl = `https://quriousacademy.com/blog/${post.slug}`;
 
   return (
     <div>
@@ -56,16 +46,19 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </div>
           <h1 style={{ fontSize: "clamp(28px,4vw,46px)", lineHeight: 1.25, marginBottom: 20 }}>{post.title}</h1>
           <p style={{ fontSize: 16, color: "var(--text-dim)", lineHeight: 1.7, marginBottom: 28 }}>{post.excerpt}</p>
-          <div style={{ display: "flex", alignItems: "center", gap: 16, paddingTop: 20, borderTop: "1px solid var(--border)" }}>
-            <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,var(--primary),var(--violet))", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: "white", flexShrink: 0 }}>
-              {post.author[0]}
-            </div>
-            <div>
-              <div style={{ fontSize: 14, fontWeight: 500 }}>by {post.author}</div>
-              <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
-                {new Date(post.createdAt).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, paddingTop: 20, borderTop: "1px solid var(--border)", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+              <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,var(--primary),var(--violet))", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: "white", flexShrink: 0 }}>
+                {post.author[0]}
+              </div>
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 500 }}>by {post.author}</div>
+                <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
+                  {new Date(post.createdAt).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}
+                </div>
               </div>
             </div>
+            <ShareButtons url={postUrl} title={post.title} />
           </div>
         </div>
       </section>
@@ -74,14 +67,19 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       {embed && (
         <section style={{ padding: "40px 24px 0" }}>
           <div style={{ maxWidth: 720, margin: "0 auto" }}>
-            <div style={{ position: "relative", paddingTop: "56.25%", borderRadius: 12, overflow: "hidden", background: "#0a0e1a" }}>
-              <iframe
-                src={embed}
-                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
-                allowFullScreen
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              />
-            </div>
+            {embed.type === "youtube" ? (
+              <YouTubeEmbed videoId={embed.id} title={post.title} />
+            ) : (
+              <div style={{ position: "relative", paddingTop: "56.25%", borderRadius: 12, overflow: "hidden", background: "#0a0e1a" }}>
+                <iframe
+                  src={embed.src}
+                  title={post.title}
+                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
+                  allowFullScreen
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                />
+              </div>
+            )}
           </div>
         </section>
       )}
@@ -91,9 +89,10 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <div style={{ maxWidth: 720, margin: "0 auto" }} className="prose" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
       </section>
 
-      {/* Suggest edit */}
+      {/* Suggest edit + share */}
       <section style={{ padding: "0 24px 40px" }}>
-        <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", justifyContent: "flex-end" }}>
+        <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+          <ShareButtons url={postUrl} title={post.title} />
           <SuggestEditButton contentType="blog" contentId={slug} contentTitle={post.title} ownerId={ownerId} />
         </div>
       </section>

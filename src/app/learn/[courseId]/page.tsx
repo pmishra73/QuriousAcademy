@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { getCourseContent, extractCurriculum } from "@/lib/course-content";
 import { db } from "@/lib/db";
 import { variants } from "@/lib/variants";
+import { getStudentSession } from "@/lib/student-session";
 import LearnShell from "./LearnShell";
 
 export const dynamic = "force-dynamic";
@@ -11,15 +13,36 @@ export default async function LearnPage({ params, searchParams }: {
   searchParams: Promise<{ email?: string; lessonId?: string }>;
 }) {
   const { courseId } = await params;
-  const { email, lessonId } = await searchParams;
+  const { email: legacyEmail, lessonId } = await searchParams;
 
   const variant = variants.find(v => v.id === courseId);
   if (!variant) notFound();
 
-  // Verify enrollment if email provided
+  const student = await getStudentSession();
+
+  // Legacy links (?email=...) from pre-account emails no longer grant silent
+  // access — prompt the student to log in instead.
+  if (!student && legacyEmail) {
+    return (
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", flexDirection: "column", gap: 16, color: "var(--text-muted)", fontFamily: "system-ui,sans-serif", padding: 24, textAlign: "center" }}>
+        <div style={{ fontSize: 40 }}>🔒</div>
+        <div style={{ fontSize: 18, fontWeight: 600, color: "var(--foreground)" }}>Please log in to continue</div>
+        <div style={{ fontSize: 14, maxWidth: 420 }}>Log in as <strong>{legacyEmail}</strong> to access your course.</div>
+        <Link href={`/student/login`} style={{ background: "var(--primary)", color: "white", padding: "10px 20px", borderRadius: 7, fontWeight: 500, fontSize: 13, textDecoration: "none" }}>
+          Log in →
+        </Link>
+      </div>
+    );
+  }
+
+  const email = student?.email ?? null;
+
+  // Verify enrollment
   let enrolled = false;
   if (email) {
-    const enrollment = await db.enrollment.findFirst({ where: { courseId, studentEmail: email, status: "confirmed" } });
+    const enrollment = await db.enrollment.findFirst({
+      where: { courseId, status: "confirmed", OR: [{ studentId: student?.id }, { studentEmail: email }] },
+    });
     enrolled = !!enrollment;
   }
 

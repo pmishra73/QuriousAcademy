@@ -2,6 +2,7 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { parseVideo } from "@/lib/video-embed";
 
 const inp: React.CSSProperties = {
   width: "100%", background: "var(--surface-2)", border: "1px solid var(--border)",
@@ -15,13 +16,14 @@ const lbl: React.CSSProperties = {
 
 const CATEGORIES = ["General", "Programming", "Mathematics", "AI & ML", "Science", "Technology", "Data Structures", "Interview Prep", "Career"];
 
-type Form = { slug: string; title: string; excerpt: string; body: string; category: string; videoUrl: string; published: boolean };
+type Form = { slug: string; title: string; excerpt: string; body: string; category: string; videoUrl: string; published: boolean; linkedinRequested: boolean };
 
 export default function TeacherEditBlogPage({ params }: { params: Promise<{ blogId: string }> }) {
   const { blogId } = use(params);
   const isNew = blogId === "new";
   const router = useRouter();
-  const [form, setForm] = useState<Form>({ slug: "", title: "", excerpt: "", body: "", category: "General", videoUrl: "", published: false });
+  const [form, setForm] = useState<Form>({ slug: "", title: "", excerpt: "", body: "", category: "General", videoUrl: "", published: false, linkedinRequested: false });
+  const [linkedinApprovalStatus, setLinkedinApprovalStatus] = useState<string | undefined>();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [preview, setPreview] = useState(false);
@@ -30,8 +32,9 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
 
   useEffect(() => {
     if (!isNew) {
-      fetch(`/api/teacher/blogs-blob/${blogId}`).then(r => r.json()).then((p: Form) => {
-        setForm({ slug: p.slug, title: p.title, excerpt: p.excerpt ?? "", body: p.body, category: p.category, videoUrl: p.videoUrl ?? "", published: p.published });
+      fetch(`/api/teacher/blogs-blob/${blogId}`).then(r => r.json()).then((p: Form & { linkedinApprovalStatus?: string }) => {
+        setForm({ slug: p.slug, title: p.title, excerpt: p.excerpt ?? "", body: p.body, category: p.category, videoUrl: p.videoUrl ?? "", published: p.published, linkedinRequested: p.linkedinRequested ?? false });
+        setLinkedinApprovalStatus(p.linkedinApprovalStatus);
       });
     }
   }, [blogId, isNew]);
@@ -92,12 +95,12 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
             <textarea
               value={form.body}
               onChange={set("body")}
-              style={{ ...inp, minHeight: "70vh", resize: "vertical", lineHeight: 1.7, fontFamily: "monospace", fontSize: 13 }}
+              style={{ ...inp, height: "70vh", resize: "vertical", lineHeight: 1.7, fontFamily: "monospace", fontSize: 13, overflowY: "auto" }}
             />
           </div>
           <div>
             <div style={{ fontSize: 11, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 12 }}>Preview</div>
-            <div className="prose" style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, padding: "24px 28px", minHeight: "70vh", overflowY: "auto" }}
+            <div className="prose" style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, padding: "24px 28px", height: "70vh", overflowY: "auto" }}
               dangerouslySetInnerHTML={{ __html: previewHtml }} />
           </div>
         </div>
@@ -130,6 +133,19 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
           </div>
 
           <div>
+            <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
+              <input type="checkbox" checked={form.linkedinRequested} onChange={e => setForm(f => ({ ...f, linkedinRequested: e.target.checked }))} />
+              Request LinkedIn post after publishing
+            </label>
+            <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>
+              An admin reviews and approves before it goes out on the company LinkedIn page.
+              {linkedinApprovalStatus === "pending" && <span style={{ color: "#fbbf24" }}> · Awaiting admin approval.</span>}
+              {linkedinApprovalStatus === "approved" && <span style={{ color: "#34d399" }}> · Approved — queued to post.</span>}
+              {linkedinApprovalStatus === "rejected" && <span style={{ color: "#ef4444" }}> · Rejected by admin.</span>}
+            </div>
+          </div>
+
+          <div>
             <label style={lbl}>Excerpt</label>
             <input style={inp} value={form.excerpt} onChange={set("excerpt")} placeholder="Short description shown in blog listings" />
           </div>
@@ -137,7 +153,25 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
           <div>
             <label style={lbl}>Video URL (optional — YouTube or Vimeo)</label>
             <input style={inp} type="url" value={form.videoUrl} onChange={set("videoUrl")} placeholder="https://youtube.com/watch?v=... or https://vimeo.com/..." />
-            <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>Embedded above the article body on the public page.</div>
+            {(() => {
+              const video = form.videoUrl.trim() ? parseVideo(form.videoUrl.trim()) : null;
+              if (!form.videoUrl.trim()) {
+                return <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>Embedded above the article body on the public page.</div>;
+              }
+              if (!video) {
+                return <div style={{ fontSize: 11, color: "#fbbf24", marginTop: 4 }}>Doesn&apos;t look like a YouTube or Vimeo URL — it won&apos;t embed.</div>;
+              }
+              if (video.type === "youtube") {
+                return (
+                  <img
+                    src={`https://i.ytimg.com/vi/${video.id}/mqdefault.jpg`}
+                    alt="Video thumbnail preview"
+                    style={{ marginTop: 8, width: 160, borderRadius: 6, border: "1px solid var(--border)" }}
+                  />
+                );
+              }
+              return <div style={{ fontSize: 11, color: "#34d399", marginTop: 4 }}>Valid Vimeo link ✓</div>;
+            })()}
           </div>
 
           <div>

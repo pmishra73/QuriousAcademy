@@ -2,6 +2,9 @@ import { put, del, list } from "@vercel/blob";
 import { remark } from "remark";
 import remarkHtml from "remark-html";
 
+export type LinkedInApprovalStatus = "none" | "pending" | "approved" | "rejected";
+export type LinkedInPostStatus = "idle" | "queued" | "posted" | "failed";
+
 export type BlogMeta = {
   slug: string;
   title: string;
@@ -13,6 +16,12 @@ export type BlogMeta = {
   published: boolean;
   createdAt: string;
   updatedAt: string;
+  linkedinRequested?: boolean;
+  linkedinApprovalStatus?: LinkedInApprovalStatus;
+  linkedinStatus?: LinkedInPostStatus;
+  linkedinPostedAt?: string;
+  linkedinPostUrl?: string;
+  linkedinAdminNote?: string;
 };
 
 export type BlogPost = BlogMeta & { body: string };

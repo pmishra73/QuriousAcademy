@@ -85,6 +85,9 @@ model Enrollment {
   couponCode        String?
   createdAt         DateTime         @default(now())
 
+  studentId String?
+  student   Student? @relation(fields: [studentId], references: [id])
+
   // coupon that was applied at checkout (FK stored in Coupon.usedByEnrollmentId)
   couponUsed           Coupon?      @relation("CouponUsedBy")
   // coupon issued as a reward upon completing this enrollment
@@ -92,6 +95,40 @@ model Enrollment {
 
   attendances Attendance[]
   notes       StudentNote[]
+}
+
+// ─── Student Accounts ────────────────────────────────────────────────────────
+// Separate from the staff `User` model — students authenticate via their own
+// NextAuth instance (password or Google/LinkedIn/GitHub OAuth).
+
+model Student {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String?
+  image     String?
+  createdAt DateTime @default(now())
+
+  enrollments  Enrollment[]
+  inviteTokens StudentInviteToken[]
+  sessions     StudentSession[]
+}
+
+model StudentInviteToken {
+  token     String    @id
+  studentId String
+  student   Student   @relation(fields: [studentId], references: [id])
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model StudentSession {
+  token     String   @id
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }
 
 // ─── Leads ───────────────────────────────────────────────────────────────────
@@ -353,6 +390,22 @@ model CourseWaitlist {
   createdAt  DateTime  @default(now())
 
   @@unique([courseId, email])
+}
+
+// ─── LinkedIn Integration ────────────────────────────────────────────────────
+// Singleton row holding the connected LinkedIn organization's OAuth tokens and
+// the configurable minimum gap between auto-posted blog posts.
+
+model LinkedInIntegration {
+  id                String    @id @default("singleton")
+  organizationUrn   String?
+  accessToken       String?
+  refreshToken      String?
+  tokenExpiresAt    DateTime?
+  minGapMinutes     Int       @default(30)
+  lastPostedAt      DateTime?
+  connectedByUserId String?
+  updatedAt         DateTime  @updatedAt
 }
 
 // ─── Messages ────────────────────────────────────────────────────────────────
