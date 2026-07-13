@@ -14,11 +14,5 @@ export default async function InstituteEditPage({ params }: Props) {
   });
   if (!institute) notFound();
 
-  const allTeachers = await db.user.findMany({
-    where: { role: "teacher", active: true },
-    select: { id: true, name: true, instituteId: true },
-    orderBy: { name: "asc" },
-  });
-
-  return <InstituteEditClient institute={institute} allTeachers={allTeachers} />;
+  return <InstituteEditClient institute={institute} />;
 }
