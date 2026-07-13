@@ -6,6 +6,23 @@ import { courses } from "@/lib/courses";
 import { db } from "@/lib/db";
 import { markCouponUsed } from "@/lib/coupon";
 
+async function linkStudentAndGetSetPasswordUrl(email: string, name: string): Promise<string | null> {
+  const existing = await db.student.findUnique({ where: { email } });
+  const student = existing ?? (await db.student.create({ data: { email, name } }));
+
+  if (student.password) {
+    await db.enrollment.updateMany({ where: { studentEmail: email, studentId: null }, data: { studentId: student.id } });
+    return null;
+  }
+
+  const token = crypto.randomBytes(32).toString("hex");
+  await db.studentInviteToken.create({
+    data: { token, studentId: student.id, expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
+  });
+  await db.enrollment.updateMany({ where: { studentEmail: email, studentId: null }, data: { studentId: student.id } });
+  return `https://quriousacademy.com/student/set-password?token=${token}`;
+}
+
 export async function POST(req: NextRequest) {
   const {
     razorpay_order_id, razorpay_payment_id, razorpay_signature,
@@ -30,6 +47,7 @@ export async function POST(req: NextRequest) {
   const paidAmount = finalAmount ?? basePrice;
   const discountApplied = couponCode && paidAmount < basePrice;
 
+  let setPasswordUrl: string | null = null;
   try {
     const enrollment = await db.enrollment.create({
       data: {
@@ -48,6 +66,7 @@ export async function POST(req: NextRequest) {
     if (couponCode?.trim()) {
       await markCouponUsed(couponCode.trim().toUpperCase(), enrollment.id);
     }
+    setPasswordUrl = await linkStudentAndGetSetPasswordUrl(studentEmail, studentName);
   } catch (err) {
     console.error("DB write failed:", err);
   }
@@ -95,6 +114,13 @@ export async function POST(req: NextRequest) {
           <a href="https://quriousacademy.com/learn/${courseId}?email=${encodeURIComponent(studentEmail)}" style="display:inline-block;margin:8px 0 20px;background:#5b7cfa;color:white;padding:12px 24px;border-radius:8px;font-weight:600;font-size:14px;text-decoration:none">
             Start Learning →
           </a>
+          ${setPasswordUrl ? `
+          <p style="color:#555;line-height:1.7">
+            Set a password to get a proper dashboard with all your enrolled courses in one place:
+          </p>
+          <a href="${setPasswordUrl}" style="display:inline-block;margin:0 0 20px;background:#0a0e1a;color:white;padding:12px 24px;border-radius:8px;font-weight:600;font-size:14px;text-decoration:none">
+            Set Your Password →
+          </a>` : ""}
           <div style="margin:16px 0;padding:16px 20px;background:#f7f7f7;border-radius:8px;font-size:13px;color:#666">
             <div>Payment ID: <strong>${razorpay_payment_id}</strong></div>
             <div>Order ID: <strong>${razorpay_order_id}</strong></div>
