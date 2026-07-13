@@ -2,6 +2,7 @@
 import { useState, useEffect, use, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import type { CourseContent, Part, Chapter, Lesson, ContentBlock, TextFormat } from "@/lib/course-content";
+import { parseImportJson, findUnknownResourceIds, toCourseContent, fromCourseContent, EXAMPLE_JSON } from "@/lib/course-content-import";
 
 // ─── Tiny ID generator ───────────────────────────────────────────────────────
 function uid() { return Math.random().toString(36).slice(2, 9); }
@@ -35,6 +36,97 @@ function NewItemInput({ value, onChange, onCommit, onCancel, style }: {
 
 type Resource = { id: string; type: string; tag?: string; title: string; url?: string; blobSlug?: string };
 
+function JsonImportPanel({ courseId, currentContent, resources, onImport }: {
+  courseId: string;
+  currentContent: CourseContent;
+  resources: Resource[];
+  onImport: (content: CourseContent) => void;
+}) {
+  const [text, setText] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
+  const [warnings, setWarnings] = useState<string[]>([]);
+  const [loaded, setLoaded] = useState(false);
+
+  function validate() {
+    setLoaded(false);
+    const result = parseImportJson(text);
+    if (!result.ok) { setErrors(result.errors); setWarnings([]); return; }
+    setErrors([]);
+    const knownIds = new Set(resources.map(r => r.id));
+    const unknown = findUnknownResourceIds(result.data, knownIds);
+    setWarnings(unknown.length > 0 ? [`These resourceIds don't match anything in your resource library: ${unknown.join(", ")}`] : []);
+    setLoaded(true);
+  }
+
+  function applyImport() {
+    const result = parseImportJson(text);
+    if (!result.ok) return;
+    const hasExisting = currentContent.parts.length > 0;
+    if (hasExisting && !confirm("This replaces all current course content (all parts, chapters, and lessons). Continue?")) return;
+    onImport(toCourseContent(result.data, courseId));
+    setText(""); setErrors([]); setWarnings([]); setLoaded(false);
+  }
+
+  function loadExample() {
+    setText(JSON.stringify(EXAMPLE_JSON, null, 2));
+    setErrors([]); setWarnings([]); setLoaded(false);
+  }
+
+  function exportCurrent() {
+    setText(JSON.stringify(fromCourseContent(currentContent), null, 2));
+    setErrors([]); setWarnings([]); setLoaded(false);
+  }
+
+  return (
+    <div style={{ flex: 1, overflowY: "auto", padding: "24px 28px", maxWidth: 900 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+        <h2 style={{ fontSize: 16, fontWeight: 700 }}>Import course content as JSON</h2>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button onClick={loadExample} style={btn("var(--surface-2)", "var(--text-dim)")}>Load example</button>
+          <button onClick={exportCurrent} style={btn("var(--surface-2)", "var(--text-dim)")} disabled={currentContent.parts.length === 0}>Export current as JSON</button>
+        </div>
+      </div>
+
+      <p style={{ fontSize: 13, color: "var(--text-dim)", lineHeight: 1.6, marginBottom: 16 }}>
+        Paste a JSON object shaped like <code>{"{ parts: [{ title, chapters: [{ title, lessons: [{ title, blocks: [...] }] }] }] }"}</code>.
+        Titles are required everywhere else is optional. Block types: <code>text</code> (needs <code>content</code>, optional <code>format</code>:
+        normal/bold/italic/heading/subheading), <code>video</code> / <code>live_recording</code> / <code>image</code> / <code>link</code> / <code>document</code> (needs a <code>resourceId</code> from
+        your resource library, optional <code>caption</code>), or <code>blog</code> (needs <code>blobSlug</code>, optional <code>caption</code>).
+        IDs and ordering are generated automatically — this <strong>replaces</strong> all current content on import.
+      </p>
+
+      <textarea
+        value={text}
+        onChange={e => { setText(e.target.value); setLoaded(false); setErrors([]); setWarnings([]); }}
+        placeholder='{"parts": [...]}'
+        style={{ width: "100%", minHeight: 360, background: "var(--surface-2)", border: "1px solid var(--border)", color: "var(--foreground)", borderRadius: 8, padding: 14, fontSize: 12, fontFamily: "monospace", lineHeight: 1.6, outline: "none", boxSizing: "border-box", resize: "vertical" }}
+      />
+
+      {errors.length > 0 && (
+        <div style={{ marginTop: 12, background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)", borderRadius: 8, padding: "12px 16px" }}>
+          <div style={{ fontSize: 12, fontWeight: 600, color: "#ef4444", marginBottom: 6 }}>{errors.length} validation {errors.length === 1 ? "error" : "errors"}</div>
+          <ul style={{ margin: 0, paddingLeft: 18 }}>
+            {errors.map((e, i) => <li key={i} style={{ fontSize: 12, color: "#ef4444", fontFamily: "monospace" }}>{e}</li>)}
+          </ul>
+        </div>
+      )}
+      {warnings.length > 0 && (
+        <div style={{ marginTop: 12, background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.25)", borderRadius: 8, padding: "12px 16px" }}>
+          {warnings.map((w, i) => <div key={i} style={{ fontSize: 12, color: "#fbbf24" }}>{w}</div>)}
+        </div>
+      )}
+      {loaded && errors.length === 0 && (
+        <div style={{ marginTop: 12, fontSize: 12, color: "#34d399" }}>✓ Valid — ready to import.</div>
+      )}
+
+      <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
+        <button onClick={validate} disabled={!text.trim()} style={btn("var(--surface-2)", "var(--text-dim)")}>Validate</button>
+        <button onClick={applyImport} disabled={!loaded || errors.length > 0} style={btn()}>Import & Replace Content</button>
+      </div>
+    </div>
+  );
+}
+
 export default function CourseBuilderPage({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = use(params);
   const router = useRouter();
@@ -48,6 +140,7 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
   const [saved, setSaved] = useState(false);
   const [creating, setCreating] = useState<{ level: "part" | "chapter" | "lesson"; partId?: string; chapterId?: string } | null>(null);
   const [draftTitle, setDraftTitle] = useState("");
+  const [mode, setMode] = useState<"visual" | "json">("visual");
 
   useEffect(() => {
     fetch(`/api/teacher/courses/${courseId}/content`).then(r => r.json()).then(setContent);
@@ -208,6 +301,14 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
               </span>
             )}
           </div>
+          <div style={{ display: "flex", gap: 4, marginTop: 10, background: "var(--surface-2)", borderRadius: 6, padding: 3 }}>
+            <button onClick={() => setMode("visual")} style={{ flex: 1, fontSize: 11, fontWeight: 600, padding: "5px 8px", borderRadius: 4, border: "none", cursor: "pointer", fontFamily: "inherit", background: mode === "visual" ? "var(--primary)" : "transparent", color: mode === "visual" ? "white" : "var(--text-muted)" }}>
+              Visual Editor
+            </button>
+            <button onClick={() => setMode("json")} style={{ flex: 1, fontSize: 11, fontWeight: 600, padding: "5px 8px", borderRadius: 4, border: "none", cursor: "pointer", fontFamily: "inherit", background: mode === "json" ? "var(--primary)" : "transparent", color: mode === "json" ? "white" : "var(--text-muted)" }}>
+              Import JSON
+            </button>
+          </div>
         </div>
 
         {/* Tree */}
@@ -276,7 +377,15 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
         </div>
       </div>
 
-      {/* RIGHT: Lesson Editor */}
+      {/* RIGHT: Lesson Editor or JSON Import */}
+      {mode === "json" ? (
+        <JsonImportPanel
+          courseId={courseId}
+          currentContent={content}
+          resources={resources}
+          onImport={(imported) => { setContent(imported); setSelected(null); setMode("visual"); }}
+        />
+      ) : (
       <div style={{ flex: 1, overflowY: "auto", padding: "24px 28px" }}>
         {!lesson ? (
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: "var(--text-muted)", fontSize: 14, flexDirection: "column", gap: 12 }}>
@@ -352,6 +461,7 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
           </>
         )}
       </div>
+      )}
     </div>
   );
 }
