@@ -1,5 +1,7 @@
 import { db } from "@/lib/db";
 
+export { buildPostText } from "@/lib/linkedin-post-text";
+
 const AUTH_URL = "https://www.linkedin.com/oauth/v2/authorization";
 const TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken";
 const UGC_POSTS_URL = "https://api.linkedin.com/v2/ugcPosts";
@@ -82,6 +84,3 @@ export async function postToLinkedIn(text: string): Promise<string> {
   return postId ? `https://www.linkedin.com/feed/update/${postId}/` : "https://www.linkedin.com/company/";
 }
 
-export function buildPostText(title: string, excerpt: string, slug: string): string {
-  return `${title}\n\n${excerpt}\n\nRead more: https://quriousacademy.com/blog/${slug}`;
-}
