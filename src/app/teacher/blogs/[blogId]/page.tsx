@@ -92,12 +92,12 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
             <textarea
               value={form.body}
               onChange={set("body")}
-              style={{ ...inp, minHeight: "70vh", resize: "vertical", lineHeight: 1.7, fontFamily: "monospace", fontSize: 13 }}
+              style={{ ...inp, height: "70vh", resize: "vertical", lineHeight: 1.7, fontFamily: "monospace", fontSize: 13, overflowY: "auto" }}
             />
           </div>
           <div>
             <div style={{ fontSize: 11, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 12 }}>Preview</div>
-            <div className="prose" style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, padding: "24px 28px", minHeight: "70vh", overflowY: "auto" }}
+            <div className="prose" style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, padding: "24px 28px", height: "70vh", overflowY: "auto" }}
               dangerouslySetInnerHTML={{ __html: previewHtml }} />
           </div>
         </div>
