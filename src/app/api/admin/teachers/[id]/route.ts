@@ -1,8 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
+import bcrypt from "bcryptjs";
 
 type Ctx = { params: Promise<{ id: string }> };
+
+export async function GET(_: NextRequest, { params }: Ctx) {
+  const session = await auth();
+  if (!session || (session.user as { role?: string })?.role !== "admin") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const { id } = await params;
+  const teacher = await db.user.findUnique({ where: { id, role: "teacher" } });
+  if (!teacher) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  const { password: _password, ...safe } = teacher;
+  return NextResponse.json(safe);
+}
 
 export async function PATCH(req: NextRequest, { params }: Ctx) {
   const session = await auth();
@@ -20,6 +32,9 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
   if ("slug" in body) {
     const s = body.slug as string;
     data.slug = s ? s.toLowerCase().replace(/[^a-z0-9-]/g, "") : null;
+  }
+  if ("password" in body && typeof body.password === "string" && body.password.trim()) {
+    data.password = await bcrypt.hash(body.password.trim(), 12);
   }
 
   try {
