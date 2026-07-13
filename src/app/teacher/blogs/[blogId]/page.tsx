@@ -2,6 +2,7 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { parseVideo } from "@/lib/video-embed";
 
 const inp: React.CSSProperties = {
   width: "100%", background: "var(--surface-2)", border: "1px solid var(--border)",
@@ -137,7 +138,25 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
           <div>
             <label style={lbl}>Video URL (optional — YouTube or Vimeo)</label>
             <input style={inp} type="url" value={form.videoUrl} onChange={set("videoUrl")} placeholder="https://youtube.com/watch?v=... or https://vimeo.com/..." />
-            <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>Embedded above the article body on the public page.</div>
+            {(() => {
+              const video = form.videoUrl.trim() ? parseVideo(form.videoUrl.trim()) : null;
+              if (!form.videoUrl.trim()) {
+                return <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>Embedded above the article body on the public page.</div>;
+              }
+              if (!video) {
+                return <div style={{ fontSize: 11, color: "#fbbf24", marginTop: 4 }}>Doesn't look like a YouTube or Vimeo URL — it won't embed.</div>;
+              }
+              if (video.type === "youtube") {
+                return (
+                  <img
+                    src={`https://i.ytimg.com/vi/${video.id}/mqdefault.jpg`}
+                    alt="Video thumbnail preview"
+                    style={{ marginTop: 8, width: 160, borderRadius: 6, border: "1px solid var(--border)" }}
+                  />
+                );
+              }
+              return <div style={{ fontSize: 11, color: "#34d399", marginTop: 4 }}>Valid Vimeo link ✓</div>;
+            })()}
           </div>
 
           <div>

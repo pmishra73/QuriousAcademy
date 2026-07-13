@@ -4,6 +4,8 @@ import { getBlog } from "@/lib/blog-blob";
 import { db } from "@/lib/db";
 import SuggestEditButton from "@/components/SuggestEditButton";
 import ShareButtons from "@/components/ShareButtons";
+import YouTubeEmbed from "@/components/YouTubeEmbed";
+import { parseVideo } from "@/lib/video-embed";
 
 export const dynamic = "force-dynamic";
 
@@ -16,20 +18,6 @@ const catBg: Record<string, string> = {
   "AI & ML": "rgba(52,211,153,0.1)", Science: "rgba(251,191,36,0.1)", Technology: "rgba(249,115,22,0.1)",
 };
 
-function embedUrl(raw: string): string | null {
-  try {
-    const u = new URL(raw);
-    if (u.hostname.includes("youtube.com") || u.hostname.includes("youtu.be")) {
-      const id = u.searchParams.get("v") || u.pathname.split("/").pop();
-      return `https://www.youtube.com/embed/${id}`;
-    }
-    if (u.hostname.includes("vimeo.com")) {
-      return `https://player.vimeo.com/video/${u.pathname.split("/").pop()}`;
-    }
-  } catch { /* ignore */ }
-  return null;
-}
-
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
@@ -41,7 +29,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   const prasant = await db.user.findFirst({ where: { role: "admin" }, select: { id: true } });
   const ownerId = post.authorId || prasant?.id || "";
-  const embed = post.videoUrl ? embedUrl(post.videoUrl) : null;
+  const embed = post.videoUrl ? parseVideo(post.videoUrl) : null;
   const postUrl = `https://quriousacademy.com/blog/${post.slug}`;
 
   return (
@@ -79,14 +67,19 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       {embed && (
         <section style={{ padding: "40px 24px 0" }}>
           <div style={{ maxWidth: 720, margin: "0 auto" }}>
-            <div style={{ position: "relative", paddingTop: "56.25%", borderRadius: 12, overflow: "hidden", background: "#0a0e1a" }}>
-              <iframe
-                src={embed}
-                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
-                allowFullScreen
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              />
-            </div>
+            {embed.type === "youtube" ? (
+              <YouTubeEmbed videoId={embed.id} title={post.title} />
+            ) : (
+              <div style={{ position: "relative", paddingTop: "56.25%", borderRadius: 12, overflow: "hidden", background: "#0a0e1a" }}>
+                <iframe
+                  src={embed.src}
+                  title={post.title}
+                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
+                  allowFullScreen
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                />
+              </div>
+            )}
           </div>
         </section>
       )}
