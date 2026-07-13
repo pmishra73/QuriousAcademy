@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, use, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import type { CourseContent, Part, Chapter, Lesson, ContentBlock, TextFormat } from "@/lib/course-content";
 import { parseImportJson, findUnknownResourceIds, toCourseContent, fromCourseContent, EXAMPLE_JSON } from "@/lib/course-content-import";
 
@@ -144,7 +145,7 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
 
   useEffect(() => {
     fetch(`/api/teacher/courses/${courseId}/content`).then(r => r.json()).then(setContent);
-    fetch("/api/teacher/resources").then(r => r.json()).then(d => setResources(Array.isArray(d) ? d : []));
+    fetch("/api/teacher/resources").then(r => r.json()).then(d => setResources(Array.isArray(d) ? d : [])).catch(() => setResources([]));
     fetch("/api/admin/courses/approvals").then(r => r.json()).then(list => {
       if (Array.isArray(list)) {
         const a = list.find((x: { courseId: string }) => x.courseId === courseId);
@@ -448,15 +449,25 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", borderTop: "1px solid var(--border)", paddingTop: 16 }}>
               <button onClick={addTextBlock} style={btn("var(--surface-2)", "var(--text-dim)")}>+ Text Block</button>
               <div style={{ width: 1, background: "var(--border)", margin: "0 4px" }} />
-              <span style={{ fontSize: 11, color: "var(--text-muted)", alignSelf: "center" }}>Add resource:</span>
-              {resources.slice(0, 8).map(r => (
-                <button key={r.id} onClick={() => addResourceBlock(r)}
-                  style={{ ...btn("var(--surface-2)", "var(--text-muted)"), fontSize: 11, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
-                  title={r.title}>
-                  {r.type === "video" ? "🎬" : r.type === "live_recording" ? "📹" : r.type === "image" ? "🖼️" : "🔗"} {r.title}
-                </button>
-              ))}
-              {resources.length > 8 && <span style={{ fontSize: 11, color: "var(--text-muted)", alignSelf: "center" }}>+{resources.length - 8} more in library</span>}
+              {resources.length === 0 ? (
+                <span style={{ fontSize: 11, color: "var(--text-muted)", alignSelf: "center" }}>
+                  No resources yet —{" "}
+                  <Link href="/teacher/resources" style={{ color: "var(--primary)" }}>add videos, images, links or documents in your Resource Library</Link>{" "}
+                  to attach them here.
+                </span>
+              ) : (
+                <>
+                  <span style={{ fontSize: 11, color: "var(--text-muted)", alignSelf: "center" }}>Add resource:</span>
+                  {resources.slice(0, 8).map(r => (
+                    <button key={r.id} onClick={() => addResourceBlock(r)}
+                      style={{ ...btn("var(--surface-2)", "var(--text-muted)"), fontSize: 11, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+                      title={r.title}>
+                      {r.type === "video" ? "🎬" : r.type === "live_recording" ? "📹" : r.type === "image" ? "🖼️" : "🔗"} {r.title}
+                    </button>
+                  ))}
+                  {resources.length > 8 && <span style={{ fontSize: 11, color: "var(--text-muted)", alignSelf: "center" }}>+{resources.length - 8} more in library</span>}
+                </>
+              )}
             </div>
           </>
         )}
