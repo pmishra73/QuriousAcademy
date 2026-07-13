@@ -38,14 +38,14 @@ export default function InstituteEditClient({ institute }: { institute: Institut
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     const q = query.trim();
-    if (!q) { setResults([]); setSearching(false); return; }
-    setSearching(true);
     debounceRef.current = setTimeout(async () => {
+      if (!q) { setResults([]); setSearching(false); return; }
+      setSearching(true);
       const res = await fetch(`/api/admin/teachers?q=${encodeURIComponent(q)}`);
       const data = await res.json();
       setResults(Array.isArray(data) ? data : []);
       setSearching(false);
-    }, 300);
+    }, q ? 300 : 0);
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
   }, [query]);
 
@@ -137,7 +137,7 @@ export default function InstituteEditClient({ institute }: { institute: Institut
 
       <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: 28 }}>
         <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Teachers</h2>
-        <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 16 }}>Teachers linked to this institute. Teachers without their own slug won't have individual pages, but their courses will appear on the institute page.</p>
+        <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 16 }}>Teachers linked to this institute. Teachers without their own slug won&apos;t have individual pages, but their courses will appear on the institute page.</p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
           {institute.teachers.map((t) => {
