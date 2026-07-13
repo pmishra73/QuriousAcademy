@@ -2,11 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const q = req.nextUrl.searchParams.get("q")?.trim();
+
   const teachers = await db.user.findMany({
-    where: { role: "teacher" },
+    where: {
+      role: "teacher",
+      ...(q && {
+        OR: [
+          { name: { contains: q, mode: "insensitive" } },
+          { email: { contains: q, mode: "insensitive" } },
+          { slug: { contains: q, mode: "insensitive" } },
+        ],
+      }),
+    },
     orderBy: { createdAt: "desc" },
-    select: { id: true, name: true, email: true, bio: true, active: true, createdAt: true },
+    select: { id: true, name: true, email: true, bio: true, active: true, createdAt: true, slug: true, instituteId: true },
+    take: q ? 20 : undefined,
   });
   return NextResponse.json(teachers);
 }
