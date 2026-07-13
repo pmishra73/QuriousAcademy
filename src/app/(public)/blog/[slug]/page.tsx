@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getBlog } from "@/lib/blog-blob";
 import { db } from "@/lib/db";
 import SuggestEditButton from "@/components/SuggestEditButton";
+import ShareButtons from "@/components/ShareButtons";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +42,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const prasant = await db.user.findFirst({ where: { role: "admin" }, select: { id: true } });
   const ownerId = post.authorId || prasant?.id || "";
   const embed = post.videoUrl ? embedUrl(post.videoUrl) : null;
+  const postUrl = `https://quriousacademy.com/blog/${post.slug}`;
 
   return (
     <div>
@@ -56,16 +58,19 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </div>
           <h1 style={{ fontSize: "clamp(28px,4vw,46px)", lineHeight: 1.25, marginBottom: 20 }}>{post.title}</h1>
           <p style={{ fontSize: 16, color: "var(--text-dim)", lineHeight: 1.7, marginBottom: 28 }}>{post.excerpt}</p>
-          <div style={{ display: "flex", alignItems: "center", gap: 16, paddingTop: 20, borderTop: "1px solid var(--border)" }}>
-            <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,var(--primary),var(--violet))", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: "white", flexShrink: 0 }}>
-              {post.author[0]}
-            </div>
-            <div>
-              <div style={{ fontSize: 14, fontWeight: 500 }}>by {post.author}</div>
-              <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
-                {new Date(post.createdAt).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, paddingTop: 20, borderTop: "1px solid var(--border)", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+              <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,var(--primary),var(--violet))", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: "white", flexShrink: 0 }}>
+                {post.author[0]}
+              </div>
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 500 }}>by {post.author}</div>
+                <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
+                  {new Date(post.createdAt).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}
+                </div>
               </div>
             </div>
+            <ShareButtons url={postUrl} title={post.title} />
           </div>
         </div>
       </section>
@@ -91,9 +96,10 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <div style={{ maxWidth: 720, margin: "0 auto" }} className="prose" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
       </section>
 
-      {/* Suggest edit */}
+      {/* Suggest edit + share */}
       <section style={{ padding: "0 24px 40px" }}>
-        <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", justifyContent: "flex-end" }}>
+        <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+          <ShareButtons url={postUrl} title={post.title} />
           <SuggestEditButton contentType="blog" contentId={slug} contentTitle={post.title} ownerId={ownerId} />
         </div>
       </section>
