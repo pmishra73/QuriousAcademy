@@ -2,6 +2,7 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { buildPostText } from "@/lib/linkedin-post-text";
 
 const inp: React.CSSProperties = {
   width: "100%", background: "var(--surface-2)", border: "1px solid var(--border)",
@@ -28,6 +29,8 @@ export default function AdminEditBlogPage({ params }: { params: Promise<{ blogId
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [posting, setPosting] = useState(false);
+  const [linkedinConnected, setLinkedinConnected] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -37,6 +40,7 @@ export default function AdminEditBlogPage({ params }: { params: Promise<{ blogId
         setLinkedin({ linkedinRequested: p.linkedinRequested, linkedinApprovalStatus: p.linkedinApprovalStatus, linkedinStatus: p.linkedinStatus, linkedinPostUrl: p.linkedinPostUrl });
       });
     }
+    fetch("/api/admin/linkedin/settings").then(r => r.json()).then(d => setLinkedinConnected(!!d.connected)).catch(() => {});
   }, [slugParam, isNew]);
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
@@ -83,6 +87,21 @@ export default function AdminEditBlogPage({ params }: { params: Promise<{ blogId
     setLinkedin(l => ({ ...l, linkedinStatus: "posted", linkedinPostUrl: data.postUrl }));
   }
 
+  async function copyPostText() {
+    await navigator.clipboard.writeText(buildPostText(form.title, form.excerpt, form.slug));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  }
+
+  async function markPosted() {
+    setLinkedin(l => ({ ...l, linkedinStatus: "posted" }));
+    await fetch(`/api/teacher/blogs-blob/${slugParam}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ linkedinStatus: "posted" }),
+    });
+  }
+
   return (
     <div style={{ maxWidth: 720 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
@@ -109,10 +128,20 @@ export default function AdminEditBlogPage({ params }: { params: Promise<{ blogId
               <button type="button" onClick={() => setLinkedInApproval("rejected")} style={{ fontSize: 12, padding: "6px 14px", borderRadius: 6, border: "1px solid rgba(239,68,68,0.3)", background: "rgba(239,68,68,0.1)", color: "#ef4444", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }}>Reject</button>
             </div>
           )}
-          {linkedin.linkedinApprovalStatus === "approved" && linkedin.linkedinStatus !== "posted" && (
+          {linkedin.linkedinApprovalStatus === "approved" && linkedin.linkedinStatus !== "posted" && linkedinConnected && (
             <button type="button" onClick={postToLinkedIn} disabled={posting} style={{ fontSize: 12, padding: "6px 14px", borderRadius: 6, border: "1px solid #0a66c2", background: "#0a66c2", color: "white", cursor: "pointer", fontFamily: "inherit", fontWeight: 600, flexShrink: 0 }}>
               {posting ? "Posting…" : "Post to LinkedIn"}
             </button>
+          )}
+          {linkedin.linkedinApprovalStatus === "approved" && linkedin.linkedinStatus !== "posted" && !linkedinConnected && (
+            <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+              <button type="button" onClick={copyPostText} style={{ fontSize: 12, padding: "6px 14px", borderRadius: 6, border: "1px solid #0a66c2", background: copied ? "#34d399" : "#0a66c2", color: "white", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }} title="Copy the post text, then paste it into a new post on your LinkedIn Company Page">
+                {copied ? "Copied ✓" : "Copy post text"}
+              </button>
+              <button type="button" onClick={markPosted} style={{ fontSize: 12, padding: "6px 14px", borderRadius: 6, border: "1px solid var(--border)", background: "none", color: "var(--text-muted)", cursor: "pointer", fontFamily: "inherit" }} title="Once you've pasted it on LinkedIn yourself">
+                Mark as posted
+              </button>
+            </div>
           )}
         </div>
       )}
