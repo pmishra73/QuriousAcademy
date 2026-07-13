@@ -23,6 +23,8 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
   const [submitting, setSubmitting] = useState(false);
   const [approvalStatus, setApprovalStatus] = useState<string>("draft");
   const [saved, setSaved] = useState(false);
+  const [creating, setCreating] = useState<{ level: "part" | "chapter" | "lesson"; partId?: string; chapterId?: string } | null>(null);
+  const [draftTitle, setDraftTitle] = useState("");
 
   useEffect(() => {
     fetch(`/api/teacher/courses/${courseId}/content`).then(r => r.json()).then(setContent);
@@ -37,17 +39,57 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
 
   // ─── Tree mutations ───────────────────────────────────────────────────────
 
-  function addPart() {
-    const p: Part = { id: uid(), title: "New Part", order: content.parts.length, chapters: [] };
+  function addPart(title: string) {
+    const p: Part = { id: uid(), title, order: content.parts.length, chapters: [] };
     setContent(c => ({ ...c, parts: [...c.parts, p] }));
   }
 
-  function addChapter(partId: string) {
-    setContent(c => ({ ...c, parts: c.parts.map(p => p.id !== partId ? p : { ...p, chapters: [...p.chapters, { id: uid(), title: "New Chapter", order: p.chapters.length, lessons: [] }] }) }));
+  function addChapter(partId: string, title: string) {
+    setContent(c => ({ ...c, parts: c.parts.map(p => p.id !== partId ? p : { ...p, chapters: [...p.chapters, { id: uid(), title, order: p.chapters.length, lessons: [] }] }) }));
   }
 
-  function addLesson(partId: string, chapterId: string) {
-    setContent(c => ({ ...c, parts: c.parts.map(p => p.id !== partId ? p : { ...p, chapters: p.chapters.map(ch => ch.id !== chapterId ? ch : { ...ch, lessons: [...ch.lessons, { id: uid(), title: "New Lesson", order: ch.lessons.length, blocks: [] }] }) }) }));
+  function addLesson(partId: string, chapterId: string, title: string) {
+    setContent(c => ({ ...c, parts: c.parts.map(p => p.id !== partId ? p : { ...p, chapters: p.chapters.map(ch => ch.id !== chapterId ? ch : { ...ch, lessons: [...ch.lessons, { id: uid(), title, order: ch.lessons.length, blocks: [] }] }) }) }));
+  }
+
+  // ─── Inline "add" flow — button opens a naming box, Enter commits ────────
+
+  function startCreating(target: { level: "part" | "chapter" | "lesson"; partId?: string; chapterId?: string }) {
+    setCreating(target);
+    setDraftTitle("");
+  }
+
+  function commitCreating() {
+    if (!creating) return;
+    const title = draftTitle.trim();
+    if (!title) { setCreating(null); return; }
+    if (creating.level === "part") addPart(title);
+    else if (creating.level === "chapter" && creating.partId) addChapter(creating.partId, title);
+    else if (creating.level === "lesson" && creating.partId && creating.chapterId) addLesson(creating.partId, creating.chapterId, title);
+    setCreating(null);
+    setDraftTitle("");
+  }
+
+  function cancelCreating() {
+    setCreating(null);
+    setDraftTitle("");
+  }
+
+  function NewItemInput({ style }: { style: React.CSSProperties }) {
+    return (
+      <input
+        autoFocus
+        value={draftTitle}
+        onChange={e => setDraftTitle(e.target.value)}
+        onKeyDown={e => {
+          if (e.key === "Enter") commitCreating();
+          else if (e.key === "Escape") cancelCreating();
+        }}
+        onBlur={() => { if (!draftTitle.trim()) cancelCreating(); }}
+        placeholder="Name and press Enter…"
+        style={style}
+      />
+    );
   }
 
   function updatePartTitle(partId: string, title: string) {
@@ -171,18 +213,23 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
                 <span style={{ fontSize: 10, color: "var(--text-muted)", flexShrink: 0 }}>▸</span>
                 <input value={part.title} onChange={e => updatePartTitle(part.id, e.target.value)}
                   style={{ flex: 1, background: "none", border: "none", outline: "none", fontSize: 12, fontWeight: 700, color: "var(--foreground)", fontFamily: "inherit", padding: "2px 4px" }} />
-                <button onClick={() => addChapter(part.id)} style={{ fontSize: 10, background: "none", border: "none", cursor: "pointer", color: "var(--primary)", padding: "2px 4px" }} title="Add Chapter">+Ch</button>
+                <button onClick={() => startCreating({ level: "chapter", partId: part.id })} style={{ fontSize: 10, background: "none", border: "none", cursor: "pointer", color: "var(--primary)", padding: "2px 4px" }} title="Add Chapter">+Ch</button>
                 <button onClick={() => deletePart(part.id)} style={{ fontSize: 10, background: "none", border: "none", cursor: "pointer", color: "#ef4444", padding: "2px" }}>✕</button>
               </div>
 
               {/* Chapters */}
+              {creating?.level === "chapter" && creating.partId === part.id && (
+                <div style={{ marginLeft: 14, padding: "3px 0" }}>
+                  <NewItemInput style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--primary)", outline: "none", borderRadius: 4, fontSize: 12, fontWeight: 600, color: "var(--foreground)", fontFamily: "inherit", padding: "3px 6px", boxSizing: "border-box" }} />
+                </div>
+              )}
               {part.chapters.map(ch => (
                 <div key={ch.id} style={{ marginLeft: 14 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 4, padding: "3px 0" }}>
                     <span style={{ fontSize: 9, color: "var(--text-muted)", flexShrink: 0 }}>▸</span>
                     <input value={ch.title} onChange={e => updateChapterTitle(part.id, ch.id, e.target.value)}
                       style={{ flex: 1, background: "none", border: "none", outline: "none", fontSize: 12, fontWeight: 600, color: "var(--text-dim)", fontFamily: "inherit", padding: "2px 4px" }} />
-                    <button onClick={() => addLesson(part.id, ch.id)} style={{ fontSize: 10, background: "none", border: "none", cursor: "pointer", color: "var(--primary)", padding: "2px 4px" }} title="Add Lesson">+L</button>
+                    <button onClick={() => startCreating({ level: "lesson", partId: part.id, chapterId: ch.id })} style={{ fontSize: 10, background: "none", border: "none", cursor: "pointer", color: "var(--primary)", padding: "2px 4px" }} title="Add Lesson">+L</button>
                     <button onClick={() => deleteChapter(part.id, ch.id)} style={{ fontSize: 10, background: "none", border: "none", cursor: "pointer", color: "#ef4444", padding: "2px" }}>✕</button>
                   </div>
 
@@ -203,11 +250,21 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
                       </div>
                     );
                   })}
+                  {creating?.level === "lesson" && creating.partId === part.id && creating.chapterId === ch.id && (
+                    <div style={{ marginLeft: 14, padding: "2px 0" }}>
+                      <NewItemInput style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--primary)", outline: "none", borderRadius: 4, fontSize: 12, color: "var(--foreground)", fontFamily: "inherit", padding: "3px 6px", boxSizing: "border-box" }} />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           ))}
-          <button onClick={addPart} style={{ width: "100%", marginTop: 8, background: "var(--surface-2)", border: "1px dashed var(--border)", borderRadius: 6, padding: "8px", fontSize: 12, color: "var(--text-muted)", cursor: "pointer", fontFamily: "inherit" }}>
+          {creating?.level === "part" && (
+            <div style={{ marginTop: 8 }}>
+              <NewItemInput style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--primary)", outline: "none", borderRadius: 6, padding: "8px", fontSize: 12, color: "var(--foreground)", fontFamily: "inherit", boxSizing: "border-box" }} />
+            </div>
+          )}
+          <button onClick={() => startCreating({ level: "part" })} style={{ width: "100%", marginTop: 8, background: "var(--surface-2)", border: "1px dashed var(--border)", borderRadius: 6, padding: "8px", fontSize: 12, color: "var(--text-muted)", cursor: "pointer", fontFamily: "inherit" }}>
             + Add Part
           </button>
         </div>
