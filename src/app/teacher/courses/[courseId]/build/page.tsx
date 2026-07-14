@@ -1,9 +1,9 @@
 "use client";
-import { useState, useEffect, use, useCallback } from "react";
+import { useState, useEffect, useRef, use, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { CourseContent, Part, Chapter, Lesson, ContentBlock, TextFormat } from "@/lib/course-content";
-import { parseImportJson, findUnknownResourceIds, toCourseContent, fromCourseContent, EXAMPLE_JSON } from "@/lib/course-content-import";
+import { parseImportJson, findUnknownResourceIds, toCourseContent, fromCourseContent, EXAMPLE_JSON, type ImportCourseContent } from "@/lib/course-content-import";
 
 // ─── Tiny ID generator ───────────────────────────────────────────────────────
 function uid() { return Math.random().toString(36).slice(2, 9); }
@@ -47,21 +47,29 @@ function JsonImportPanel({ courseId, currentContent, resources, onImport }: {
   const [errors, setErrors] = useState<string[]>([]);
   const [warnings, setWarnings] = useState<string[]>([]);
   const [loaded, setLoaded] = useState(false);
+  const [fileError, setFileError] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  function checkUnknownResourceIds(data: ImportCourseContent) {
+    const knownIds = new Set(resources.map(r => r.id));
+    const unknown = findUnknownResourceIds(data, knownIds);
+    setWarnings(unknown.length > 0 ? [`These resourceIds don't match anything in your resource library: ${unknown.join(", ")}`] : []);
+  }
 
   function validate() {
     setLoaded(false);
     const result = parseImportJson(text);
     if (!result.ok) { setErrors(result.errors); setWarnings([]); return; }
     setErrors([]);
-    const knownIds = new Set(resources.map(r => r.id));
-    const unknown = findUnknownResourceIds(result.data, knownIds);
-    setWarnings(unknown.length > 0 ? [`These resourceIds don't match anything in your resource library: ${unknown.join(", ")}`] : []);
+    checkUnknownResourceIds(result.data);
     setLoaded(true);
   }
 
   function applyImport() {
     const result = parseImportJson(text);
-    if (!result.ok) return;
+    if (!result.ok) { setErrors(result.errors); setWarnings([]); setLoaded(false); return; }
+    setErrors([]);
+    checkUnknownResourceIds(result.data);
     const hasExisting = currentContent.parts.length > 0;
     if (hasExisting && !confirm("This replaces all current course content (all parts, chapters, and lessons). Continue?")) return;
     onImport(toCourseContent(result.data, courseId));
@@ -78,18 +86,39 @@ function JsonImportPanel({ courseId, currentContent, resources, onImport }: {
     setErrors([]); setWarnings([]); setLoaded(false);
   }
 
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow re-selecting the same file later
+    if (!file) return;
+    setFileError("");
+    if (!file.name.toLowerCase().endsWith(".json") && file.type !== "application/json") {
+      setFileError(`"${file.name}" doesn't look like a .json file.`);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setText(String(reader.result ?? ""));
+      setErrors([]); setWarnings([]); setLoaded(false);
+    };
+    reader.onerror = () => setFileError(`Couldn't read "${file.name}" — please try again.`);
+    reader.readAsText(file);
+  }
+
   return (
     <div style={{ flex: 1, overflowY: "auto", padding: "24px 28px", maxWidth: 900 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
         <h2 style={{ fontSize: 16, fontWeight: 700 }}>Import course content as JSON</h2>
         <div style={{ display: "flex", gap: 8 }}>
+          <input ref={fileInputRef} type="file" accept="application/json,.json" onChange={handleFileChange} style={{ display: "none" }} />
+          <button onClick={() => fileInputRef.current?.click()} style={btn("var(--primary)")}>Upload JSON file…</button>
           <button onClick={loadExample} style={btn("var(--surface-2)", "var(--text-dim)")}>Load example</button>
           <button onClick={exportCurrent} style={btn("var(--surface-2)", "var(--text-dim)")} disabled={currentContent.parts.length === 0}>Export current as JSON</button>
         </div>
       </div>
+      {fileError && <p style={{ fontSize: 12, color: "#ef4444", marginTop: -8, marginBottom: 16 }}>{fileError}</p>}
 
       <p style={{ fontSize: 13, color: "var(--text-dim)", lineHeight: 1.6, marginBottom: 16 }}>
-        Paste a JSON object shaped like <code>{"{ parts: [{ title, chapters: [{ title, lessons: [{ title, blocks: [...] }] }] }] }"}</code>.
+        Upload a <code>.json</code> file, or paste a JSON object shaped like <code>{"{ parts: [{ title, chapters: [{ title, lessons: [{ title, blocks: [...] }] }] }] }"}</code>.
         Titles are required everywhere else is optional. Block types: <code>text</code> (needs <code>content</code>, optional <code>format</code>:
         normal/bold/italic/heading/subheading), <code>video</code> / <code>live_recording</code> / <code>image</code> / <code>link</code> / <code>document</code> (needs a <code>resourceId</code> from
         your resource library, optional <code>caption</code>), or <code>blog</code> (needs <code>blobSlug</code>, optional <code>caption</code>).
@@ -122,7 +151,7 @@ function JsonImportPanel({ courseId, currentContent, resources, onImport }: {
 
       <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
         <button onClick={validate} disabled={!text.trim()} style={btn("var(--surface-2)", "var(--text-dim)")}>Validate</button>
-        <button onClick={applyImport} disabled={!loaded || errors.length > 0} style={btn()}>Import & Replace Content</button>
+        <button onClick={applyImport} disabled={!text.trim()} style={btn()}>Import & Replace Content</button>
       </div>
     </div>
   );
@@ -138,6 +167,7 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
   const [saving, setSaving] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [approvalStatus, setApprovalStatus] = useState<string>("draft");
+  const [actionError, setActionError] = useState("");
   const [saved, setSaved] = useState(false);
   const [creating, setCreating] = useState<{ level: "part" | "chapter" | "lesson"; partId?: string; chapterId?: string } | null>(null);
   const [draftTitle, setDraftTitle] = useState("");
@@ -146,11 +176,8 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
   useEffect(() => {
     fetch(`/api/teacher/courses/${courseId}/content`).then(r => r.json()).then(setContent);
     fetch("/api/teacher/resources").then(r => r.json()).then(d => setResources(Array.isArray(d) ? d : [])).catch(() => setResources([]));
-    fetch("/api/admin/courses/approvals").then(r => r.json()).then(list => {
-      if (Array.isArray(list)) {
-        const a = list.find((x: { courseId: string }) => x.courseId === courseId);
-        if (a) setApprovalStatus(a.status);
-      }
+    fetch(`/api/teacher/courses/${courseId}/submit`).then(r => r.json()).then(d => {
+      if (d?.status) setApprovalStatus(d.status);
     }).catch(() => {});
   }, [courseId]);
 
@@ -260,19 +287,35 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
 
   // ─── Save / Submit ────────────────────────────────────────────────────────
 
-  async function save() {
+  async function persist(newContent: CourseContent): Promise<boolean> {
     setSaving(true);
-    await fetch(`/api/teacher/courses/${courseId}/content`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(content) });
+    setActionError("");
+    const res = await fetch(`/api/teacher/courses/${courseId}/content`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(newContent) });
     setSaving(false);
+    if (!res.ok) {
+      setActionError("Save failed — your changes weren't persisted. Please try again.");
+      return false;
+    }
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
+    return true;
+  }
+
+  function save(): Promise<boolean> {
+    return persist(content);
   }
 
   async function submitForReview() {
-    await save();
+    const ok = await save();
+    if (!ok) return;
     setSubmitting(true);
-    await fetch(`/api/teacher/courses/${courseId}/submit`, { method: "POST" });
+    setActionError("");
+    const res = await fetch(`/api/teacher/courses/${courseId}/submit`, { method: "POST" });
     setSubmitting(false);
+    if (!res.ok) {
+      setActionError("Submit failed — this course wasn't sent for review. Please try again.");
+      return;
+    }
     setApprovalStatus("pending");
   }
 
@@ -302,6 +345,7 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
               </span>
             )}
           </div>
+          {actionError && <p style={{ color: "#ef4444", fontSize: 12, marginTop: 8, marginBottom: 0 }}>{actionError}</p>}
           <div style={{ display: "flex", gap: 4, marginTop: 10, background: "var(--surface-2)", borderRadius: 6, padding: 3 }}>
             <button onClick={() => setMode("visual")} style={{ flex: 1, fontSize: 11, fontWeight: 600, padding: "5px 8px", borderRadius: 4, border: "none", cursor: "pointer", fontFamily: "inherit", background: mode === "visual" ? "var(--primary)" : "transparent", color: mode === "visual" ? "white" : "var(--text-muted)" }}>
               Visual Editor
@@ -384,7 +428,7 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
           courseId={courseId}
           currentContent={content}
           resources={resources}
-          onImport={(imported) => { setContent(imported); setSelected(null); setMode("visual"); }}
+          onImport={(imported) => { setContent(imported); setSelected(null); setMode("visual"); persist(imported); }}
         />
       ) : (
       <div style={{ flex: 1, overflowY: "auto", padding: "24px 28px" }}>
