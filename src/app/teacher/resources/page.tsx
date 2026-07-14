@@ -20,6 +20,7 @@ export default function TeacherResourcesPage() {
   const [filter, setFilter] = useState("all");
   const [form, setForm] = useState({ type: "video", tag: "", title: "", description: "", url: "", published: false });
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
   function load() {
     fetch("/api/teacher/resources").then(r => r.json()).then(d => { setResources(Array.isArray(d) ? d : []); setLoading(false); });
@@ -31,8 +32,14 @@ export default function TeacherResourcesPage() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
-    await fetch("/api/teacher/resources", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...form, tag: form.tag || null }) });
+    setError("");
+    const res = await fetch("/api/teacher/resources", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...form, tag: form.tag || null }) });
     setSaving(false);
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      setError(data.error ?? "Something went wrong — the resource wasn't saved.");
+      return;
+    }
     setOpen(false);
     setForm({ type: "video", tag: "", title: "", description: "", url: "", published: false });
     load();
@@ -63,7 +70,7 @@ export default function TeacherResourcesPage() {
           <Link href="/teacher/blogs/new" style={{ background: "var(--surface-2)", border: "1px solid var(--border)", color: "var(--text-dim)", textDecoration: "none", padding: "9px 16px", borderRadius: 8, fontSize: 13 }}>
             ✍️ New Blog
           </Link>
-          <button onClick={() => setOpen(true)} style={{ background: "#34d399", color: "#0a0e1a", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+          <button onClick={() => { setError(""); setOpen(true); }} style={{ background: "#34d399", color: "#0a0e1a", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
             + Add Resource
           </button>
         </div>
@@ -145,6 +152,7 @@ export default function TeacherResourcesPage() {
                 <input type="checkbox" checked={form.published} onChange={e => set("published", e.target.checked)} />
                 Publish immediately
               </label>
+              {error && <p style={{ color: "#ef4444", fontSize: 13, margin: 0 }}>{error}</p>}
               <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
                 <button type="button" onClick={() => setOpen(false)} style={{ flex: 1, background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 8, padding: 10, fontSize: 13, cursor: "pointer", color: "var(--text-dim)", fontFamily: "inherit" }}>Cancel</button>
                 <button type="submit" disabled={saving} style={{ flex: 2, background: "#34d399", color: "#0a0e1a", border: "none", borderRadius: 8, padding: 10, fontSize: 13, fontWeight: 700, cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1, fontFamily: "inherit" }}>
