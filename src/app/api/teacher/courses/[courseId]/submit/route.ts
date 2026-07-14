@@ -5,6 +5,16 @@ import { sendMail, ADMIN } from "@/lib/mailer";
 
 type Params = { params: Promise<{ courseId: string }> };
 
+export async function GET(_: NextRequest, { params }: Params) {
+  const session = await auth();
+  const role = (session?.user as { role?: string })?.role;
+  if (!session || (role !== "admin" && role !== "teacher")) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { courseId } = await params;
+
+  const approval = await db.courseApproval.findUnique({ where: { courseId } });
+  return NextResponse.json({ status: approval?.status ?? "draft" });
+}
+
 export async function POST(_: NextRequest, { params }: Params) {
   const session = await auth();
   const role = (session?.user as { role?: string })?.role;
