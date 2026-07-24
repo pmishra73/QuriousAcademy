@@ -31,7 +31,31 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const prasant = await db.user.findFirst({ where: { role: "admin" }, select: { id: true } });
   const ownerId = post.authorId || prasant?.id || "";
   const embed = post.videoUrl ? parseVideo(post.videoUrl) : null;
+  const hasBoth = !!(post.imageUrl && embed);
   const postUrl = `https://quriousacademy.com/blog/${post.slug}`;
+  const postTitle = post.title.replace(/"/g, "&quot;");
+
+  function videoBlock() {
+    if (!embed) return "";
+    if (embed.type === "youtube") {
+      return `<div style="position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden;margin:32px 0">
+        <iframe src="https://www.youtube-nocookie.com/embed/${embed.id}" title="${postTitle}" style="position:absolute;inset:0;width:100%;height:100%;border:none" allowfullscreen allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+      </div>`;
+    }
+    return `<div style="position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden;margin:32px 0">
+      <iframe src="${embed.src}" title="${postTitle}" style="position:absolute;inset:0;width:100%;height:100%;border:none" allowfullscreen allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+    </div>`;
+  }
+
+  function injectVideoBeforeLastParagraph(html: string): string {
+    const vid = videoBlock();
+    if (!vid) return html;
+    const lastP = html.lastIndexOf("<p");
+    if (lastP === -1) return html + vid;
+    return html.slice(0, lastP) + vid + html.slice(lastP);
+  }
+
+  const articleHtml = hasBoth ? injectVideoBeforeLastParagraph(post.contentHtml) : post.contentHtml;
 
   return (
     <div>
@@ -59,8 +83,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             </div>
           )}
 
-          {/* Embedded video — right after image (or title if no image) */}
-          {embed && (
+          {/* Embedded video — in hero only when there is no cover image */}
+          {embed && !hasBoth && (
             <div style={{ marginBottom: 28 }}>
               {embed.type === "youtube" ? (
                 <YouTubeEmbed videoId={embed.id} title={post.title} />
@@ -99,7 +123,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
       {/* Article body */}
       <section style={{ padding: "48px 24px 40px" }}>
-        <div style={{ maxWidth: 720, margin: "0 auto" }} className="prose" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
+        <div style={{ maxWidth: 720, margin: "0 auto" }} className="prose" dangerouslySetInnerHTML={{ __html: articleHtml }} />
       </section>
 
       {/* Suggest edit + share */}
