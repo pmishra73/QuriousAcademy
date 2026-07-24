@@ -63,6 +63,19 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </div>
       </section>
 
+      {/* Cover image */}
+      {post.imageUrl && (
+        <section style={{ padding: "32px 24px 0" }}>
+          <div style={{ maxWidth: 720, margin: "0 auto" }}>
+            <img
+              src={post.imageUrl}
+              alt={post.title}
+              style={{ width: "100%", maxHeight: 400, objectFit: "cover", borderRadius: 12, border: "1px solid var(--border)" }}
+            />
+          </div>
+        </section>
+      )}
+
       {/* Embedded video */}
       {embed && (
         <section style={{ padding: "40px 24px 0" }}>

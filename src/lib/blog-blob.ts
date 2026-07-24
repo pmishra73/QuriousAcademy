@@ -14,6 +14,7 @@ export type BlogMeta = {
   author: string;
   authorId: string;
   videoUrl?: string;
+  imageUrl?: string;
   published: boolean;
   createdAt: string;
   updatedAt: string;
@@ -31,6 +32,7 @@ export type BlogPostWithHtml = BlogMeta & { contentHtml: string };
 function toMeta(p: {
   slug: string; title: string; excerpt: string; category: string;
   author: string; authorId: string | null; videoUrl: string | null;
+  imageUrl: string | null;
   published: boolean; createdAt: Date; updatedAt: Date;
   linkedinRequested: boolean; linkedinApprovalStatus: string;
   linkedinStatus: string; linkedinPostedAt: Date | null;
@@ -44,6 +46,7 @@ function toMeta(p: {
     author: p.author,
     authorId: p.authorId ?? "",
     videoUrl: p.videoUrl ?? undefined,
+    imageUrl: p.imageUrl ?? undefined,
     published: p.published,
     createdAt: p.createdAt.toISOString(),
     updatedAt: p.updatedAt.toISOString(),
@@ -58,7 +61,7 @@ function toMeta(p: {
 
 const META_SELECT = {
   slug: true, title: true, excerpt: true, category: true,
-  author: true, authorId: true, videoUrl: true, published: true,
+  author: true, authorId: true, videoUrl: true, imageUrl: true, published: true,
   createdAt: true, updatedAt: true,
   linkedinRequested: true, linkedinApprovalStatus: true,
   linkedinStatus: true, linkedinPostedAt: true,
@@ -77,7 +80,7 @@ export async function getBlog(slug: string): Promise<BlogPostWithHtml | null> {
   const row = await db.blogPost.findUnique({ where: { slug }, select: META_SELECT });
   if (!row) return null;
   const body = (await getBlogBody(slug)) ?? "";
-  const contentHtml = (await remark().use(remarkHtml).process(body)).toString();
+  const contentHtml = (await remark().use(remarkHtml, { sanitize: false }).process(body)).toString();
   return { ...toMeta(row), contentHtml };
 }
 
@@ -96,6 +99,7 @@ export async function saveBlog(post: BlogPost): Promise<string> {
     author: post.author,
     authorId: post.authorId || null,
     videoUrl: post.videoUrl ?? null,
+    imageUrl: post.imageUrl ?? null,
     published: post.published,
     linkedinRequested: post.linkedinRequested ?? false,
     linkedinApprovalStatus: post.linkedinApprovalStatus ?? "none",
@@ -107,7 +111,7 @@ export async function saveBlog(post: BlogPost): Promise<string> {
   await db.blogPost.upsert({
     where: { slug: post.slug },
     create: { slug: post.slug, body: "", ...data },
-    update: data,
+    update: { ...data, imageUrl: data.imageUrl }, // explicit to satisfy TS
   });
   await putBlogBody(post.slug, post.body);
   return post.slug;
