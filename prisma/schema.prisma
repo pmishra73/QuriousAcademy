@@ -283,18 +283,25 @@ model Announcement {
 // ─── Blog Posts ──────────────────────────────────────────────────────────────
 
 model BlogPost {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  title       String
-  excerpt     String
-  body        String
-  category    String
-  author      String
-  authorId    String?
-  instituteId String?
-  published   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                     String    @id @default(cuid())
+  slug                   String    @unique
+  title                  String
+  excerpt                String
+  body                   String    // legacy — body now stored in R2; kept for old /api/teacher/blogs routes
+  category               String
+  author                 String
+  authorId               String?
+  instituteId            String?
+  videoUrl               String?
+  published              Boolean   @default(false)
+  linkedinRequested      Boolean   @default(false)
+  linkedinApprovalStatus String    @default("none")
+  linkedinStatus         String    @default("idle")
+  linkedinPostedAt       DateTime?
+  linkedinPostUrl        String?
+  linkedinAdminNote      String?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
 }
 
 // ─── Course Approvals ────────────────────────────────────────────────────────
