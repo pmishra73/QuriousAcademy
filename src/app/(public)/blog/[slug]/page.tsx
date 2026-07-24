@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import SuggestEditButton from "@/components/SuggestEditButton";
 import ShareButtons from "@/components/ShareButtons";
 import YouTubeEmbed from "@/components/YouTubeEmbed";
+import BlogComments from "@/components/BlogComments";
 import { parseVideo } from "@/lib/video-embed";
 
 export const dynamic = "force-dynamic";
@@ -44,8 +45,41 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             <span style={{ fontSize: 12, padding: "4px 12px", borderRadius: 100, background: bg, color, fontWeight: 600 }}>{post.category}</span>
             {post.videoUrl && <span style={{ fontSize: 12, color: "#34d399" }}>▶ Includes video</span>}
           </div>
-          <h1 style={{ fontSize: "clamp(28px,4vw,46px)", lineHeight: 1.25, marginBottom: 20 }}>{post.title}</h1>
+
+          <h1 style={{ fontSize: "clamp(28px,4vw,46px)", lineHeight: 1.25, marginBottom: 24 }}>{post.title}</h1>
+
+          {/* Cover image — right after title */}
+          {post.imageUrl && (
+            <div style={{ marginBottom: 28 }}>
+              <img
+                src={post.imageUrl}
+                alt={post.title}
+                style={{ width: "100%", maxHeight: 420, objectFit: "cover", borderRadius: 12, border: "1px solid var(--border)" }}
+              />
+            </div>
+          )}
+
+          {/* Embedded video — right after image (or title if no image) */}
+          {embed && (
+            <div style={{ marginBottom: 28 }}>
+              {embed.type === "youtube" ? (
+                <YouTubeEmbed videoId={embed.id} title={post.title} />
+              ) : (
+                <div style={{ position: "relative", paddingTop: "56.25%", borderRadius: 12, overflow: "hidden", background: "#0a0e1a" }}>
+                  <iframe
+                    src={embed.src}
+                    title={post.title}
+                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
+                    allowFullScreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
           <p style={{ fontSize: 16, color: "var(--text-dim)", lineHeight: 1.7, marginBottom: 28 }}>{post.excerpt}</p>
+
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, paddingTop: 20, borderTop: "1px solid var(--border)", flexWrap: "wrap" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
               <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,var(--primary),var(--violet))", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: "white", flexShrink: 0 }}>
@@ -63,40 +97,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </div>
       </section>
 
-      {/* Cover image */}
-      {post.imageUrl && (
-        <section style={{ padding: "32px 24px 0" }}>
-          <div style={{ maxWidth: 720, margin: "0 auto" }}>
-            <img
-              src={post.imageUrl}
-              alt={post.title}
-              style={{ width: "100%", maxHeight: 400, objectFit: "cover", borderRadius: 12, border: "1px solid var(--border)" }}
-            />
-          </div>
-        </section>
-      )}
-
-      {/* Embedded video */}
-      {embed && (
-        <section style={{ padding: "40px 24px 0" }}>
-          <div style={{ maxWidth: 720, margin: "0 auto" }}>
-            {embed.type === "youtube" ? (
-              <YouTubeEmbed videoId={embed.id} title={post.title} />
-            ) : (
-              <div style={{ position: "relative", paddingTop: "56.25%", borderRadius: 12, overflow: "hidden", background: "#0a0e1a" }}>
-                <iframe
-                  src={embed.src}
-                  title={post.title}
-                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
-                  allowFullScreen
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                />
-              </div>
-            )}
-          </div>
-        </section>
-      )}
-
       {/* Article body */}
       <section style={{ padding: "48px 24px 40px" }}>
         <div style={{ maxWidth: 720, margin: "0 auto" }} className="prose" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
@@ -107,6 +107,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
           <ShareButtons url={postUrl} title={post.title} />
           <SuggestEditButton contentType="blog" contentId={slug} contentTitle={post.title} ownerId={ownerId} />
+        </div>
+      </section>
+
+      {/* Comments */}
+      <section style={{ padding: "0 24px 64px" }}>
+        <div style={{ maxWidth: 720, margin: "0 auto", borderTop: "1px solid var(--border)", paddingTop: 40 }}>
+          <BlogComments slug={slug} />
         </div>
       </section>
 
