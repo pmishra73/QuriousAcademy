@@ -10,7 +10,7 @@ const TAG_COLOR: Record<string, string> = { live_class: "#f59e0b", recorded: "#3
 const inputStyle: React.CSSProperties = { width: "100%", background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 8, padding: "9px 12px", fontSize: 13, color: "var(--foreground)", outline: "none", boxSizing: "border-box", fontFamily: "inherit" };
 const labelStyle: React.CSSProperties = { fontSize: 11, color: "var(--text-muted)", display: "block", marginBottom: 5, textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 600 };
 
-const TYPES = ["video", "live_recording", "image", "link", "document"];
+const TYPES = ["video", "live_recording", "image", "link", "document", "blog"];
 const TAGS = ["", "live_class", "recorded", "supplementary"];
 
 export default function TeacherResourcesPage() {

@@ -8,6 +8,7 @@ import { typeConfig, sectionOrder } from "@/lib/variants";
 import type { CourseVariant } from "@/lib/variants";
 import type { MergedVariant } from "@/lib/courseOverrides";
 import ContentUnlockModal from "@/components/ContentUnlockModal";
+import NotifyMeButton from "@/components/NotifyMeButton";
 
 function CourseIcon({ name, size = 20 }: { name: string; size?: number }) {
   const Icon = (LucideIcons as unknown as Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>>)[name];
@@ -166,13 +167,7 @@ function VariantCard({ v, onUnlock }: { v: MergedVariant; onUnlock: (v: CourseVa
             See Syllabus ↓
           </button>
           {v.status === "coming_soon" ? (
-            <Link href={`/courses/${v.id}`} style={{
-              fontSize: 12, fontWeight: 600, padding: "8px 14px", borderRadius: 7,
-              background: "rgba(251,191,36,0.12)", color: "#fbbf24",
-              border: "1px solid rgba(251,191,36,0.3)", whiteSpace: "nowrap",
-            }}>
-              Coming Soon →
-            </Link>
+            <NotifyMeButton courseId={v.id} courseTitle={v.title} compact />
           ) : (
             <Link href={`/enroll?course=${v.id}`} style={{
               fontSize: 12, fontWeight: 600, padding: "8px 14px", borderRadius: 7,

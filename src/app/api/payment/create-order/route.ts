@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Razorpay from "razorpay";
-import { variants } from "@/lib/variants";
-import { courses } from "@/lib/courses";
-import { validateCoupon } from "@/lib/sheets";
+import { validateCoupon } from "@/lib/coupon";
+import { getMergedVariants } from "@/lib/courseOverrides";
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID!,
@@ -12,25 +11,27 @@ const razorpay = new Razorpay({
 export async function POST(req: NextRequest) {
   const { courseId, couponCode } = await req.json();
 
-  const variant = variants.find((v) => v.id === courseId);
-  const course = courses.find((c) => c.id === courseId);
-  const baseAmount = variant?.price ?? course?.price ?? 0;
-  const name = variant?.title ?? course?.title ?? "";
+  const allVariants = await getMergedVariants();
+  const variant = allVariants.find((v) => v.id === courseId);
 
-  if (!baseAmount) {
-    return NextResponse.json({ error: "Course not found" }, { status: 404 });
+  if (!variant || variant.status !== "active") {
+    return NextResponse.json({ error: "Course not found or not available for enrollment" }, { status: 404 });
   }
 
-  // Apply 10% coupon discount if provided
+  const baseAmount = variant.price;
+  const name = variant.title;
+
   let finalAmount = baseAmount;
   let discountApplied = false;
+  let discountPercent = 0;
   let couponError: string | undefined;
 
   if (couponCode?.trim()) {
     try {
       const result = await validateCoupon(couponCode.trim().toUpperCase());
       if (result.valid) {
-        finalAmount = Math.round(baseAmount * 0.9);
+        discountPercent = result.discount ?? 10;
+        finalAmount = Math.round(baseAmount * (1 - discountPercent / 100));
         discountApplied = true;
       } else {
         couponError = result.reason;
@@ -62,6 +63,7 @@ export async function POST(req: NextRequest) {
       baseAmount,
       finalAmount,
       discountApplied,
+      discountPercent,
       couponError,
     });
   } catch (err) {

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { CourseContent, Part, Chapter, Lesson, ContentBlock, TextFormat } from "@/lib/course-content";
 import { parseImportJson, findUnknownResourceIds, toCourseContent, fromCourseContent, EXAMPLE_JSON, type ImportCourseContent } from "@/lib/course-content-import";
+import { variants } from "@/lib/variants";
 
 // ─── Tiny ID generator ───────────────────────────────────────────────────────
 function uid() { return Math.random().toString(36).slice(2, 9); }
@@ -161,6 +162,8 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
   const { courseId } = use(params);
   const router = useRouter();
 
+  const courseTitle = variants.find(v => v.id === courseId)?.title ?? courseId;
+
   const [content, setContent] = useState<CourseContent>({ courseId, updatedAt: "", parts: [] });
   const [selected, setSelected] = useState<{ partId: string; chapterId: string; lessonId: string } | null>(null);
   const [resources, setResources] = useState<Resource[]>([]);
@@ -172,6 +175,8 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
   const [creating, setCreating] = useState<{ level: "part" | "chapter" | "lesson"; partId?: string; chapterId?: string } | null>(null);
   const [draftTitle, setDraftTitle] = useState("");
   const [mode, setMode] = useState<"visual" | "json">("visual");
+  const [renamingLesson, setRenamingLesson] = useState<{ partId: string; chapterId: string; lessonId: string; value: string } | null>(null);
+  const [resourceSearch, setResourceSearch] = useState("");
 
   useEffect(() => {
     fetch(`/api/teacher/courses/${courseId}/content`).then(r => r.json()).then(setContent);
@@ -329,8 +334,9 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
       <div style={{ width: 280, flexShrink: 0, borderRight: "1px solid var(--border)", overflowY: "auto", display: "flex", flexDirection: "column" }}>
         {/* Header */}
         <div style={{ padding: "16px 14px 12px", borderBottom: "1px solid var(--border)" }}>
-          <div style={{ fontSize: 11, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 4 }}>Course</div>
-          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 12 }}>{courseId}</div>
+          <div style={{ fontSize: 11, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 2 }}>Course</div>
+          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 2, lineHeight: 1.3 }}>{courseTitle}</div>
+          <div style={{ fontSize: 10, color: "var(--text-muted)", marginBottom: 10, fontFamily: "monospace" }}>{courseId}</div>
           <div style={{ display: "flex", gap: 6 }}>
             <button style={btn(saved ? "#34d399" : "var(--primary)")} onClick={save} disabled={saving}>
               {saving ? "Saving…" : saved ? "Saved ✓" : "Save"}
@@ -388,16 +394,38 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
                   {/* Lessons */}
                   {ch.lessons.map(l => {
                     const isActive = selected?.lessonId === l.id;
+                    const isRenaming = renamingLesson?.lessonId === l.id;
                     return (
                       <div key={l.id} style={{ marginLeft: 14, display: "flex", alignItems: "center", gap: 4, padding: "2px 0" }}>
-                        <button onClick={() => setSelected({ partId: part.id, chapterId: ch.id, lessonId: l.id })}
-                          style={{ flex: 1, textAlign: "left", background: isActive ? "rgba(91,124,250,0.12)" : "none", border: "none", borderRadius: 4, padding: "3px 6px", fontSize: 12, color: isActive ? "var(--primary)" : "var(--text-muted)", cursor: "pointer", fontFamily: "inherit", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                          {l.title}
-                        </button>
-                        <button onClick={() => {
-                          const newTitle = prompt("Rename lesson:", l.title);
-                          if (newTitle) updateLessonTitle(part.id, ch.id, l.id, newTitle);
-                        }} style={{ fontSize: 10, background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", padding: "2px" }}>✎</button>
+                        {isRenaming ? (
+                          <input
+                            autoFocus
+                            value={renamingLesson.value}
+                            onChange={e => setRenamingLesson(r => r ? { ...r, value: e.target.value } : r)}
+                            onKeyDown={e => {
+                              if (e.key === "Enter") {
+                                if (renamingLesson.value.trim()) updateLessonTitle(renamingLesson.partId, renamingLesson.chapterId, renamingLesson.lessonId, renamingLesson.value.trim());
+                                setRenamingLesson(null);
+                              } else if (e.key === "Escape") {
+                                setRenamingLesson(null);
+                              }
+                            }}
+                            onBlur={() => {
+                              if (renamingLesson?.value.trim()) updateLessonTitle(renamingLesson.partId, renamingLesson.chapterId, renamingLesson.lessonId, renamingLesson.value.trim());
+                              setRenamingLesson(null);
+                            }}
+                            style={{ flex: 1, background: "var(--surface-2)", border: "1px solid var(--primary)", outline: "none", borderRadius: 4, fontSize: 12, color: "var(--foreground)", fontFamily: "inherit", padding: "2px 6px", boxSizing: "border-box" }}
+                          />
+                        ) : (
+                          <button onClick={() => setSelected({ partId: part.id, chapterId: ch.id, lessonId: l.id })}
+                            style={{ flex: 1, textAlign: "left", background: isActive ? "rgba(91,124,250,0.12)" : "none", border: "none", borderRadius: 4, padding: "3px 6px", fontSize: 12, color: isActive ? "var(--primary)" : "var(--text-muted)", cursor: "pointer", fontFamily: "inherit", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                            {l.title}
+                          </button>
+                        )}
+                        {!isRenaming && (
+                          <button onClick={() => setRenamingLesson({ partId: part.id, chapterId: ch.id, lessonId: l.id, value: l.title })}
+                            style={{ fontSize: 10, background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", padding: "2px" }}>✎</button>
+                        )}
                         <button onClick={() => deleteLesson(part.id, ch.id, l.id)} style={{ fontSize: 10, background: "none", border: "none", cursor: "pointer", color: "#ef4444", padding: "2px" }}>✕</button>
                       </div>
                     );
@@ -502,14 +530,31 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
               ) : (
                 <>
                   <span style={{ fontSize: 11, color: "var(--text-muted)", alignSelf: "center" }}>Add resource:</span>
-                  {resources.slice(0, 8).map(r => (
-                    <button key={r.id} onClick={() => addResourceBlock(r)}
-                      style={{ ...btn("var(--surface-2)", "var(--text-muted)"), fontSize: 11, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
-                      title={r.title}>
-                      {r.type === "video" ? "🎬" : r.type === "live_recording" ? "📹" : r.type === "image" ? "🖼️" : "🔗"} {r.title}
-                    </button>
-                  ))}
-                  {resources.length > 8 && <span style={{ fontSize: 11, color: "var(--text-muted)", alignSelf: "center" }}>+{resources.length - 8} more in library</span>}
+                  <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                    <input
+                      value={resourceSearch}
+                      onChange={e => setResourceSearch(e.target.value)}
+                      placeholder="Filter resources…"
+                      style={{ ...inp, width: 160, padding: "5px 8px", fontSize: 11 }}
+                    />
+                    <select
+                      value=""
+                      onChange={e => {
+                        const r = resources.find(r => r.id === e.target.value);
+                        if (r) { addResourceBlock(r); setResourceSearch(""); }
+                      }}
+                      style={{ ...inp, width: 220, padding: "5px 8px", fontSize: 11 }}
+                    >
+                      <option value="">— select to attach —</option>
+                      {resources
+                        .filter(r => !resourceSearch || r.title.toLowerCase().includes(resourceSearch.toLowerCase()))
+                        .map(r => (
+                          <option key={r.id} value={r.id}>
+                            {r.type === "video" ? "🎬" : r.type === "live_recording" ? "📹" : r.type === "image" ? "🖼️" : "🔗"} {r.title}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
                 </>
               )}
             </div>

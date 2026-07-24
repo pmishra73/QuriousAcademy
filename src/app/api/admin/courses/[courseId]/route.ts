@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getMergedVariants } from "@/lib/courseOverrides";
+import { auth } from "@/lib/auth";
+
+function adminOnly() {
+  return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+}
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ courseId: string }> }
 ) {
+  const session = await auth();
+  if ((session?.user as { role?: string })?.role !== "admin") return adminOnly();
   const { courseId } = await params;
   const all = await getMergedVariants();
   const variant = all.find((v) => v.id === courseId);
@@ -17,6 +24,8 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ courseId: string }> }
 ) {
+  const session = await auth();
+  if ((session?.user as { role?: string })?.role !== "admin") return adminOnly();
   const { courseId } = await params;
   const fields = await req.json();
 

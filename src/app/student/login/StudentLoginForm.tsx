@@ -68,6 +68,11 @@ function Form() {
           {loading ? "Signing in…" : "Sign in →"}
         </button>
       </form>
+      <p style={{ textAlign: "right", marginTop: 10 }}>
+        <a href="/student/forgot-password" style={{ fontSize: 12, color: "var(--text-muted)", textDecoration: "none" }}>
+          Forgot password?
+        </a>
+      </p>
     </>
   );
 }

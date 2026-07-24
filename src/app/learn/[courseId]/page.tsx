@@ -4,6 +4,7 @@ import { getCourseContent, extractCurriculum } from "@/lib/course-content";
 import { db } from "@/lib/db";
 import { variants } from "@/lib/variants";
 import { getStudentSession } from "@/lib/student-session";
+import { auth } from "@/lib/auth";
 import LearnShell from "./LearnShell";
 
 export const dynamic = "force-dynamic";
@@ -19,6 +20,8 @@ export default async function LearnPage({ params, searchParams }: {
   if (!variant) notFound();
 
   const student = await getStudentSession();
+  const staffSession = await auth();
+  const isAdmin = (staffSession?.user as { role?: string })?.role === "admin";
 
   // Legacy links (?email=...) from pre-account emails no longer grant silent
   // access — prompt the student to log in instead.
@@ -49,12 +52,53 @@ export default async function LearnPage({ params, searchParams }: {
   const approval = await db.courseApproval.findUnique({ where: { courseId } });
   const content = await getCourseContent(courseId);
 
-  if (!content || !approval || approval.status !== "approved") {
+  if (!content) {
     return (
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", flexDirection: "column", gap: 12, color: "var(--text-muted)", fontFamily: "system-ui,sans-serif" }}>
         <div style={{ fontSize: 40 }}>🔒</div>
         <div style={{ fontSize: 18, fontWeight: 600, color: "var(--foreground)" }}>Content coming soon</div>
         <div style={{ fontSize: 14 }}>The course content for <strong>{variant.title}</strong> is being prepared.</div>
+        {isAdmin && (
+          <Link href={`/teacher/courses/${courseId}/build`} style={{ background: "var(--primary)", color: "white", padding: "10px 20px", borderRadius: 7, fontWeight: 500, fontSize: 13, textDecoration: "none", marginTop: 8 }}>
+            Open Builder →
+          </Link>
+        )}
+      </div>
+    );
+  }
+
+  if (!isAdmin && (!approval || approval.status !== "approved")) {
+    return (
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", flexDirection: "column", gap: 12, color: "var(--text-muted)", fontFamily: "system-ui,sans-serif" }}>
+        <div style={{ fontSize: 40 }}>🔒</div>
+        <div style={{ fontSize: 18, fontWeight: 600, color: "var(--foreground)" }}>Content coming soon</div>
+        <div style={{ fontSize: 14 }}>The course content for <strong>{variant.title}</strong> is being prepared.</div>
+      </div>
+    );
+  }
+
+  if (!isAdmin && !student) {
+    return (
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", flexDirection: "column", gap: 16, color: "var(--text-muted)", fontFamily: "system-ui,sans-serif", padding: 24, textAlign: "center" }}>
+        <div style={{ fontSize: 40 }}>🔒</div>
+        <div style={{ fontSize: 18, fontWeight: 600, color: "var(--foreground)" }}>Log in to access this course</div>
+        <div style={{ fontSize: 14, maxWidth: 360 }}>You need to be logged in and enrolled to view course content.</div>
+        <Link href="/student/login" style={{ background: "var(--primary)", color: "white", padding: "10px 20px", borderRadius: 7, fontWeight: 500, fontSize: 13, textDecoration: "none" }}>
+          Log in →
+        </Link>
+      </div>
+    );
+  }
+
+  if (!isAdmin && !enrolled) {
+    return (
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", flexDirection: "column", gap: 16, color: "var(--text-muted)", fontFamily: "system-ui,sans-serif", padding: 24, textAlign: "center" }}>
+        <div style={{ fontSize: 40 }}>🎓</div>
+        <div style={{ fontSize: 18, fontWeight: 600, color: "var(--foreground)" }}>You are not enrolled in this course</div>
+        <div style={{ fontSize: 14, maxWidth: 380 }}>Enroll in <strong>{variant.title}</strong> to access the full course content.</div>
+        <Link href={`/enroll?course=${courseId}`} style={{ background: "var(--primary)", color: "white", padding: "10px 20px", borderRadius: 7, fontWeight: 500, fontSize: 13, textDecoration: "none" }}>
+          Enroll now →
+        </Link>
       </div>
     );
   }

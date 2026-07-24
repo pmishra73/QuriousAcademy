@@ -185,7 +185,8 @@ export default function CourseEditPage() {
             ))}
           </div>
           <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 16, lineHeight: 1.6 }}>
-            Content (curriculum, sessions, outcomes) is edited by running the course content script. See <code>scripts/generate-brochure.ts</code>.
+            Curriculum and lesson content is managed in the Course Builder.{" "}
+            <a href={`/teacher/courses/${courseId}/build`} style={{ color: "var(--primary)", textDecoration: "none" }}>Open the builder →</a>
           </p>
         </div>
 

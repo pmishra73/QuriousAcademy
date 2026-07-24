@@ -83,6 +83,7 @@ model Enrollment {
   discountApplied   Int              @default(0)
   status            EnrollmentStatus @default(pending)
   couponCode        String?
+  batchDate         String?
   createdAt         DateTime         @default(now())
 
   studentId String?
