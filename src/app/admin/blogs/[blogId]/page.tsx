@@ -4,6 +4,21 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { buildPostText } from "@/lib/linkedin-post-text";
 
+function compressImage(file: File, maxWidth: number, quality: number): Promise<Blob> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, maxWidth / img.width);
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext("2d")!.drawImage(img, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob((blob) => resolve(blob ?? file), "image/jpeg", quality);
+    };
+    img.src = URL.createObjectURL(file);
+  });
+}
+
 const inp: React.CSSProperties = {
   width: "100%", background: "var(--surface-2)", border: "1px solid var(--border)",
   color: "var(--foreground)", borderRadius: 8, padding: "10px 14px",
@@ -72,8 +87,9 @@ export default function AdminEditBlogPage({ params }: { params: Promise<{ blogId
     const file = e.target.files?.[0];
     if (!file) return;
     setImageUploading(true);
+    const compressed = await compressImage(file, 1200, 0.85);
     const fd = new FormData();
-    fd.append("file", file);
+    fd.append("file", compressed, file.name);
     fd.append("slug", form.slug || "blog");
     const res = await fetch("/api/teacher/blogs-blob/upload-image", { method: "POST", body: fd });
     const data = await res.json();
