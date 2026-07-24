@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { auth } from "@/lib/auth";
 import bcrypt from "bcryptjs";
 
+function adminOnly() {
+  return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+}
+
 export async function GET(req: NextRequest) {
+  const session = await auth();
+  if ((session?.user as { role?: string })?.role !== "admin") return adminOnly();
+
   const q = req.nextUrl.searchParams.get("q")?.trim();
 
   const teachers = await db.user.findMany({
@@ -24,6 +32,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const session = await auth();
+  if ((session?.user as { role?: string })?.role !== "admin") return adminOnly();
+
   const { name, email, password, bio, slug, instituteId } = await req.json();
   if (!name?.trim() || !email?.trim() || !password?.trim()) {
     return NextResponse.json({ error: "Name, email and password are required." }, { status: 400 });

@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateCoupon } from "@/lib/coupon";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
+  const { allowed } = checkRateLimit(`coupon:${ip}`, 20, 60 * 60 * 1000); // 20 attempts / hour
+  if (!allowed) {
+    return NextResponse.json({ valid: false, reason: "Too many attempts. Please try again later." }, { status: 429 });
+  }
+
   const { code } = await req.json();
   if (!code?.trim()) {
     return NextResponse.json({ valid: false, reason: "No code provided" }, { status: 400 });
