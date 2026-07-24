@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import PasswordInput from "@/components/PasswordInput";
@@ -19,8 +19,61 @@ type Teacher = {
   slug: string | null; active: boolean; instituteId: string | null;
 };
 type Institute = { id: string; name: string };
+type CourseOption = { id: string; title: string };
 
-export default function TeacherEditClient({ teacher, institutes }: { teacher: Teacher; institutes: Institute[] }) {
+function CourseAssignments({ teacherId, allCourses }: { teacherId: string; allCourses: CourseOption[] }) {
+  const [assigned, setAssigned] = useState<string[]>([]);
+  const [saving, setSaving] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch(`/api/admin/teachers/${teacherId}/assignments`).then(r => r.json()).then(setAssigned);
+  }, [teacherId]);
+
+  async function toggle(courseId: string) {
+    setSaving(courseId);
+    const isAssigned = assigned.includes(courseId);
+    await fetch(`/api/admin/teachers/${teacherId}/assignments`, {
+      method: isAssigned ? "DELETE" : "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ courseId }),
+    });
+    setAssigned(prev => isAssigned ? prev.filter(id => id !== courseId) : [...prev, courseId]);
+    setSaving(null);
+  }
+
+  return (
+    <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: 28, marginTop: 24 }}>
+      <h2 style={{ fontSize: 14, fontWeight: 700, marginBottom: 16 }}>Course Assignments</h2>
+      <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 16, lineHeight: 1.6 }}>
+        Teachers can only build content and create sessions for courses they are assigned to.
+      </p>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {allCourses.map(c => {
+          const isAssigned = assigned.includes(c.id);
+          return (
+            <label key={c.id} style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer", padding: "8px 10px", borderRadius: 8, background: isAssigned ? "rgba(52,211,153,0.06)" : "transparent", border: `1px solid ${isAssigned ? "rgba(52,211,153,0.2)" : "var(--border)"}` }}>
+              <input
+                type="checkbox"
+                checked={isAssigned}
+                disabled={saving === c.id}
+                onChange={() => toggle(c.id)}
+                style={{ width: 15, height: 15, accentColor: "#34d399", flexShrink: 0 }}
+              />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 13, fontWeight: 500 }}>{c.title}</div>
+                <div style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: "monospace" }}>{c.id}</div>
+              </div>
+              {saving === c.id && <span style={{ fontSize: 11, color: "var(--text-muted)" }}>Saving…</span>}
+              {isAssigned && saving !== c.id && <span style={{ fontSize: 11, color: "#34d399", fontWeight: 600 }}>✓ Assigned</span>}
+            </label>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export default function TeacherEditClient({ teacher, institutes, allCourses }: { teacher: Teacher; institutes: Institute[]; allCourses: CourseOption[] }) {
   const router = useRouter();
   const [form, setForm] = useState({
     name: teacher.name,
@@ -111,6 +164,8 @@ export default function TeacherEditClient({ teacher, institutes }: { teacher: Te
           </button>
         </div>
       </form>
+
+      <CourseAssignments teacherId={teacher.id} allCourses={allCourses} />
     </div>
   );
 }

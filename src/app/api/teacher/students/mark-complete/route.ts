@@ -9,7 +9,14 @@ export async function POST(req: NextRequest) {
   const role = (session?.user as { role?: string })?.role;
   if (role !== "teacher" && role !== "admin") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+  const userId = (session?.user as { id?: string })?.id;
   const { enrollmentId, studentEmail, studentPhone, studentName, courseId } = await req.json();
+
+  if (role === "teacher") {
+    if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const assignment = await db.courseAssignment.findFirst({ where: { teacherId: userId, courseId } });
+    if (!assignment) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const code = await createCoupon({ reason: "course_completion", completionEnrollmentId: enrollmentId });
 

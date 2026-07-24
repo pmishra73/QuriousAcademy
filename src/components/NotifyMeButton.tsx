@@ -1,20 +1,24 @@
 "use client";
 import { useState } from "react";
 
-export default function NotifyMeButton({ courseId, courseTitle }: { courseId: string; courseTitle: string }) {
+export default function NotifyMeButton({ courseId, courseTitle, compact }: { courseId: string; courseTitle: string; compact?: boolean }) {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ name: "", email: "" });
-  const [state, setState] = useState<"idle" | "loading" | "done">("idle");
+  const [state, setState] = useState<"idle" | "loading" | "done" | "error">("idle");
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setState("loading");
-    await fetch(`/api/courses/${courseId}/notify`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-    setState("done");
+    try {
+      const res = await fetch(`/api/courses/${courseId}/notify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      setState(res.ok ? "done" : "error");
+    } catch {
+      setState("error");
+    }
   }
 
   const inp: React.CSSProperties = {
@@ -28,20 +32,32 @@ export default function NotifyMeButton({ courseId, courseTitle }: { courseId: st
       <button
         onClick={() => setOpen(true)}
         style={{
-          display: "inline-flex", alignItems: "center", gap: 8,
+          display: "inline-flex", alignItems: "center", gap: compact ? 6 : 8,
           background: "rgba(251,191,36,0.12)", color: "#fbbf24",
-          border: "1px solid rgba(251,191,36,0.3)", borderRadius: 8,
-          padding: "12px 24px", fontSize: 15, fontWeight: 600,
-          cursor: "pointer", fontFamily: "inherit",
+          border: "1px solid rgba(251,191,36,0.3)", borderRadius: compact ? 7 : 8,
+          padding: compact ? "8px 14px" : "12px 24px", fontSize: compact ? 12 : 15, fontWeight: 600,
+          cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap",
         }}
       >
-        🔔 Notify Me When Available
+        {compact ? "Notify Me" : "🔔 Notify Me When Available"}
       </button>
 
       {open && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.65)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 300, padding: 24 }}>
           <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 16, padding: 32, width: "min(460px,100%)" }}>
-            {state === "done" ? (
+            {state === "error" ? (
+              <div style={{ textAlign: "center", padding: "16px 0" }}>
+                <div style={{ fontSize: 40, marginBottom: 16 }}>⚠️</div>
+                <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 10 }}>Something went wrong</h2>
+                <p style={{ fontSize: 14, color: "var(--text-muted)", lineHeight: 1.7, marginBottom: 24 }}>
+                  We couldn't save your details. Please try again.
+                </p>
+                <button onClick={() => setState("idle")}
+                  style={{ background: "var(--primary)", color: "white", border: "none", borderRadius: 8, padding: "10px 24px", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
+                  Try again
+                </button>
+              </div>
+            ) : state === "done" ? (
               <div style={{ textAlign: "center", padding: "16px 0" }}>
                 <div style={{ fontSize: 48, marginBottom: 16 }}>🎉</div>
                 <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 10 }}>You're on the list!</h2>
@@ -76,7 +92,7 @@ export default function NotifyMeButton({ courseId, courseTitle }: { courseId: st
                     </button>
                     <button type="submit" disabled={state === "loading"}
                       style={{ flex: 2, background: "#fbbf24", color: "#0a0e1a", border: "none", borderRadius: 8, padding: "10px", fontSize: 13, fontWeight: 700, cursor: state === "loading" ? "not-allowed" : "pointer", opacity: state === "loading" ? 0.7 : 1, fontFamily: "inherit" }}>
-                      {state === "loading" ? "Saving…" : "Notify Me →"}
+                      {state === "loading" ? "Saving…" : "Notify me →"}
                     </button>
                   </div>
                 </form>

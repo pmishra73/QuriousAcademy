@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { auth } from "@/lib/auth";
 import { sendMail, ADMIN } from "@/lib/mailer";
 
 // POST — public: anyone submits a change suggestion
@@ -43,6 +44,10 @@ export async function POST(req: NextRequest) {
 
 // GET — admin only: list all requests
 export async function GET() {
+  const session = await auth();
+  if ((session?.user as { role?: string })?.role !== "admin") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   const requests = await db.contentChangeRequest.findMany({ orderBy: { createdAt: "desc" } });
   return NextResponse.json(requests);
 }

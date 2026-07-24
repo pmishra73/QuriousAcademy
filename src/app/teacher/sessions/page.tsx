@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { variants } from "@/lib/variants";
 import AddSessionButton from "./AddSessionButton";
+import SessionActions from "./SessionActions";
 
 export default async function TeacherSessionsPage() {
   const session = await auth();
@@ -60,7 +61,7 @@ export default async function TeacherSessionsPage() {
                     </div>
                     {s.notes && <p style={{ fontSize: 12, color: "var(--text-dim)", lineHeight: 1.5, margin: 0 }}>{s.notes}</p>}
                   </div>
-                  <div style={{ display: "flex", gap: 10, alignItems: "center", flexShrink: 0 }}>
+                  <div style={{ display: "flex", gap: 10, alignItems: "center", flexShrink: 0, flexWrap: "wrap" }}>
                     {s.meetingLink && (
                       <a href={s.meetingLink} target="_blank" rel="noopener noreferrer"
                         style={{ fontSize: 12, color: "var(--primary)", padding: "5px 12px", borderRadius: 6, border: "1px solid rgba(91,124,250,0.3)", background: "rgba(91,124,250,0.08)" }}>
@@ -70,6 +71,7 @@ export default async function TeacherSessionsPage() {
                     <span style={{ fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 100, background: sc.bg, color: sc.color, border: `1px solid ${sc.border}` }}>
                       {s.status}
                     </span>
+                    <SessionActions session={{ id: s.id, title: s.title, courseId: s.courseId, scheduledAt: s.scheduledAt.toISOString(), meetingLink: s.meetingLink, notes: s.notes, status: s.status }} />
                   </div>
                 </div>
               </div>

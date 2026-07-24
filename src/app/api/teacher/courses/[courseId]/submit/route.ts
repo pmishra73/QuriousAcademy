@@ -5,6 +5,16 @@ import { sendMail, ADMIN } from "@/lib/mailer";
 
 type Params = { params: Promise<{ courseId: string }> };
 
+async function authorizeTeacher(session: { user?: { role?: string; id?: string } } | null, courseId: string): Promise<boolean> {
+  const role = (session?.user as { role?: string })?.role;
+  if (role === "admin") return true;
+  if (role !== "teacher") return false;
+  const userId = (session?.user as { id?: string })?.id;
+  if (!userId) return false;
+  const assignment = await db.courseAssignment.findFirst({ where: { teacherId: userId, courseId } });
+  return !!assignment;
+}
+
 export async function GET(_: NextRequest, { params }: Params) {
   const session = await auth();
   const role = (session?.user as { role?: string })?.role;
@@ -21,6 +31,10 @@ export async function POST(_: NextRequest, { params }: Params) {
   const userId = (session?.user as { id?: string })?.id!;
   if (!session || (role !== "admin" && role !== "teacher")) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { courseId } = await params;
+
+  if (!(await authorizeTeacher(session, courseId))) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const approval = await db.courseApproval.upsert({
     where: { courseId },

@@ -5,11 +5,24 @@ import { db } from "@/lib/db";
 
 type Params = { params: Promise<{ courseId: string }> };
 
+async function authorizeTeacher(session: { user?: { role?: string; id?: string } } | null, courseId: string): Promise<boolean> {
+  const role = (session?.user as { role?: string })?.role;
+  if (role === "admin") return true;
+  if (role !== "teacher") return false;
+  const userId = (session?.user as { id?: string })?.id;
+  if (!userId) return false;
+  const assignment = await db.courseAssignment.findFirst({ where: { teacherId: userId, courseId } });
+  return !!assignment;
+}
+
 export async function GET(_: NextRequest, { params }: Params) {
   const session = await auth();
   const role = (session?.user as { role?: string })?.role;
   if (!session || (role !== "admin" && role !== "teacher")) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { courseId } = await params;
+  if (!(await authorizeTeacher(session, courseId))) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
   const content = await getCourseContent(courseId) ?? emptyCourseContent(courseId);
   return NextResponse.json(content);
 }
@@ -20,6 +33,10 @@ export async function PUT(req: NextRequest, { params }: Params) {
   const userId = (session?.user as { id?: string })?.id!;
   if (!session || (role !== "admin" && role !== "teacher")) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { courseId } = await params;
+
+  if (!(await authorizeTeacher(session, courseId))) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   // Ensure CourseApproval record exists
   await db.courseApproval.upsert({
