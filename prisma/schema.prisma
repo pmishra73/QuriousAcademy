@@ -293,6 +293,7 @@ model BlogPost {
   authorId               String?
   instituteId            String?
   videoUrl               String?
+  imageUrl               String?
   published              Boolean   @default(false)
   linkedinRequested      Boolean   @default(false)
   linkedinApprovalStatus String    @default("none")

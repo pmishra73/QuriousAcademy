@@ -10,6 +10,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const { body } = await req.json();
-  const processed = await remark().use(remarkHtml).process(body ?? "");
+  const processed = await remark().use(remarkHtml, { sanitize: false }).process(body ?? "");
   return NextResponse.json({ html: processed.toString() });
 }

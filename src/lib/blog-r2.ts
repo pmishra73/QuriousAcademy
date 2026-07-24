@@ -1,4 +1,5 @@
 import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import type { Readable } from "stream";
 
 function r2() {
   return new S3Client({
@@ -35,6 +36,35 @@ export async function getBlogBody(slug: string): Promise<string | null> {
 export async function deleteBlogBody(slug: string): Promise<void> {
   try {
     await r2().send(new DeleteObjectCommand({ Bucket: BUCKET, Key: key(slug) }));
+  } catch {
+    // not found — nothing to do
+  }
+}
+
+// ── Images ────────────────────────────────────────────────────────────────────
+
+export async function putBlogImage(imageKey: string, body: Buffer, contentType: string): Promise<void> {
+  await r2().send(new PutObjectCommand({
+    Bucket: BUCKET,
+    Key: imageKey,
+    Body: body,
+    ContentType: contentType,
+  }));
+}
+
+export async function getBlogImage(imageKey: string): Promise<{ stream: Readable; contentType: string } | null> {
+  try {
+    const res = await r2().send(new GetObjectCommand({ Bucket: BUCKET, Key: imageKey }));
+    if (!res.Body) return null;
+    return { stream: res.Body as Readable, contentType: res.ContentType ?? "image/jpeg" };
+  } catch {
+    return null;
+  }
+}
+
+export async function deleteBlogImage(imageKey: string): Promise<void> {
+  try {
+    await r2().send(new DeleteObjectCommand({ Bucket: BUCKET, Key: imageKey }));
   } catch {
     // not found — nothing to do
   }

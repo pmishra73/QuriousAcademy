@@ -34,6 +34,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     ...(body.body !== undefined && { body: body.body }),
     ...(body.category !== undefined && { category: body.category }),
     ...(body.videoUrl !== undefined && { videoUrl: body.videoUrl || undefined }),
+    ...(body.imageUrl !== undefined && { imageUrl: body.imageUrl || undefined }),
     ...(body.published !== undefined && { published: body.published }),
     ...(body.linkedinRequested !== undefined && {
       linkedinRequested: body.linkedinRequested,

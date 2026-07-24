@@ -15,9 +15,10 @@
 
 import { list } from "@vercel/blob";
 import { PrismaClient } from "../src/generated/prisma";
+import { PrismaPg } from "@prisma/adapter-pg";
 import { putBlogBody } from "../src/lib/blog-r2";
 
-const db = new PrismaClient();
+const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL ?? "" }) });
 
 async function main() {
   const { blobs } = await list({ prefix: "blogs/", storeId: process.env.BLOB_STORE_ID });
@@ -27,8 +28,14 @@ async function main() {
 
   for (const b of blobs) {
     try {
-      const res = await fetch(b.url);
-      if (!res.ok) { console.warn(`SKIP ${b.url} — HTTP ${res.status}`); failed++; continue; }
+      console.log(`  url: ${b.url}`);
+      console.log(`  downloadUrl: ${b.downloadUrl}`);
+      const res = await fetch(b.downloadUrl, {
+        headers: process.env.BLOB_READ_WRITE_TOKEN
+          ? { Authorization: `Bearer ${process.env.BLOB_READ_WRITE_TOKEN}` }
+          : {},
+      });
+      if (!res.ok) { console.warn(`SKIP — HTTP ${res.status}: ${await res.text().then(t => t.slice(0, 120))}`); failed++; continue; }
       const post = await res.json();
       if (!post?.slug) { console.warn(`SKIP ${b.url} — no slug`); failed++; continue; }
 
