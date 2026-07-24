@@ -1,8 +1,9 @@
+import crypto from "crypto";
 import { db } from "./db";
 
 export function generateCouponCode(): string {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  return `QA-${Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("")}`;
+  return `QA-${Array.from({ length: 6 }, () => chars[crypto.randomInt(chars.length)]).join("")}`;
 }
 
 export async function createCoupon(opts: {

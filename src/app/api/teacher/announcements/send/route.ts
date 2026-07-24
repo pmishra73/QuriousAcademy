@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { sendMail } from "@/lib/mailer";
+import { escHtml } from "@/lib/html-escape";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -11,7 +12,12 @@ export async function POST(req: NextRequest) {
 
   const { courseId, subject, body } = await req.json();
 
-  await db.announcement.create({ data: { courseId, teacherId: userId, subject, body } });
+  if (role === "teacher") {
+    const assignment = await db.courseAssignment.findFirst({ where: { teacherId: userId!, courseId } });
+    if (!assignment) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  await db.announcement.create({ data: { courseId, teacherId: userId!, subject, body } });
 
   const enrollments = await db.enrollment.findMany({
     where: { courseId, status: "confirmed" },
@@ -27,10 +33,10 @@ export async function POST(req: NextRequest) {
         html: `
           <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;padding:32px">
             <p style="color:#888;font-size:12px;margin-bottom:20px">Message from your instructor at Qurious Academy</p>
-            <h2 style="margin-bottom:16px">${subject}</h2>
-            <div style="color:#444;line-height:1.8;font-size:14px;white-space:pre-wrap">${body}</div>
+            <h2 style="margin-bottom:16px">${escHtml(subject)}</h2>
+            <div style="color:#444;line-height:1.8;font-size:14px;white-space:pre-wrap">${escHtml(body)}</div>
             <hr style="margin:28px 0;border:none;border-top:1px solid #eee"/>
-            <p style="color:#aaa;font-size:12px">You received this because you are enrolled in <strong>${courseId}</strong>.<br/>Questions? Reply to this email or contact hello@quriousacademy.com</p>
+            <p style="color:#aaa;font-size:12px">You received this because you are enrolled in <strong>${escHtml(courseId)}</strong>.<br/>Questions? Reply to this email or contact hello@quriousacademy.com</p>
           </div>
         `,
       });
