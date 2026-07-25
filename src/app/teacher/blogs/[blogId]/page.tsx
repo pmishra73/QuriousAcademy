@@ -4,11 +4,11 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { parseVideo } from "@/lib/video-embed";
 
-function compressImage(file: File, maxWidth: number, quality: number): Promise<Blob> {
+function compressImage(file: File, maxWidth: number, maxHeight: number, quality: number): Promise<Blob> {
   return new Promise((resolve) => {
     const img = new Image();
     img.onload = () => {
-      const scale = Math.min(1, maxWidth / img.width);
+      const scale = Math.min(1, maxWidth / img.width, maxHeight / img.height);
       const canvas = document.createElement("canvas");
       canvas.width = Math.round(img.width * scale);
       canvas.height = Math.round(img.height * scale);
@@ -85,7 +85,7 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
     const file = e.target.files?.[0];
     if (!file) return;
     setImageUploading(true);
-    const compressed = await compressImage(file, 1200, 0.85);
+    const compressed = await compressImage(file, 1200, 630, 0.85);
     const fd = new FormData();
     fd.append("file", compressed, file.name);
     fd.append("slug", form.slug || "blog");
