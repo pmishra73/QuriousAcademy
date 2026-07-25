@@ -10,9 +10,7 @@ export async function GET(_: NextRequest, { params }: Params) {
   const result = await getBlogImage(imageKey);
   if (!result) return new NextResponse(null, { status: 404 });
 
-  const chunks: Uint8Array[] = [];
-  for await (const chunk of result.stream) chunks.push(chunk as Uint8Array);
-  const body = Buffer.concat(chunks);
+  const body = await result.stream.transformToByteArray();
 
   return new NextResponse(body, {
     headers: {

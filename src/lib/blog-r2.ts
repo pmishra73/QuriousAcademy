@@ -1,5 +1,7 @@
 import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
-import type { Readable } from "stream";
+import type { SdkStream } from "@aws-sdk/types";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyStream = SdkStream<any>;
 
 function r2() {
   return new S3Client({
@@ -52,11 +54,11 @@ export async function putBlogImage(imageKey: string, body: Buffer, contentType: 
   }));
 }
 
-export async function getBlogImage(imageKey: string): Promise<{ stream: Readable; contentType: string } | null> {
+export async function getBlogImage(imageKey: string): Promise<{ stream: AnyStream; contentType: string } | null> {
   try {
     const res = await r2().send(new GetObjectCommand({ Bucket: BUCKET, Key: imageKey }));
     if (!res.Body) return null;
-    return { stream: res.Body as Readable, contentType: res.ContentType ?? "image/jpeg" };
+    return { stream: res.Body as AnyStream, contentType: res.ContentType ?? "image/jpeg" };
   } catch {
     return null;
   }

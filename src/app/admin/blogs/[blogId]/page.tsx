@@ -248,8 +248,8 @@ export default function AdminEditBlogPage({ params }: { params: Promise<{ blogId
           {error && <p style={{ color: "#ef4444", fontSize: 13 }}>{error}</p>}
 
           <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-            <button type="submit" disabled={saving} style={{ background: "var(--primary)", color: "white", border: "none", borderRadius: 8, padding: "11px 24px", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
-              {saving ? "Saving…" : isNew ? "Publish Post" : "Save Changes"}
+            <button type="submit" disabled={saving || imageUploading} style={{ background: "var(--primary)", color: "white", border: "none", borderRadius: 8, padding: "11px 24px", fontSize: 14, fontWeight: 600, cursor: (saving || imageUploading) ? "not-allowed" : "pointer", opacity: (saving || imageUploading) ? 0.7 : 1, fontFamily: "inherit" }}>
+              {saving ? "Saving…" : imageUploading ? "Uploading image…" : isNew ? "Publish Post" : "Save Changes"}
             </button>
             <Link href="/admin/blogs" style={{ padding: "11px 20px", borderRadius: 8, border: "1px solid var(--border)", color: "var(--text-muted)", fontSize: 14, textDecoration: "none" }}>
               Cancel
