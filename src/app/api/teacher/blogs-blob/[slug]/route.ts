@@ -33,6 +33,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     ...(body.excerpt !== undefined && { excerpt: body.excerpt }),
     ...(body.body !== undefined && { body: body.body }),
     ...(body.category !== undefined && { category: body.category }),
+    ...(body.subCategory !== undefined && { subCategory: body.subCategory || undefined }),
     ...(body.videoUrl !== undefined && { videoUrl: body.videoUrl || undefined }),
     ...(body.imageUrl !== undefined && { imageUrl: body.imageUrl || undefined }),
     ...(body.published !== undefined && { published: body.published }),

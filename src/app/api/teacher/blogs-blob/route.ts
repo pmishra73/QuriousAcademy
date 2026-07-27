@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { slug, title, excerpt, body, category, videoUrl, imageUrl, published, linkedinRequested } = await req.json();
+  const { slug, title, excerpt, body, category, subCategory, videoUrl, imageUrl, published, linkedinRequested } = await req.json();
   if (!slug?.trim() || !title?.trim() || !body?.trim()) {
     return NextResponse.json({ error: "slug, title and body are required" }, { status: 400 });
   }
@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
     excerpt: excerpt?.trim() ?? "",
     body: body.trim(),
     category: category?.trim() ?? "General",
+    subCategory: subCategory?.trim() || undefined,
     author: user?.name ?? "Unknown",
     authorId: userId,
     videoUrl: videoUrl?.trim() || undefined,

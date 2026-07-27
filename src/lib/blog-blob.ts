@@ -11,6 +11,7 @@ export type BlogMeta = {
   title: string;
   excerpt: string;
   category: string;
+  subCategory?: string;
   author: string;
   authorId: string;
   videoUrl?: string;
@@ -30,7 +31,7 @@ export type BlogPost = BlogMeta & { body: string };
 export type BlogPostWithHtml = BlogMeta & { contentHtml: string };
 
 function toMeta(p: {
-  slug: string; title: string; excerpt: string; category: string;
+  slug: string; title: string; excerpt: string; category: string; subCategory: string | null;
   author: string; authorId: string | null; videoUrl: string | null;
   imageUrl: string | null;
   published: boolean; createdAt: Date; updatedAt: Date;
@@ -43,6 +44,7 @@ function toMeta(p: {
     title: p.title,
     excerpt: p.excerpt,
     category: p.category,
+    subCategory: p.subCategory ?? undefined,
     author: p.author,
     authorId: p.authorId ?? "",
     videoUrl: p.videoUrl ?? undefined,
@@ -60,7 +62,7 @@ function toMeta(p: {
 }
 
 const META_SELECT = {
-  slug: true, title: true, excerpt: true, category: true,
+  slug: true, title: true, excerpt: true, category: true, subCategory: true,
   author: true, authorId: true, videoUrl: true, imageUrl: true, published: true,
   createdAt: true, updatedAt: true,
   linkedinRequested: true, linkedinApprovalStatus: true,
@@ -96,6 +98,7 @@ export async function saveBlog(post: BlogPost): Promise<string> {
     title: post.title,
     excerpt: post.excerpt,
     category: post.category,
+    subCategory: post.subCategory ?? null,
     author: post.author,
     authorId: post.authorId || null,
     videoUrl: post.videoUrl ?? null,

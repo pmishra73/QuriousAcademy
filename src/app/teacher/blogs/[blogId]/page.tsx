@@ -28,34 +28,126 @@ const lbl: React.CSSProperties = {
   fontSize: 11, color: "var(--text-muted)", display: "block",
   marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 600,
 };
+const addBtn: React.CSSProperties = {
+  fontSize: 11, color: "var(--primary)", background: "none", border: "none",
+  cursor: "pointer", padding: "2px 0", marginTop: 5, textDecoration: "underline",
+  fontFamily: "inherit",
+};
 
-const CATEGORIES = ["General", "Programming", "Mathematics", "AI & ML", "Science", "Technology", "Data Structures", "Interview Prep", "Career"];
+type CategoryNode = { id: string; name: string; parentId: string | null; children: CategoryNode[] };
+type Form = {
+  slug: string; title: string; excerpt: string; body: string;
+  category: string; subCategory: string;
+  videoUrl: string; imageUrl: string; published: boolean; linkedinRequested: boolean;
+};
 
-type Form = { slug: string; title: string; excerpt: string; body: string; category: string; videoUrl: string; imageUrl: string; published: boolean; linkedinRequested: boolean };
+function InlineAdd({ label, onSave, onCancel }: { label: string; onSave: (name: string) => Promise<void>; onCancel: () => void }) {
+  const [val, setVal] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState("");
+  const ref = useRef<HTMLInputElement>(null);
+
+  useEffect(() => { ref.current?.focus(); }, []);
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!val.trim()) return;
+    setSaving(true); setErr("");
+    try {
+      await onSave(val.trim());
+      setVal("");
+    } catch (ex: unknown) {
+      setErr(ex instanceof Error ? ex.message : "Failed");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <form onSubmit={submit} style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6 }}>
+      <input
+        ref={ref}
+        value={val}
+        onChange={e => setVal(e.target.value)}
+        placeholder={`New ${label} name`}
+        style={{ ...inp, padding: "7px 10px", fontSize: 13, flex: 1 }}
+      />
+      <button type="submit" disabled={saving || !val.trim()} style={{ background: "var(--primary)", color: "white", border: "none", borderRadius: 6, padding: "7px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", opacity: (!val.trim() || saving) ? 0.6 : 1 }}>
+        {saving ? "…" : "Add"}
+      </button>
+      <button type="button" onClick={onCancel} style={{ background: "none", border: "1px solid var(--border)", borderRadius: 6, padding: "7px 10px", fontSize: 12, cursor: "pointer", color: "var(--text-muted)", fontFamily: "inherit" }}>
+        ✕
+      </button>
+      {err && <span style={{ fontSize: 11, color: "#ef4444" }}>{err}</span>}
+    </form>
+  );
+}
 
 export default function TeacherEditBlogPage({ params }: { params: Promise<{ blogId: string }> }) {
   const { blogId } = use(params);
   const isNew = blogId === "new";
   const router = useRouter();
-  const [form, setForm] = useState<Form>({ slug: "", title: "", excerpt: "", body: "", category: "General", videoUrl: "", imageUrl: "", published: false, linkedinRequested: false });
+
+  const [form, setForm] = useState<Form>({
+    slug: "", title: "", excerpt: "", body: "",
+    category: "", subCategory: "",
+    videoUrl: "", imageUrl: "", published: false, linkedinRequested: false,
+  });
   const [linkedinApprovalStatus, setLinkedinApprovalStatus] = useState<string | undefined>();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [previewHtml, setPreviewHtml] = useState("");
   const [previewLoading, setPreviewLoading] = useState(false);
   const [imageUploading, setImageUploading] = useState(false);
+
+  // Category state
+  const [categories, setCategories] = useState<CategoryNode[]>([]);
+  const [showAddCat, setShowAddCat] = useState(false);
+  const [showAddSub, setShowAddSub] = useState(false);
+
   const previewDebounce = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Load categories
+  async function loadCategories() {
+    const res = await fetch("/api/blog-categories");
+    if (res.ok) {
+      const data: CategoryNode[] = await res.json();
+      setCategories(data);
+      return data;
+    }
+    return [] as CategoryNode[];
+  }
+
+  useEffect(() => { loadCategories(); }, []);
 
   useEffect(() => {
     if (!isNew) {
       fetch(`/api/teacher/blogs-blob/${blogId}`).then(r => r.json()).then((p: Form & { linkedinApprovalStatus?: string }) => {
-        setForm({ slug: p.slug, title: p.title, excerpt: p.excerpt ?? "", body: p.body, category: p.category, videoUrl: p.videoUrl ?? "", imageUrl: p.imageUrl ?? "", published: p.published, linkedinRequested: p.linkedinRequested ?? false });
+        setForm({
+          slug: p.slug, title: p.title, excerpt: p.excerpt ?? "", body: p.body,
+          category: p.category, subCategory: p.subCategory ?? "",
+          videoUrl: p.videoUrl ?? "", imageUrl: p.imageUrl ?? "",
+          published: p.published, linkedinRequested: p.linkedinRequested ?? false,
+        });
         setLinkedinApprovalStatus(p.linkedinApprovalStatus);
       });
     }
   }, [blogId, isNew]);
 
-  // Live preview — debounced 600ms after typing stops
+  // Set first category as default once categories load
+  useEffect(() => {
+    if (isNew && categories.length > 0 && !form.category) {
+      setForm(f => ({ ...f, category: categories[0].name }));
+    }
+  }, [categories, isNew, form.category]);
+
+  // Clear sub-category when category changes
+  function handleCategoryChange(name: string) {
+    setForm(f => ({ ...f, category: name, subCategory: "" }));
+    setShowAddSub(false);
+  }
+
+  // Live preview
   useEffect(() => {
     if (!form.body) { setPreviewHtml(""); return; }
     if (previewDebounce.current) clearTimeout(previewDebounce.current);
@@ -97,10 +189,44 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
     e.target.value = "";
   }
 
+  async function addCategory(name: string) {
+    const res = await fetch("/api/blog-categories", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, parentId: null }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error ?? "Failed");
+    const updated = await loadCategories();
+    const created = updated.find(c => c.name === name);
+    if (created) setForm(f => ({ ...f, category: created.name, subCategory: "" }));
+    setShowAddCat(false);
+  }
+
+  async function addSubCategory(name: string) {
+    const parent = categories.find(c => c.name === form.category);
+    if (!parent) throw new Error("Select a category first");
+    const res = await fetch("/api/blog-categories", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, parentId: parent.id }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error ?? "Failed");
+    await loadCategories();
+    setForm(f => ({ ...f, subCategory: name }));
+    setShowAddSub(false);
+  }
+
   async function handleSubmit(ev: React.FormEvent) {
     ev.preventDefault();
     setSaving(true); setError("");
-    const payload = { ...form, videoUrl: form.videoUrl.trim() || undefined, imageUrl: form.imageUrl.trim() || undefined };
+    const payload = {
+      ...form,
+      videoUrl: form.videoUrl.trim() || undefined,
+      imageUrl: form.imageUrl.trim() || undefined,
+      subCategory: form.subCategory.trim() || undefined,
+    };
     const res = isNew
       ? await fetch("/api/teacher/blogs-blob", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
       : await fetch(`/api/teacher/blogs-blob/${blogId}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
@@ -109,6 +235,9 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
     if (!res.ok) { setError(data.error ?? "Something went wrong."); return; }
     router.push("/teacher/blogs");
   }
+
+  const selectedCatNode = categories.find(c => c.name === form.category);
+  const subOptions = selectedCatNode?.children ?? [];
 
   return (
     <div style={{ maxWidth: "100%" }}>
@@ -135,13 +264,46 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
             </div>
           </div>
 
+          {/* Category + Sub-category row */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            {/* Category */}
             <div>
               <label style={lbl}>Category</label>
-              <select style={inp} value={form.category} onChange={set("category")}>
-                {CATEGORIES.map(c => <option key={c}>{c}</option>)}
+              <select style={inp} value={form.category} onChange={e => handleCategoryChange(e.target.value)}>
+                {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
               </select>
+              {!showAddCat ? (
+                <button type="button" style={addBtn} onClick={() => { setShowAddCat(true); setShowAddSub(false); }}>
+                  + Add new category
+                </button>
+              ) : (
+                <InlineAdd label="category" onSave={addCategory} onCancel={() => setShowAddCat(false)} />
+              )}
             </div>
+
+            {/* Sub-category */}
+            <div>
+              <label style={lbl}>Sub-category <span style={{ color: "var(--text-muted)", fontWeight: 400, textTransform: "none", letterSpacing: 0 }}>(optional)</span></label>
+              <select style={inp} value={form.subCategory} onChange={set("subCategory")}>
+                <option value="">— None —</option>
+                {subOptions.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
+              </select>
+              {!showAddSub ? (
+                <button
+                  type="button"
+                  style={{ ...addBtn, opacity: form.category ? 1 : 0.4, cursor: form.category ? "pointer" : "not-allowed" }}
+                  onClick={() => { if (form.category) { setShowAddSub(true); setShowAddCat(false); } }}
+                  title={form.category ? undefined : "Select a category first"}
+                >
+                  + Add new sub-category
+                </button>
+              ) : (
+                <InlineAdd label="sub-category" onSave={addSubCategory} onCancel={() => setShowAddSub(false)} />
+              )}
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div style={{ display: "flex", alignItems: "flex-end", paddingBottom: 4 }}>
               <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
                 <input type="checkbox" checked={form.published} onChange={e => setForm(f => ({ ...f, published: e.target.checked }))} />

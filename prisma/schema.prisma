@@ -289,6 +289,7 @@ model BlogPost {
   excerpt                String
   body                   String    // legacy — body now stored in R2; kept for old /api/teacher/blogs routes
   category               String
+  subCategory            String?
   author                 String
   authorId               String?
   instituteId            String?
@@ -303,6 +304,17 @@ model BlogPost {
   linkedinAdminNote      String?
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
+}
+
+model BlogCategory {
+  id        String         @id @default(cuid())
+  name      String
+  parentId  String?
+  parent    BlogCategory?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children  BlogCategory[] @relation("CategoryTree")
+  createdAt DateTime       @default(now())
+
+  @@unique([name, parentId])
 }
 
 // ─── Course Approvals ────────────────────────────────────────────────────────
