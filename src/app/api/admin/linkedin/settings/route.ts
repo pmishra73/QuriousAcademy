@@ -15,8 +15,6 @@ export async function GET() {
   return NextResponse.json({
     connected: !!(integration?.accessToken && integration?.organizationUrn),
     organizationUrn: integration?.organizationUrn ?? null,
-    minGapMinutes: integration?.minGapMinutes ?? 30,
-    lastPostedAt: integration?.lastPostedAt ?? null,
   });
 }
 
@@ -26,17 +24,13 @@ export async function PATCH(req: NextRequest) {
 
   const data: Record<string, unknown> = {};
   if ("organizationUrn" in body) data.organizationUrn = (body.organizationUrn as string)?.trim() || null;
-  if ("minGapMinutes" in body) {
-    const n = Number(body.minGapMinutes);
-    if (Number.isFinite(n) && n >= 0) data.minGapMinutes = Math.round(n);
-  }
 
   const integration = await db.linkedInIntegration.upsert({
     where: { id: "singleton" },
     create: { id: "singleton", ...data },
     update: data,
   });
-  return NextResponse.json({ ok: true, organizationUrn: integration.organizationUrn, minGapMinutes: integration.minGapMinutes });
+  return NextResponse.json({ ok: true, organizationUrn: integration.organizationUrn });
 }
 
 export async function DELETE() {

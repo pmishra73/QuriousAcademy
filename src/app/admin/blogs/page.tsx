@@ -1,10 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { buildPostText } from "@/lib/linkedin-post-text";
 
 type Post = {
-  slug: string; title: string; category: string; author: string; published: boolean; createdAt: string;
+  slug: string; title: string; excerpt: string; category: string; author: string; published: boolean; createdAt: string;
   linkedinRequested?: boolean; linkedinApprovalStatus?: "none" | "pending" | "approved" | "rejected";
+  linkedinStatus?: "idle" | "posted" | "failed"; linkedinPostUrl?: string;
 };
 
 const badgeStyle = (bg: string, color: string): React.CSSProperties => ({
@@ -14,9 +16,13 @@ const badgeStyle = (bg: string, color: string): React.CSSProperties => ({
 export default function AdminBlogsPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [posting, setPosting] = useState<string | null>(null);
+  const [linkedinConnected, setLinkedinConnected] = useState(false);
+  const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/teacher/blogs-blob").then(r => r.json()).then(d => { setPosts(Array.isArray(d) ? d : []); setLoading(false); });
+    fetch("/api/admin/linkedin/settings").then(r => r.json()).then(d => setLinkedinConnected(!!d.connected)).catch(() => {});
   }, []);
 
   async function togglePublished(post: Post) {
@@ -35,6 +41,34 @@ export default function AdminBlogsPage() {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ linkedinApprovalStatus: status }),
+    });
+  }
+
+  async function postToLinkedIn(post: Post) {
+    setPosting(post.slug);
+    const res = await fetch("/api/admin/linkedin/publish", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug: post.slug }),
+    });
+    const data = await res.json();
+    setPosting(null);
+    if (!res.ok) { alert(data.error ?? "Failed to post to LinkedIn."); return; }
+    setPosts(ps => ps.map(p => p.slug === post.slug ? { ...p, linkedinStatus: "posted", linkedinPostUrl: data.postUrl } : p));
+  }
+
+  async function copyPostText(post: Post) {
+    await navigator.clipboard.writeText(buildPostText(post.title, post.excerpt, post.slug));
+    setCopiedSlug(post.slug);
+    setTimeout(() => setCopiedSlug(null), 1800);
+  }
+
+  async function markPosted(post: Post) {
+    setPosts(ps => ps.map(p => p.slug === post.slug ? { ...p, linkedinStatus: "posted" } : p));
+    await fetch(`/api/teacher/blogs-blob/${post.slug}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ linkedinStatus: "posted" }),
     });
   }
 
@@ -75,7 +109,28 @@ export default function AdminBlogsPage() {
                   <button onClick={() => setLinkedInStatus(p, "rejected")} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 6, border: "1px solid rgba(239,68,68,0.3)", background: "rgba(239,68,68,0.1)", color: "#ef4444", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }}>Reject</button>
                 </div>
               )}
-              {p.linkedinApprovalStatus === "approved" && <span style={badgeStyle("rgba(52,211,153,0.1)", "#34d399")}>LinkedIn: approved</span>}
+              {p.linkedinApprovalStatus === "approved" && p.linkedinStatus === "posted" && (
+                <a href={p.linkedinPostUrl} target="_blank" rel="noreferrer" style={badgeStyle("rgba(52,211,153,0.1)", "#34d399")}>LinkedIn: posted ↗</a>
+              )}
+              {p.linkedinApprovalStatus === "approved" && p.linkedinStatus !== "posted" && linkedinConnected && (
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={badgeStyle("rgba(52,211,153,0.1)", "#34d399")}>LinkedIn: approved</span>
+                  <button onClick={() => postToLinkedIn(p)} disabled={posting === p.slug} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 6, border: "1px solid #0a66c2", background: "#0a66c2", color: "white", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }}>
+                    {posting === p.slug ? "Posting…" : "Post to LinkedIn"}
+                  </button>
+                </div>
+              )}
+              {p.linkedinApprovalStatus === "approved" && p.linkedinStatus !== "posted" && !linkedinConnected && (
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={badgeStyle("rgba(52,211,153,0.1)", "#34d399")}>LinkedIn: approved</span>
+                  <button onClick={() => copyPostText(p)} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 6, border: "1px solid #0a66c2", background: copiedSlug === p.slug ? "#34d399" : "#0a66c2", color: "white", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }} title="Copy the post text, then paste it into a new post on your LinkedIn Company Page">
+                    {copiedSlug === p.slug ? "Copied ✓" : "Copy post text"}
+                  </button>
+                  <button onClick={() => markPosted(p)} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 6, border: "1px solid var(--border)", background: "none", color: "var(--text-muted)", cursor: "pointer", fontFamily: "inherit" }} title="Once you've pasted it on LinkedIn yourself">
+                    Mark as posted
+                  </button>
+                </div>
+              )}
               {p.linkedinApprovalStatus === "rejected" && <span style={badgeStyle("rgba(239,68,68,0.1)", "#ef4444")}>LinkedIn: rejected</span>}
 
               <button
