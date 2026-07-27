@@ -39,9 +39,13 @@ export async function proxy(req: NextRequest) {
 
   // ── Auth guards (main domain) ──────────────────────────────────────────────
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET ?? "";
+  // On HTTPS (production), NextAuth sets __Secure-authjs.session-token.
+  // Without secureCookie:true, getToken looks for the non-prefixed name and
+  // always returns null, causing every logged-in admin/teacher to be bounced.
+  const secureCookie = req.nextUrl.protocol === "https:";
 
   if (pathname.startsWith("/admin") || pathname.startsWith("/teacher")) {
-    const token = await getToken({ req, secret });
+    const token = await getToken({ req, secret, secureCookie });
     const role = token?.role as string | undefined;
 
     if (pathname.startsWith("/admin")) {
