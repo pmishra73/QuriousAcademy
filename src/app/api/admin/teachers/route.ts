@@ -44,6 +44,11 @@ export async function POST(req: NextRequest) {
 
   const cleanSlug = slug ? slug.toLowerCase().replace(/[^a-z0-9-]/g, "") : null;
 
+  if (cleanSlug) {
+    const instituteConflict = await db.institute.findUnique({ where: { slug: cleanSlug } });
+    if (instituteConflict) return NextResponse.json({ error: "Slug is already used by an institute." }, { status: 409 });
+  }
+
   const hashed = await bcrypt.hash(password, 12);
   try {
     const user = await db.user.create({

@@ -32,6 +32,10 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
   if ("slug" in body) {
     const s = body.slug as string;
     data.slug = s ? s.toLowerCase().replace(/[^a-z0-9-]/g, "") : null;
+    if (data.slug) {
+      const instituteConflict = await db.institute.findUnique({ where: { slug: data.slug as string } });
+      if (instituteConflict) return NextResponse.json({ error: "Slug is already used by an institute." }, { status: 409 });
+    }
   }
   if ("password" in body && typeof body.password === "string" && body.password.trim()) {
     data.password = await bcrypt.hash(body.password.trim(), 12);

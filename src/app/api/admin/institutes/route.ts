@@ -25,6 +25,9 @@ export async function POST(req: NextRequest) {
   const clean = slug.toLowerCase().replace(/[^a-z0-9-]/g, "");
   if (!clean) return NextResponse.json({ error: "invalid slug" }, { status: 400 });
 
+  const teacherConflict = await db.user.findFirst({ where: { slug: clean, role: "teacher" } });
+  if (teacherConflict) return NextResponse.json({ error: "Slug is already used by a teacher." }, { status: 409 });
+
   try {
     const institute = await db.institute.create({ data: { name, slug: clean, bio: bio || null, logo: logo || null, website: website || null } });
     return NextResponse.json(institute, { status: 201 });

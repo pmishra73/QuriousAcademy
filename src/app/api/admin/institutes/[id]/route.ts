@@ -14,7 +14,13 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
 
   const data: Record<string, unknown> = {};
   if (name !== undefined) data.name = name;
-  if (slug !== undefined) data.slug = (slug as string).toLowerCase().replace(/[^a-z0-9-]/g, "");
+  if (slug !== undefined) {
+    data.slug = (slug as string).toLowerCase().replace(/[^a-z0-9-]/g, "");
+    if (data.slug) {
+      const teacherConflict = await db.user.findFirst({ where: { slug: data.slug as string, role: "teacher" } });
+      if (teacherConflict) return NextResponse.json({ error: "Slug is already used by a teacher." }, { status: 409 });
+    }
+  }
   if (bio !== undefined) data.bio = bio || null;
   if (logo !== undefined) data.logo = logo || null;
   if (website !== undefined) data.website = website || null;

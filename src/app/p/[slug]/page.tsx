@@ -4,16 +4,41 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+
+  const teacher = await db.user.findFirst({
+    where: { slug, role: "teacher", active: true },
+    select: { name: true, bio: true },
+  });
+  if (teacher) return {
+    title: `${teacher.name} | Qurious Academy`,
+    description: teacher.bio ?? `Learn from ${teacher.name} on Qurious Academy`,
+  };
+
+  const institute = await db.institute.findFirst({
+    where: { slug, active: true },
+    select: { name: true, bio: true },
+  });
+  if (institute) return {
+    title: `${institute.name} | Qurious Academy`,
+    description: institute.bio ?? `Explore courses by ${institute.name} on Qurious Academy`,
+  };
+
+  return { title: "Profile | Qurious Academy" };
+}
+
 export default async function ProfilePage({ params }: Props) {
   const { slug } = await params;
 
   // Try teacher first, then institute
-  const teacher = await db.user.findUnique({
+  const teacher = await db.user.findFirst({
     where: { slug, role: "teacher", active: true },
     include: { institute: true, courses: true },
   });
@@ -24,7 +49,7 @@ export default async function ProfilePage({ params }: Props) {
     return <TeacherProfile teacher={teacher} courses={teacherCourses} />;
   }
 
-  const institute = await db.institute.findUnique({
+  const institute = await db.institute.findFirst({
     where: { slug, active: true },
     include: { teachers: { where: { active: true }, include: { courses: true } } },
   });
