@@ -1,12 +1,10 @@
-import { auth } from "@/lib/auth";
-import { NextResponse } from "next/server";
-import type { NextAuthRequest } from "next-auth";
+import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 const ROOT_DOMAIN = process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? "quriousacademy.com";
 
-export default auth((req: NextAuthRequest) => {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const user = req.auth?.user as { role?: string } | undefined;
 
   // ── Subdomain routing ──────────────────────────────────────────────────────
   const host = req.headers.get("host") ?? "";
@@ -24,18 +22,15 @@ export default auth((req: NextAuthRequest) => {
     const subdomain = hostname.split(".")[0];
     if (subdomain && subdomain !== "www" && subdomain !== "api") {
       if (pathname === "/" || pathname === "") {
-        // Internally rewrite root to the unified profile page
         const url = req.nextUrl.clone();
         url.pathname = `/p/${subdomain}`;
         return NextResponse.rewrite(url);
       }
-      // All other paths (e.g. /courses/123) → redirect to main domain so
-      // relative links in the profile page continue to work
       const port = req.nextUrl.port;
       const mainHost = isProd
         ? ROOT_DOMAIN
         : `localhost${port ? `:${port}` : ""}`;
-      const proto = req.nextUrl.protocol; // "https:" or "http:"
+      const proto = req.nextUrl.protocol;
       return NextResponse.redirect(
         new URL(`${proto}//${mainHost}${pathname}${req.nextUrl.search}`)
       );
@@ -43,17 +38,24 @@ export default auth((req: NextAuthRequest) => {
   }
 
   // ── Auth guards (main domain) ──────────────────────────────────────────────
-  if (pathname.startsWith("/admin")) {
-    if (!user) return NextResponse.redirect(new URL("/login?from=admin", req.url));
-    if (user.role !== "admin") return NextResponse.redirect(new URL("/login?error=unauthorized", req.url));
-  }
+  const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET ?? "";
 
-  if (pathname.startsWith("/teacher")) {
-    if (!user) return NextResponse.redirect(new URL("/login?from=teacher", req.url));
-    if (user.role !== "teacher" && user.role !== "admin")
-      return NextResponse.redirect(new URL("/login?error=unauthorized", req.url));
+  if (pathname.startsWith("/admin") || pathname.startsWith("/teacher")) {
+    const token = await getToken({ req, secret });
+    const role = token?.role as string | undefined;
+
+    if (pathname.startsWith("/admin")) {
+      if (!token) return NextResponse.redirect(new URL("/login?from=admin", req.url));
+      if (role !== "admin") return NextResponse.redirect(new URL("/login?error=unauthorized", req.url));
+    }
+
+    if (pathname.startsWith("/teacher")) {
+      if (!token) return NextResponse.redirect(new URL("/login?from=teacher", req.url));
+      if (role !== "teacher" && role !== "admin")
+        return NextResponse.redirect(new URL("/login?error=unauthorized", req.url));
+    }
   }
-});
+}
 
 export const config = {
   matcher: [
