@@ -55,10 +55,9 @@ function InlineAdd({ label, onSave, onCancel }: { label: string; onSave: (name: 
     setSaving(true); setErr("");
     try {
       await onSave(val.trim());
-      setVal("");
+      onCancel(); // close after save — onSave is responsible for updating parent state first
     } catch (ex: unknown) {
       setErr(ex instanceof Error ? ex.message : "Failed");
-    } finally {
       setSaving(false);
     }
   }
@@ -200,7 +199,7 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
     const updated = await loadCategories();
     const created = updated.find(c => c.name === name);
     if (created) setForm(f => ({ ...f, category: created.name, subCategory: "" }));
-    setShowAddCat(false);
+    // InlineAdd calls onCancel() after this resolves to close the form
   }
 
   async function addSubCategory(name: string) {
@@ -213,9 +212,14 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error ?? "Failed");
-    await loadCategories();
-    setForm(f => ({ ...f, subCategory: name }));
-    setShowAddSub(false);
+    // Use fresh data from reload to set sub-category; this ensures setCategories and setForm
+    // are batched together before InlineAdd calls onCancel to close the form
+    const updated = await loadCategories();
+    const updatedParent = updated.find(c => c.name === form.category);
+    if (updatedParent?.children.some(ch => ch.name === name)) {
+      setForm(f => ({ ...f, subCategory: name }));
+    }
+    // InlineAdd calls onCancel() after this resolves to close the form
   }
 
   async function handleSubmit(ev: React.FormEvent) {
