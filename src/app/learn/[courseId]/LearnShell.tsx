@@ -77,6 +77,19 @@ function BlockRenderer({ block, resourceMap }: { block: ContentBlock; resourceMa
     ) : null;
   }
 
+  if (block.type === "blog") {
+    const href = `/blog/${block.blobSlug}`;
+    return (
+      <a href={href} style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12, textDecoration: "none", background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 10, padding: "14px 18px" }}>
+        <span style={{ fontSize: 22, flexShrink: 0 }}>✍️</span>
+        <div>
+          <div style={{ fontSize: 14, fontWeight: 600, color: "var(--foreground)", marginBottom: 2 }}>{block.caption ?? block.blobSlug}</div>
+          <div style={{ fontSize: 12, color: "var(--primary)" }}>Read article ↗</div>
+        </div>
+      </a>
+    );
+  }
+
   return null;
 }
 

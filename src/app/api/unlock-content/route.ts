@@ -6,14 +6,25 @@ import { createCoupon } from "@/lib/coupon";
 export async function POST(req: NextRequest) {
   const { name, email, phone, courseId, courseTitle } = await req.json();
 
+  // Deduplicate: if this email+course already has a coupon, return the existing one
+  const existingLead = await db.lead.findFirst({
+    where: { email, courseId },
+    include: { coupons: { where: { status: "unused" }, orderBy: { createdAt: "desc" }, take: 1 } },
+  });
+
+  if (existingLead?.coupons.length) {
+    return NextResponse.json({ ok: true, couponCode: existingLead.coupons[0].code });
+  }
+
   let couponCode = "";
   try {
-    const lead = await db.lead.create({ data: { name, email, phone, courseId } });
+    const lead = existingLead
+      ? existingLead
+      : await db.lead.create({ data: { name, email, phone, courseId } });
     couponCode = await createCoupon({ reason: "syllabus_unlock", leadId: lead.id });
   } catch (err) {
     console.error("DB write failed:", err);
-    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-    couponCode = `QA-${Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("")}`;
+    return NextResponse.json({ error: "Could not generate coupon. Please try again." }, { status: 500 });
   }
 
   const now = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });

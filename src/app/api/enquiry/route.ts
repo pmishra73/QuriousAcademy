@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sendMail, ADMIN } from "@/lib/mailer";
+import { escHtml } from "@/lib/html-escape";
 
 export async function POST(req: NextRequest) {
   const { type, name, email, phone, subject, body } = await req.json();
@@ -26,8 +27,8 @@ export async function POST(req: NextRequest) {
           <table style="width:100%;border-collapse:collapse">
             ${[["Name", name], ["Email", email], ["Phone", phone ?? "—"], ["About", subject], ["Message", body]]
               .map(([k, v]) => `<tr>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.07);color:#9ba8c4;font-size:13px;width:30%;vertical-align:top">${k}</td>
-                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.07);font-size:14px">${v}</td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.07);color:#9ba8c4;font-size:13px;width:30%;vertical-align:top">${escHtml(k)}</td>
+                <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.07);font-size:14px">${escHtml(v)}</td>
               </tr>`).join("")}
           </table>
         </div>

@@ -24,6 +24,7 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [prefilled, setPrefilled] = useState(false);
   const [coupon, setCoupon] = useState<string | null>(null);
+  const [couponError, setCouponError] = useState(false);
   const cfg = typeConfig[variant.type];
 
   useEffect(() => {
@@ -43,14 +44,15 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
   const openSyllabus = () => {
     // Record a lead silently if we already have details from session
     if (form.name && form.email && form.phone) {
-      fetch("/api/unlock-content", {
+      const timeout = setTimeout(() => setCouponError(true), 8000);
+    fetch("/api/unlock-content", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, courseId: variant.id, courseTitle: variant.title }),
       })
-        .then((r) => r.json())
-        .then((data) => { if (data.couponCode) setCoupon(data.couponCode); })
-        .catch(() => {});
+        .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
+        .then((data) => { clearTimeout(timeout); if (data.couponCode) setCoupon(data.couponCode); })
+        .catch(() => { clearTimeout(timeout); setCouponError(true); });
     }
     setStep("content");
   };
@@ -59,14 +61,15 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
     e.preventDefault();
     try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(form)); } catch {}
     setStep("content");
+    const timeout = setTimeout(() => setCouponError(true), 8000);
     fetch("/api/unlock-content", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...form, courseId: variant.id, courseTitle: variant.title }),
     })
-      .then((r) => r.json())
-      .then((data) => { if (data.couponCode) setCoupon(data.couponCode); })
-      .catch(() => {});
+      .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
+      .then((data) => { clearTimeout(timeout); if (data.couponCode) setCoupon(data.couponCode); })
+      .catch(() => { clearTimeout(timeout); setCouponError(true); });
   };
 
   const inp: React.CSSProperties = {
@@ -353,6 +356,11 @@ export default function ContentUnlockModal({ variant, onClose }: Props) {
                 >
                   Copy code
                 </button>
+              </div>
+            ) : couponError ? (
+              <div style={{ marginBottom: 20, fontSize: 13, color: "#f97316", padding: "12px 16px", background: "rgba(249,115,22,0.07)", border: "1px solid rgba(249,115,22,0.2)", borderRadius: 8 }}>
+                Couldn't generate your coupon right now — please{" "}
+                <a href="/contact" style={{ color: "#f97316" }}>contact us</a> and we'll sort it.
               </div>
             ) : (
               <div style={{ marginBottom: 20, fontSize: 13, color: "var(--text-muted)", padding: "12px 16px", background: "var(--surface-2)", borderRadius: 8 }}>

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { sendMail, FROM } from "@/lib/mailer";
+import { sendMail } from "@/lib/mailer";
+import { escHtml, safeHref } from "@/lib/html-escape";
 
 function gcalLink(title: string, start: Date, meetingLink: string | null) {
   const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
@@ -18,9 +19,18 @@ function gcalLink(title: string, start: Date, meetingLink: string | null) {
 export async function POST(req: NextRequest) {
   const session = await auth();
   const role = (session?.user as { role?: string })?.role;
+  const userId = (session?.user as { id?: string })?.id;
   if (role !== "teacher" && role !== "admin") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { courseId, title, scheduledAt, meetingLink, notes } = await req.json();
+
+  // Teachers can only create sessions for their own assigned courses
+  if (role === "teacher") {
+    if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const assignment = await db.courseAssignment.findFirst({ where: { teacherId: userId, courseId } });
+    if (!assignment) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   const scheduledDate = new Date(scheduledAt);
 
   const s = await db.session.create({
@@ -51,8 +61,8 @@ export async function POST(req: NextRequest) {
           <table style="border-collapse:collapse;width:100%;margin:16px 0">
             <tr><td style="padding:8px 0;color:#666;width:100px">Session</td><td style="padding:8px 0;font-weight:600">${title}</td></tr>
             <tr><td style="padding:8px 0;color:#666">Date &amp; Time</td><td style="padding:8px 0;font-weight:600">${dateStr} IST</td></tr>
-            ${meetingLink ? `<tr><td style="padding:8px 0;color:#666">Meeting Link</td><td style="padding:8px 0"><a href="${meetingLink}" style="color:#5b7cfa">${meetingLink}</a></td></tr>` : ""}
-            ${notes ? `<tr><td style="padding:8px 0;color:#666">Notes</td><td style="padding:8px 0">${notes}</td></tr>` : ""}
+            ${meetingLink ? `<tr><td style="padding:8px 0;color:#666">Meeting Link</td><td style="padding:8px 0"><a href="${safeHref(meetingLink)}" style="color:#5b7cfa">${escHtml(meetingLink)}</a></td></tr>` : ""}
+            ${notes ? `<tr><td style="padding:8px 0;color:#666">Notes</td><td style="padding:8px 0">${escHtml(notes)}</td></tr>` : ""}
           </table>
           <a href="${calLink}" style="display:inline-block;background:#5b7cfa;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;margin:8px 0">
             Add to Google Calendar

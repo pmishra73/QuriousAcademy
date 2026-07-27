@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
+import { variants } from "@/lib/variants";
 import TeacherEditClient from "./TeacherEditClient";
 
 type Props = { params: Promise<{ id: string }> };
@@ -18,5 +19,7 @@ export default async function TeacherEditPage({ params }: Props) {
     orderBy: { name: "asc" },
   });
 
-  return <TeacherEditClient teacher={safeTeacher} institutes={institutes} />;
+  const allCourses = variants.map(v => ({ id: v.id, title: v.title }));
+
+  return <TeacherEditClient teacher={safeTeacher} institutes={institutes} allCourses={allCourses} />;
 }

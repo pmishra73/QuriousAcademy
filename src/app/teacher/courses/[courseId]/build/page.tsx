@@ -1,7 +1,10 @@
 "use client";
-import { useState, useEffect, use, useCallback } from "react";
+import { useState, useEffect, useRef, use, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import type { CourseContent, Part, Chapter, Lesson, ContentBlock, TextFormat } from "@/lib/course-content";
+import { parseImportJson, findUnknownResourceIds, toCourseContent, fromCourseContent, EXAMPLE_JSON, type ImportCourseContent } from "@/lib/course-content-import";
+import { variants } from "@/lib/variants";
 
 // ─── Tiny ID generator ───────────────────────────────────────────────────────
 function uid() { return Math.random().toString(36).slice(2, 9); }
@@ -35,9 +38,131 @@ function NewItemInput({ value, onChange, onCommit, onCancel, style }: {
 
 type Resource = { id: string; type: string; tag?: string; title: string; url?: string; blobSlug?: string };
 
+function JsonImportPanel({ courseId, currentContent, resources, onImport }: {
+  courseId: string;
+  currentContent: CourseContent;
+  resources: Resource[];
+  onImport: (content: CourseContent) => void;
+}) {
+  const [text, setText] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
+  const [warnings, setWarnings] = useState<string[]>([]);
+  const [loaded, setLoaded] = useState(false);
+  const [fileError, setFileError] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  function checkUnknownResourceIds(data: ImportCourseContent) {
+    const knownIds = new Set(resources.map(r => r.id));
+    const unknown = findUnknownResourceIds(data, knownIds);
+    setWarnings(unknown.length > 0 ? [`These resourceIds don't match anything in your resource library: ${unknown.join(", ")}`] : []);
+  }
+
+  function validate() {
+    setLoaded(false);
+    const result = parseImportJson(text);
+    if (!result.ok) { setErrors(result.errors); setWarnings([]); return; }
+    setErrors([]);
+    checkUnknownResourceIds(result.data);
+    setLoaded(true);
+  }
+
+  function applyImport() {
+    const result = parseImportJson(text);
+    if (!result.ok) { setErrors(result.errors); setWarnings([]); setLoaded(false); return; }
+    setErrors([]);
+    checkUnknownResourceIds(result.data);
+    const hasExisting = currentContent.parts.length > 0;
+    if (hasExisting && !confirm("This replaces all current course content (all parts, chapters, and lessons). Continue?")) return;
+    onImport(toCourseContent(result.data, courseId));
+    setText(""); setErrors([]); setWarnings([]); setLoaded(false);
+  }
+
+  function loadExample() {
+    setText(JSON.stringify(EXAMPLE_JSON, null, 2));
+    setErrors([]); setWarnings([]); setLoaded(false);
+  }
+
+  function exportCurrent() {
+    setText(JSON.stringify(fromCourseContent(currentContent), null, 2));
+    setErrors([]); setWarnings([]); setLoaded(false);
+  }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow re-selecting the same file later
+    if (!file) return;
+    setFileError("");
+    if (!file.name.toLowerCase().endsWith(".json") && file.type !== "application/json") {
+      setFileError(`"${file.name}" doesn't look like a .json file.`);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setText(String(reader.result ?? ""));
+      setErrors([]); setWarnings([]); setLoaded(false);
+    };
+    reader.onerror = () => setFileError(`Couldn't read "${file.name}" — please try again.`);
+    reader.readAsText(file);
+  }
+
+  return (
+    <div style={{ flex: 1, overflowY: "auto", padding: "24px 28px", maxWidth: 900 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+        <h2 style={{ fontSize: 16, fontWeight: 700 }}>Import course content as JSON</h2>
+        <div style={{ display: "flex", gap: 8 }}>
+          <input ref={fileInputRef} type="file" accept="application/json,.json" onChange={handleFileChange} style={{ display: "none" }} />
+          <button onClick={() => fileInputRef.current?.click()} style={btn("var(--primary)")}>Upload JSON file…</button>
+          <button onClick={loadExample} style={btn("var(--surface-2)", "var(--text-dim)")}>Load example</button>
+          <button onClick={exportCurrent} style={btn("var(--surface-2)", "var(--text-dim)")} disabled={currentContent.parts.length === 0}>Export current as JSON</button>
+        </div>
+      </div>
+      {fileError && <p style={{ fontSize: 12, color: "#ef4444", marginTop: -8, marginBottom: 16 }}>{fileError}</p>}
+
+      <p style={{ fontSize: 13, color: "var(--text-dim)", lineHeight: 1.6, marginBottom: 16 }}>
+        Upload a <code>.json</code> file, or paste a JSON object shaped like <code>{"{ parts: [{ title, chapters: [{ title, lessons: [{ title, blocks: [...] }] }] }] }"}</code>.
+        Titles are required everywhere else is optional. Block types: <code>text</code> (needs <code>content</code>, optional <code>format</code>:
+        normal/bold/italic/heading/subheading), <code>video</code> / <code>live_recording</code> / <code>image</code> / <code>link</code> / <code>document</code> (needs a <code>resourceId</code> from
+        your resource library, optional <code>caption</code>), or <code>blog</code> (needs <code>blobSlug</code>, optional <code>caption</code>).
+        IDs and ordering are generated automatically — this <strong>replaces</strong> all current content on import.
+      </p>
+
+      <textarea
+        value={text}
+        onChange={e => { setText(e.target.value); setLoaded(false); setErrors([]); setWarnings([]); }}
+        placeholder='{"parts": [...]}'
+        style={{ width: "100%", minHeight: 360, background: "var(--surface-2)", border: "1px solid var(--border)", color: "var(--foreground)", borderRadius: 8, padding: 14, fontSize: 12, fontFamily: "monospace", lineHeight: 1.6, outline: "none", boxSizing: "border-box", resize: "vertical" }}
+      />
+
+      {errors.length > 0 && (
+        <div style={{ marginTop: 12, background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)", borderRadius: 8, padding: "12px 16px" }}>
+          <div style={{ fontSize: 12, fontWeight: 600, color: "#ef4444", marginBottom: 6 }}>{errors.length} validation {errors.length === 1 ? "error" : "errors"}</div>
+          <ul style={{ margin: 0, paddingLeft: 18 }}>
+            {errors.map((e, i) => <li key={i} style={{ fontSize: 12, color: "#ef4444", fontFamily: "monospace" }}>{e}</li>)}
+          </ul>
+        </div>
+      )}
+      {warnings.length > 0 && (
+        <div style={{ marginTop: 12, background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.25)", borderRadius: 8, padding: "12px 16px" }}>
+          {warnings.map((w, i) => <div key={i} style={{ fontSize: 12, color: "#fbbf24" }}>{w}</div>)}
+        </div>
+      )}
+      {loaded && errors.length === 0 && (
+        <div style={{ marginTop: 12, fontSize: 12, color: "#34d399" }}>✓ Valid — ready to import.</div>
+      )}
+
+      <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
+        <button onClick={validate} disabled={!text.trim()} style={btn("var(--surface-2)", "var(--text-dim)")}>Validate</button>
+        <button onClick={applyImport} disabled={!text.trim()} style={btn()}>Import & Replace Content</button>
+      </div>
+    </div>
+  );
+}
+
 export default function CourseBuilderPage({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = use(params);
   const router = useRouter();
+
+  const courseTitle = variants.find(v => v.id === courseId)?.title ?? courseId;
 
   const [content, setContent] = useState<CourseContent>({ courseId, updatedAt: "", parts: [] });
   const [selected, setSelected] = useState<{ partId: string; chapterId: string; lessonId: string } | null>(null);
@@ -45,18 +170,19 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
   const [saving, setSaving] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [approvalStatus, setApprovalStatus] = useState<string>("draft");
+  const [actionError, setActionError] = useState("");
   const [saved, setSaved] = useState(false);
   const [creating, setCreating] = useState<{ level: "part" | "chapter" | "lesson"; partId?: string; chapterId?: string } | null>(null);
   const [draftTitle, setDraftTitle] = useState("");
+  const [mode, setMode] = useState<"visual" | "json">("visual");
+  const [renamingLesson, setRenamingLesson] = useState<{ partId: string; chapterId: string; lessonId: string; value: string } | null>(null);
+  const [resourceSearch, setResourceSearch] = useState("");
 
   useEffect(() => {
     fetch(`/api/teacher/courses/${courseId}/content`).then(r => r.json()).then(setContent);
-    fetch("/api/teacher/resources").then(r => r.json()).then(d => setResources(Array.isArray(d) ? d : []));
-    fetch("/api/admin/courses/approvals").then(r => r.json()).then(list => {
-      if (Array.isArray(list)) {
-        const a = list.find((x: { courseId: string }) => x.courseId === courseId);
-        if (a) setApprovalStatus(a.status);
-      }
+    fetch("/api/teacher/resources").then(r => r.json()).then(d => setResources(Array.isArray(d) ? d : [])).catch(() => setResources([]));
+    fetch(`/api/teacher/courses/${courseId}/submit`).then(r => r.json()).then(d => {
+      if (d?.status) setApprovalStatus(d.status);
     }).catch(() => {});
   }, [courseId]);
 
@@ -166,19 +292,35 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
 
   // ─── Save / Submit ────────────────────────────────────────────────────────
 
-  async function save() {
+  async function persist(newContent: CourseContent): Promise<boolean> {
     setSaving(true);
-    await fetch(`/api/teacher/courses/${courseId}/content`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(content) });
+    setActionError("");
+    const res = await fetch(`/api/teacher/courses/${courseId}/content`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(newContent) });
     setSaving(false);
+    if (!res.ok) {
+      setActionError("Save failed — your changes weren't persisted. Please try again.");
+      return false;
+    }
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
+    return true;
+  }
+
+  function save(): Promise<boolean> {
+    return persist(content);
   }
 
   async function submitForReview() {
-    await save();
+    const ok = await save();
+    if (!ok) return;
     setSubmitting(true);
-    await fetch(`/api/teacher/courses/${courseId}/submit`, { method: "POST" });
+    setActionError("");
+    const res = await fetch(`/api/teacher/courses/${courseId}/submit`, { method: "POST" });
     setSubmitting(false);
+    if (!res.ok) {
+      setActionError("Submit failed — this course wasn't sent for review. Please try again.");
+      return;
+    }
     setApprovalStatus("pending");
   }
 
@@ -192,8 +334,9 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
       <div style={{ width: 280, flexShrink: 0, borderRight: "1px solid var(--border)", overflowY: "auto", display: "flex", flexDirection: "column" }}>
         {/* Header */}
         <div style={{ padding: "16px 14px 12px", borderBottom: "1px solid var(--border)" }}>
-          <div style={{ fontSize: 11, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 4 }}>Course</div>
-          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 12 }}>{courseId}</div>
+          <div style={{ fontSize: 11, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 2 }}>Course</div>
+          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 2, lineHeight: 1.3 }}>{courseTitle}</div>
+          <div style={{ fontSize: 10, color: "var(--text-muted)", marginBottom: 10, fontFamily: "monospace" }}>{courseId}</div>
           <div style={{ display: "flex", gap: 6 }}>
             <button style={btn(saved ? "#34d399" : "var(--primary)")} onClick={save} disabled={saving}>
               {saving ? "Saving…" : saved ? "Saved ✓" : "Save"}
@@ -207,6 +350,15 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
                 {approvalStatus}
               </span>
             )}
+          </div>
+          {actionError && <p style={{ color: "#ef4444", fontSize: 12, marginTop: 8, marginBottom: 0 }}>{actionError}</p>}
+          <div style={{ display: "flex", gap: 4, marginTop: 10, background: "var(--surface-2)", borderRadius: 6, padding: 3 }}>
+            <button onClick={() => setMode("visual")} style={{ flex: 1, fontSize: 11, fontWeight: 600, padding: "5px 8px", borderRadius: 4, border: "none", cursor: "pointer", fontFamily: "inherit", background: mode === "visual" ? "var(--primary)" : "transparent", color: mode === "visual" ? "white" : "var(--text-muted)" }}>
+              Visual Editor
+            </button>
+            <button onClick={() => setMode("json")} style={{ flex: 1, fontSize: 11, fontWeight: 600, padding: "5px 8px", borderRadius: 4, border: "none", cursor: "pointer", fontFamily: "inherit", background: mode === "json" ? "var(--primary)" : "transparent", color: mode === "json" ? "white" : "var(--text-muted)" }}>
+              Import JSON
+            </button>
           </div>
         </div>
 
@@ -242,16 +394,38 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
                   {/* Lessons */}
                   {ch.lessons.map(l => {
                     const isActive = selected?.lessonId === l.id;
+                    const isRenaming = renamingLesson?.lessonId === l.id;
                     return (
                       <div key={l.id} style={{ marginLeft: 14, display: "flex", alignItems: "center", gap: 4, padding: "2px 0" }}>
-                        <button onClick={() => setSelected({ partId: part.id, chapterId: ch.id, lessonId: l.id })}
-                          style={{ flex: 1, textAlign: "left", background: isActive ? "rgba(91,124,250,0.12)" : "none", border: "none", borderRadius: 4, padding: "3px 6px", fontSize: 12, color: isActive ? "var(--primary)" : "var(--text-muted)", cursor: "pointer", fontFamily: "inherit", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                          {l.title}
-                        </button>
-                        <button onClick={() => {
-                          const newTitle = prompt("Rename lesson:", l.title);
-                          if (newTitle) updateLessonTitle(part.id, ch.id, l.id, newTitle);
-                        }} style={{ fontSize: 10, background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", padding: "2px" }}>✎</button>
+                        {isRenaming ? (
+                          <input
+                            autoFocus
+                            value={renamingLesson.value}
+                            onChange={e => setRenamingLesson(r => r ? { ...r, value: e.target.value } : r)}
+                            onKeyDown={e => {
+                              if (e.key === "Enter") {
+                                if (renamingLesson.value.trim()) updateLessonTitle(renamingLesson.partId, renamingLesson.chapterId, renamingLesson.lessonId, renamingLesson.value.trim());
+                                setRenamingLesson(null);
+                              } else if (e.key === "Escape") {
+                                setRenamingLesson(null);
+                              }
+                            }}
+                            onBlur={() => {
+                              if (renamingLesson?.value.trim()) updateLessonTitle(renamingLesson.partId, renamingLesson.chapterId, renamingLesson.lessonId, renamingLesson.value.trim());
+                              setRenamingLesson(null);
+                            }}
+                            style={{ flex: 1, background: "var(--surface-2)", border: "1px solid var(--primary)", outline: "none", borderRadius: 4, fontSize: 12, color: "var(--foreground)", fontFamily: "inherit", padding: "2px 6px", boxSizing: "border-box" }}
+                          />
+                        ) : (
+                          <button onClick={() => setSelected({ partId: part.id, chapterId: ch.id, lessonId: l.id })}
+                            style={{ flex: 1, textAlign: "left", background: isActive ? "rgba(91,124,250,0.12)" : "none", border: "none", borderRadius: 4, padding: "3px 6px", fontSize: 12, color: isActive ? "var(--primary)" : "var(--text-muted)", cursor: "pointer", fontFamily: "inherit", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                            {l.title}
+                          </button>
+                        )}
+                        {!isRenaming && (
+                          <button onClick={() => setRenamingLesson({ partId: part.id, chapterId: ch.id, lessonId: l.id, value: l.title })}
+                            style={{ fontSize: 10, background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", padding: "2px" }}>✎</button>
+                        )}
                         <button onClick={() => deleteLesson(part.id, ch.id, l.id)} style={{ fontSize: 10, background: "none", border: "none", cursor: "pointer", color: "#ef4444", padding: "2px" }}>✕</button>
                       </div>
                     );
@@ -276,7 +450,15 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
         </div>
       </div>
 
-      {/* RIGHT: Lesson Editor */}
+      {/* RIGHT: Lesson Editor or JSON Import */}
+      {mode === "json" ? (
+        <JsonImportPanel
+          courseId={courseId}
+          currentContent={content}
+          resources={resources}
+          onImport={(imported) => { setContent(imported); setSelected(null); setMode("visual"); persist(imported); }}
+        />
+      ) : (
       <div style={{ flex: 1, overflowY: "auto", padding: "24px 28px" }}>
         {!lesson ? (
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: "var(--text-muted)", fontSize: 14, flexDirection: "column", gap: 12 }}>
@@ -339,19 +521,47 @@ export default function CourseBuilderPage({ params }: { params: Promise<{ course
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", borderTop: "1px solid var(--border)", paddingTop: 16 }}>
               <button onClick={addTextBlock} style={btn("var(--surface-2)", "var(--text-dim)")}>+ Text Block</button>
               <div style={{ width: 1, background: "var(--border)", margin: "0 4px" }} />
-              <span style={{ fontSize: 11, color: "var(--text-muted)", alignSelf: "center" }}>Add resource:</span>
-              {resources.slice(0, 8).map(r => (
-                <button key={r.id} onClick={() => addResourceBlock(r)}
-                  style={{ ...btn("var(--surface-2)", "var(--text-muted)"), fontSize: 11, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
-                  title={r.title}>
-                  {r.type === "video" ? "🎬" : r.type === "live_recording" ? "📹" : r.type === "image" ? "🖼️" : "🔗"} {r.title}
-                </button>
-              ))}
-              {resources.length > 8 && <span style={{ fontSize: 11, color: "var(--text-muted)", alignSelf: "center" }}>+{resources.length - 8} more in library</span>}
+              {resources.length === 0 ? (
+                <span style={{ fontSize: 11, color: "var(--text-muted)", alignSelf: "center" }}>
+                  No resources yet —{" "}
+                  <Link href="/teacher/resources" style={{ color: "var(--primary)" }}>add videos, images, links or documents in your Resource Library</Link>{" "}
+                  to attach them here.
+                </span>
+              ) : (
+                <>
+                  <span style={{ fontSize: 11, color: "var(--text-muted)", alignSelf: "center" }}>Add resource:</span>
+                  <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                    <input
+                      value={resourceSearch}
+                      onChange={e => setResourceSearch(e.target.value)}
+                      placeholder="Filter resources…"
+                      style={{ ...inp, width: 160, padding: "5px 8px", fontSize: 11 }}
+                    />
+                    <select
+                      value=""
+                      onChange={e => {
+                        const r = resources.find(r => r.id === e.target.value);
+                        if (r) { addResourceBlock(r); setResourceSearch(""); }
+                      }}
+                      style={{ ...inp, width: 220, padding: "5px 8px", fontSize: 11 }}
+                    >
+                      <option value="">— select to attach —</option>
+                      {resources
+                        .filter(r => !resourceSearch || r.title.toLowerCase().includes(resourceSearch.toLowerCase()))
+                        .map(r => (
+                          <option key={r.id} value={r.id}>
+                            {r.type === "video" ? "🎬" : r.type === "live_recording" ? "📹" : r.type === "image" ? "🖼️" : "🔗"} {r.title}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                </>
+              )}
             </div>
           </>
         )}
       </div>
+      )}
     </div>
   );
 }

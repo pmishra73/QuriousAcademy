@@ -83,6 +83,7 @@ model Enrollment {
   discountApplied   Int              @default(0)
   status            EnrollmentStatus @default(pending)
   couponCode        String?
+  batchDate         String?
   createdAt         DateTime         @default(now())
 
   studentId String?
@@ -282,18 +283,38 @@ model Announcement {
 // ─── Blog Posts ──────────────────────────────────────────────────────────────
 
 model BlogPost {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  title       String
-  excerpt     String
-  body        String
-  category    String
-  author      String
-  authorId    String?
-  instituteId String?
-  published   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                     String    @id @default(cuid())
+  slug                   String    @unique
+  title                  String
+  excerpt                String
+  body                   String    // legacy — body now stored in R2; kept for old /api/teacher/blogs routes
+  category               String
+  subCategory            String?
+  author                 String
+  authorId               String?
+  instituteId            String?
+  videoUrl               String?
+  imageUrl               String?
+  published              Boolean   @default(false)
+  linkedinRequested      Boolean   @default(false)
+  linkedinApprovalStatus String    @default("none")
+  linkedinStatus         String    @default("idle")
+  linkedinPostedAt       DateTime?
+  linkedinPostUrl        String?
+  linkedinAdminNote      String?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+}
+
+model BlogCategory {
+  id        String         @id @default(cuid())
+  name      String
+  parentId  String?
+  parent    BlogCategory?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children  BlogCategory[] @relation("CategoryTree")
+  createdAt DateTime       @default(now())
+
+  @@unique([name, parentId])
 }
 
 // ─── Course Approvals ────────────────────────────────────────────────────────
@@ -363,6 +384,18 @@ model ContentChangeRequest {
 
   createdAt       DateTime             @default(now())
   updatedAt       DateTime             @updatedAt
+}
+
+// ─── Blog Comments ───────────────────────────────────────────────────────────
+
+model BlogComment {
+  id        String   @id @default(cuid())
+  blogSlug  String
+  name      String
+  body      String
+  createdAt DateTime @default(now())
+
+  @@index([blogSlug])
 }
 
 // ─── Course Overrides ────────────────────────────────────────────────────────

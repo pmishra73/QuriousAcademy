@@ -33,6 +33,8 @@ interface RazorpayOptions {
 }
 interface RazorpayInstance { open(): void; }
 
+type ActiveVariant = { id: string; title: string; price: number; type: string; status: string; duration?: string; instructor?: string; icon?: string; schedule?: unknown; deliveryMode?: string; recordedPrice?: number };
+
 function useRazorpay() {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
@@ -51,30 +53,44 @@ function EnrollForm() {
   const courseId = params.get("course") || "";
   const razorpayReady = useRazorpay();
 
-  // Find in both variants and old courses
-  const variant = variants.find((v) => v.id === courseId);
+  // Active courses fetched from the API (filtered by CourseOverride status)
+  const [activeVariants, setActiveVariants] = useState<ActiveVariant[]>([]);
+  useEffect(() => {
+    fetch("/api/courses")
+      .then(r => r.json())
+      .then((data: ActiveVariant[]) => {
+        if (Array.isArray(data)) setActiveVariants(data.filter(v => v.status === "active"));
+      })
+      .catch(() => {});
+  }, []);
+
+  // Prefer server-side data for the selected course; fall back to static imports
+  const serverVariant = activeVariants.find((v) => v.id === courseId);
+  const staticVariant = variants.find((v) => v.id === courseId);
   const oldCourse = courses.find((c) => c.id === courseId);
-  const courseTitle = variant?.title ?? oldCourse?.title ?? "";
-  const coursePrice = variant?.price ?? oldCourse?.price ?? 0;
-  const courseDuration = variant?.duration ?? oldCourse?.duration ?? "";
-  const courseInstructor = variant?.instructor ?? oldCourse?.instructor ?? "";
-  const courseBadge = variant?.icon ?? oldCourse?.badge ?? "📘";
+  const courseTitle = serverVariant?.title ?? staticVariant?.title ?? oldCourse?.title ?? "";
+  const coursePrice = serverVariant?.price ?? staticVariant?.price ?? oldCourse?.price ?? 0;
+  const courseDuration = serverVariant?.duration ?? staticVariant?.duration ?? oldCourse?.duration ?? "";
+  const courseInstructor = serverVariant?.instructor ?? staticVariant?.instructor ?? oldCourse?.instructor ?? "";
+  const courseBadge = serverVariant?.icon ?? staticVariant?.icon ?? oldCourse?.badge ?? "📘";
 
   const [form, setForm] = useState({ name: "", email: "", phone: "", courseId });
   const [batchDate, setBatchDate] = useState("");
   const [coupon, setCoupon] = useState("");
 
-  // Compute upcoming batches for the selected live variant
-  const selectedVariant = variants.find((v) => v.id === form.courseId);
+  const selectedVariant = activeVariants.find((v) => v.id === form.courseId) ?? variants.find((v) => v.id === form.courseId);
   const isLive = selectedVariant?.deliveryMode === "Live";
-  const upcomingBatches = selectedVariant && isLive ? getUpcomingDates(selectedVariant.schedule) : [];
+  const upcomingBatches = selectedVariant && isLive ? getUpcomingDates(selectedVariant.schedule as Parameters<typeof getUpcomingDates>[0]) : [];
   const [couponState, setCouponState] = useState<"idle" | "checking" | "valid" | "invalid">("idle");
   const [couponMsg, setCouponMsg] = useState("");
+  const [couponDiscount, setCouponDiscount] = useState(10);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errMsg, setErrMsg] = useState("");
 
+  const basePrice = (activeVariants.find(v => v.id === form.courseId) ?? variants.find(v => v.id === form.courseId))?.price
+    ?? courses.find(c => c.id === form.courseId)?.price ?? 0;
   const discountedPrice = couponState === "valid"
-    ? Math.round((variants.find(v => v.id === form.courseId)?.price ?? courses.find(c => c.id === form.courseId)?.price ?? 0) * 0.9)
+    ? Math.round(basePrice * (1 - couponDiscount / 100))
     : null;
 
   const applyCoupon = async () => {
@@ -88,8 +104,9 @@ function EnrollForm() {
       });
       const data = await res.json();
       if (data.valid) {
+        setCouponDiscount(data.discount ?? 10);
         setCouponState("valid");
-        setCouponMsg("Coupon applied — 10% off!");
+        setCouponMsg(`Coupon applied — ${data.discount ?? 10}% off!`);
       } else {
         setCouponState("invalid");
         setCouponMsg(data.reason ?? "Invalid coupon");
@@ -100,7 +117,6 @@ function EnrollForm() {
     }
   };
 
-  // Reset batch when course changes
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm((f) => ({ ...f, [k]: e.target.value }));
     if (k === "courseId") setBatchDate("");
@@ -134,18 +150,25 @@ function EnrollForm() {
     setStatus("loading");
 
     try {
-      // Step 1: Create order
       const orderRes = await fetch("/api/payment/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ courseId: form.courseId, couponCode: couponState === "valid" ? coupon.trim() : "" }),
       });
 
-      if (!orderRes.ok) throw new Error("Failed to create order");
+      if (!orderRes.ok) {
+        const err = await orderRes.json().catch(() => ({}));
+        throw new Error(err.error ?? "Failed to create order");
+      }
       const order = await orderRes.json();
+
+      if (order.couponError) {
+        setCouponState("invalid");
+        setCouponMsg(order.couponError);
+      }
+
       setStatus("idle");
 
-      // Step 2: Open Razorpay checkout
       const rzp = new window.Razorpay({
         key: order.keyId,
         amount: order.amount,
@@ -157,7 +180,6 @@ function EnrollForm() {
         theme: { color: "#5b7cfa" },
         handler: async (response) => {
           setStatus("loading");
-          // Step 3: Verify payment server-side
           const verifyRes = await fetch("/api/payment/verify", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -169,6 +191,7 @@ function EnrollForm() {
               courseId: form.courseId,
               couponCode: couponState === "valid" ? coupon.trim() : "",
               finalAmount: order.finalAmount,
+              discountPercent: order.discountPercent,
               batchDate: batchDate || undefined,
             }),
           });
@@ -189,7 +212,7 @@ function EnrollForm() {
     } catch (err) {
       console.error(err);
       setStatus("error");
-      setErrMsg("Something went wrong. Please try again or contact hello@quriousacademy.com");
+      setErrMsg(err instanceof Error ? err.message : "Something went wrong. Please try again or contact hello@quriousacademy.com");
     }
   };
 
@@ -218,6 +241,15 @@ function EnrollForm() {
       </div>
     );
   }
+
+  const TYPES = [
+    { label: "Masterclasses", type: "masterclass" },
+    { label: "Weekend Cohorts", type: "cohort" },
+    { label: "Sprint Courses (4 weeks)", type: "sprint" },
+    { label: "Deep Dives (6–12 weeks)", type: "deep-dive" },
+    { label: "Full Courses (6–8 months)", type: "full-course" },
+    { label: "Interview Preparation", type: "interview-prep" },
+  ];
 
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "48px 24px 80px" }}>
@@ -285,7 +317,7 @@ function EnrollForm() {
               )}
               {couponState === "idle" && !couponMsg && (
                 <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 6 }}>
-                  Got a coupon from a course unlock? Enter it here for 10% off.
+                  Got a coupon from a course unlock? Enter it here for a discount.
                 </p>
               )}
             </div>
@@ -299,36 +331,17 @@ function EnrollForm() {
                 required
               >
                 <option value="">Select a course</option>
-                <optgroup label="Masterclasses">
-                  {variants.filter(v => v.type === "masterclass").map(v => (
-                    <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
-                  ))}
-                </optgroup>
-                <optgroup label="Weekend Cohorts">
-                  {variants.filter(v => v.type === "cohort").map(v => (
-                    <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
-                  ))}
-                </optgroup>
-                <optgroup label="Sprint Courses (4 weeks)">
-                  {variants.filter(v => v.type === "sprint").map(v => (
-                    <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
-                  ))}
-                </optgroup>
-                <optgroup label="Deep Dives (6–12 weeks)">
-                  {variants.filter(v => v.type === "deep-dive").map(v => (
-                    <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
-                  ))}
-                </optgroup>
-                <optgroup label="Full Courses (6–8 months)">
-                  {variants.filter(v => v.type === "full-course").map(v => (
-                    <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
-                  ))}
-                </optgroup>
-                <optgroup label="Interview Preparation">
-                  {variants.filter(v => v.type === "interview-prep").map(v => (
-                    <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
-                  ))}
-                </optgroup>
+                {TYPES.map(({ label, type }) => {
+                  const opts = activeVariants.filter(v => v.type === type);
+                  if (opts.length === 0) return null;
+                  return (
+                    <optgroup key={type} label={label}>
+                      {opts.map(v => (
+                        <option key={v.id} value={v.id}>{v.title} — ₹{v.price.toLocaleString("en-IN")}</option>
+                      ))}
+                    </optgroup>
+                  );
+                })}
               </select>
             </div>
 
@@ -364,13 +377,13 @@ function EnrollForm() {
             )}
 
             {/* Recorded option note for live courses that have a recorded variant */}
-            {isLive && selectedVariant?.recordedPrice && (
+            {isLive && (selectedVariant as ActiveVariant | undefined)?.recordedPrice && (
               <div style={{
                 fontSize: 13, color: "var(--text-muted)", padding: "10px 14px",
                 background: "var(--surface-2)", borderRadius: 8,
                 border: "1px solid var(--border)", lineHeight: 1.6,
               }}>
-                Can&apos;t make the live batch? A <strong>recorded version</strong> is available at ₹{selectedVariant.recordedPrice.toLocaleString("en-IN")}.{" "}
+                Can&apos;t make the live batch? A <strong>recorded version</strong> is available at ₹{(selectedVariant as ActiveVariant).recordedPrice!.toLocaleString("en-IN")}.{" "}
                 <a href="/contact" style={{ color: "var(--primary)", textDecoration: "none" }}>Contact us</a> to purchase.
               </div>
             )}
@@ -403,7 +416,7 @@ function EnrollForm() {
                   Processing...
                 </>
               ) : (
-                `Pay ₹${(discountedPrice ?? variants.find(v => v.id === form.courseId)?.price ?? courses.find(c => c.id === form.courseId)?.price ?? 0).toLocaleString("en-IN")} with Razorpay →`
+                `Pay ₹${(discountedPrice ?? basePrice).toLocaleString("en-IN")} with Razorpay →`
               )}
             </button>
 
@@ -444,7 +457,7 @@ function EnrollForm() {
                     ₹{(discountedPrice ?? coursePrice).toLocaleString("en-IN")}
                   </span>
                   {discountedPrice && (
-                    <div style={{ fontSize: 11, color: "#34d399", marginTop: 2 }}>10% coupon applied ✓</div>
+                    <div style={{ fontSize: 11, color: "#34d399", marginTop: 2 }}>{couponDiscount}% coupon applied ✓</div>
                   )}
                 </div>
               </div>

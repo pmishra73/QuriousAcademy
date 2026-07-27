@@ -23,6 +23,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ prov
     return NextResponse.redirect(new URL("/student/login?error=invalid_state", req.url));
   }
 
+  // Read the saved callbackUrl (set during start) before creating the response
+  const savedCallback = req.cookies.get(`student_oauth_callback_${provider}`)?.value;
+
   try {
     const token = await config.exchangeCode(code, redirectUriFor(provider));
     const profile = await config.fetchProfile(token.access_token);
@@ -40,7 +43,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ prov
     return NextResponse.redirect(new URL("/student/login?error=oauth_failed", req.url));
   }
 
-  const res = NextResponse.redirect(new URL("/dashboard", req.url));
+  const destination = savedCallback ?? "/dashboard";
+  const res = NextResponse.redirect(new URL(destination, req.url));
   res.cookies.delete(`student_oauth_state_${provider}`);
+  res.cookies.delete(`student_oauth_callback_${provider}`);
   return res;
 }
