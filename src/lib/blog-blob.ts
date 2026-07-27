@@ -3,6 +3,23 @@ import remarkHtml from "remark-html";
 import { db } from "@/lib/db";
 import { putBlogBody, getBlogBody, deleteBlogBody } from "@/lib/blog-r2";
 
+function extractSnippet(md: string, maxLen = 200): string {
+  const text = md
+    .replace(/```[\s\S]*?```/g, "")
+    .replace(/`[^`]+`/g, "")
+    .replace(/!\[.*?\]\(.*?\)/g, "")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/[*_~]{1,2}/g, "")
+    .replace(/^\s*[-*+]\s+/gm, "")
+    .replace(/^\s*\d+\.\s+/gm, "")
+    .replace(/^\s*>/gm, "")
+    .replace(/\n+/g, " ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+  return text.length > maxLen ? text.slice(0, maxLen).trimEnd() + "…" : text;
+}
+
 export type LinkedInApprovalStatus = "none" | "pending" | "approved" | "rejected";
 export type LinkedInPostStatus = "idle" | "posted" | "failed";
 
@@ -75,7 +92,18 @@ export async function getAllBlogsMeta(): Promise<BlogMeta[]> {
     select: META_SELECT,
     orderBy: { createdAt: "desc" },
   });
-  return rows.map(toMeta);
+  const metas = rows.map(toMeta);
+
+  // For posts with no excerpt, fetch the body from R2 and compute a snippet
+  const missing = metas.filter((m) => !m.excerpt?.trim());
+  if (missing.length > 0) {
+    const bodies = await Promise.all(missing.map((m) => getBlogBody(m.slug)));
+    missing.forEach((m, i) => {
+      if (bodies[i]) m.excerpt = extractSnippet(bodies[i]!);
+    });
+  }
+
+  return metas;
 }
 
 export async function getBlog(slug: string): Promise<BlogPostWithHtml | null> {
