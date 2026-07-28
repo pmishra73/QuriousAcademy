@@ -35,7 +35,7 @@ const addBtn: React.CSSProperties = {
   fontFamily: "inherit",
 };
 
-type CategoryNode = { id: string; name: string; parentId: string | null; children: CategoryNode[] };
+type CategoryNode = { id: string; name: string; parentId: string | null; createdAt: string; children: CategoryNode[] };
 type Form = {
   slug: string; title: string; excerpt: string; body: string;
   category: string; subCategory: string;
@@ -250,6 +250,7 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
 
   const selectedCatNode = categories.find(c => c.name === form.category);
   const subOptions = selectedCatNode?.children ?? [];
+  const recentSubs = [...subOptions].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
 
   return (
     <div style={{ maxWidth: "100%" }}>
@@ -300,21 +301,32 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
                 <option value="">— None —</option>
                 {subOptions.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
               </select>
-              {subOptions.length > 0 && (
+              {recentSubs.length > 0 && (
                 <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 6 }}>
-                  {subOptions.map(s => (
-                    <span key={s.id} style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "3px 6px 3px 10px", borderRadius: 100, fontSize: 11, background: "var(--surface-2)", border: "1px solid var(--border)", color: "var(--text-dim)" }}>
-                      {s.name}
-                      <button
-                        type="button"
-                        onClick={() => setDeleteConfirm(s)}
-                        style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", padding: "0 2px", fontSize: 14, lineHeight: 1, display: "flex", alignItems: "center" }}
-                        title={`Remove ${s.name}`}
+                  {recentSubs.map(s => {
+                    const selected = form.subCategory === s.name;
+                    return (
+                      <span
+                        key={s.id}
+                        onClick={() => setForm(f => ({ ...f, subCategory: selected ? "" : s.name }))}
+                        style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "3px 6px 3px 10px", borderRadius: 100, fontSize: 11, cursor: "pointer", userSelect: "none",
+                          background: selected ? "rgba(91,124,250,0.12)" : "var(--surface-2)",
+                          border: `1px solid ${selected ? "var(--primary)" : "var(--border)"}`,
+                          color: selected ? "var(--primary)" : "var(--text-dim)",
+                        }}
                       >
-                        ×
-                      </button>
-                    </span>
-                  ))}
+                        {s.name}
+                        <button
+                          type="button"
+                          onClick={e => { e.stopPropagation(); setDeleteConfirm(s); }}
+                          style={{ background: "none", border: "none", cursor: "pointer", color: selected ? "var(--primary)" : "var(--text-muted)", padding: "0 2px", fontSize: 14, lineHeight: 1, display: "flex", alignItems: "center", opacity: 0.7 }}
+                          title={`Remove ${s.name}`}
+                        >
+                          ×
+                        </button>
+                      </span>
+                    );
+                  })}
                 </div>
               )}
               {!showAddSub ? (

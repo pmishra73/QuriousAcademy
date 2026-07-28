@@ -12,6 +12,7 @@ export type CategoryNode = {
   id: string;
   name: string;
   parentId: string | null;
+  createdAt: string;
   children: CategoryNode[];
 };
 
@@ -31,7 +32,7 @@ export async function GET() {
   // Build tree: top-level with children nested
   const byId = new Map<string, CategoryNode>();
   for (const r of rows) {
-    byId.set(r.id, { id: r.id, name: r.name, parentId: r.parentId, children: [] });
+    byId.set(r.id, { id: r.id, name: r.name, parentId: r.parentId, createdAt: r.createdAt.toISOString(), children: [] });
   }
   const tree: CategoryNode[] = [];
   for (const node of byId.values()) {
