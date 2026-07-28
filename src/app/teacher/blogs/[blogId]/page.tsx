@@ -23,6 +23,7 @@ const inp: React.CSSProperties = {
   width: "100%", background: "var(--surface-2)", border: "1px solid var(--border)",
   color: "var(--foreground)", borderRadius: 8, padding: "10px 14px",
   fontSize: 14, outline: "none", fontFamily: "inherit", boxSizing: "border-box",
+  colorScheme: "dark",
 };
 const lbl: React.CSSProperties = {
   fontSize: 11, color: "var(--text-muted)", display: "block",
@@ -212,14 +213,8 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error ?? "Failed");
-    // Use fresh data from reload to set sub-category; this ensures setCategories and setForm
-    // are batched together before InlineAdd calls onCancel to close the form
-    const updated = await loadCategories();
-    const updatedParent = updated.find(c => c.name === form.category);
-    if (updatedParent?.children.some(ch => ch.name === name)) {
-      setForm(f => ({ ...f, subCategory: name }));
-    }
-    // InlineAdd calls onCancel() after this resolves to close the form
+    await loadCategories();
+    setForm(f => ({ ...f, subCategory: name }));
   }
 
   async function handleSubmit(ev: React.FormEvent) {
@@ -288,10 +283,37 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
             {/* Sub-category */}
             <div>
               <label style={lbl}>Sub-category <span style={{ color: "var(--text-muted)", fontWeight: 400, textTransform: "none", letterSpacing: 0 }}>(optional)</span></label>
-              <select style={inp} value={form.subCategory} onChange={set("subCategory")}>
-                <option value="">— None —</option>
-                {subOptions.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
-              </select>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, minHeight: 38, alignItems: "center" }}>
+                <button
+                  type="button"
+                  onClick={() => setForm(f => ({ ...f, subCategory: "" }))}
+                  style={{
+                    padding: "5px 12px", borderRadius: 100, fontSize: 12, fontWeight: 500,
+                    cursor: "pointer", border: "1px solid", fontFamily: "inherit",
+                    borderColor: !form.subCategory ? "var(--primary)" : "var(--border)",
+                    background: !form.subCategory ? "rgba(91,124,250,0.12)" : "var(--surface-2)",
+                    color: !form.subCategory ? "var(--primary)" : "var(--text-dim)",
+                  }}
+                >
+                  None
+                </button>
+                {subOptions.map(s => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => setForm(f => ({ ...f, subCategory: s.name }))}
+                    style={{
+                      padding: "5px 12px", borderRadius: 100, fontSize: 12, fontWeight: 500,
+                      cursor: "pointer", border: "1px solid", fontFamily: "inherit",
+                      borderColor: form.subCategory === s.name ? "var(--primary)" : "var(--border)",
+                      background: form.subCategory === s.name ? "rgba(91,124,250,0.12)" : "var(--surface-2)",
+                      color: form.subCategory === s.name ? "var(--primary)" : "var(--text-dim)",
+                    }}
+                  >
+                    {s.name}
+                  </button>
+                ))}
+              </div>
               {!showAddSub ? (
                 <button
                   type="button"
