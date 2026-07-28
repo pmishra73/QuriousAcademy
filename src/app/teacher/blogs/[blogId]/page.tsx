@@ -50,13 +50,12 @@ function InlineAdd({ label, onSave, onCancel }: { label: string; onSave: (name: 
 
   useEffect(() => { ref.current?.focus(); }, []);
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
+  async function submit() {
     if (!val.trim()) return;
     setSaving(true); setErr("");
     try {
       await onSave(val.trim());
-      onCancel(); // close after save — onSave is responsible for updating parent state first
+      onCancel();
     } catch (ex: unknown) {
       setErr(ex instanceof Error ? ex.message : "Failed");
       setSaving(false);
@@ -64,22 +63,23 @@ function InlineAdd({ label, onSave, onCancel }: { label: string; onSave: (name: 
   }
 
   return (
-    <form onSubmit={submit} style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6 }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6 }}>
       <input
         ref={ref}
         value={val}
         onChange={e => setVal(e.target.value)}
+        onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); submit(); } }}
         placeholder={`New ${label} name`}
         style={{ ...inp, padding: "7px 10px", fontSize: 13, flex: 1 }}
       />
-      <button type="submit" disabled={saving || !val.trim()} style={{ background: "var(--primary)", color: "white", border: "none", borderRadius: 6, padding: "7px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", opacity: (!val.trim() || saving) ? 0.6 : 1 }}>
+      <button type="button" onClick={submit} disabled={saving || !val.trim()} style={{ background: "var(--primary)", color: "white", border: "none", borderRadius: 6, padding: "7px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", opacity: (!val.trim() || saving) ? 0.6 : 1 }}>
         {saving ? "…" : "Add"}
       </button>
       <button type="button" onClick={onCancel} style={{ background: "none", border: "1px solid var(--border)", borderRadius: 6, padding: "7px 10px", fontSize: 12, cursor: "pointer", color: "var(--text-muted)", fontFamily: "inherit" }}>
         ✕
       </button>
       {err && <span style={{ fontSize: 11, color: "#ef4444" }}>{err}</span>}
-    </form>
+    </div>
   );
 }
 
