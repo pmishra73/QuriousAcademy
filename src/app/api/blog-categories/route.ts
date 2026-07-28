@@ -12,6 +12,7 @@ export type CategoryNode = {
   id: string;
   name: string;
   parentId: string | null;
+  createdAt: string;
   children: CategoryNode[];
 };
 
@@ -31,7 +32,7 @@ export async function GET() {
   // Build tree: top-level with children nested
   const byId = new Map<string, CategoryNode>();
   for (const r of rows) {
-    byId.set(r.id, { id: r.id, name: r.name, parentId: r.parentId, children: [] });
+    byId.set(r.id, { id: r.id, name: r.name, parentId: r.parentId, createdAt: r.createdAt.toISOString(), children: [] });
   }
   const tree: CategoryNode[] = [];
   for (const node of byId.values()) {
@@ -43,6 +44,27 @@ export async function GET() {
   }
 
   return NextResponse.json(tree);
+}
+
+export async function DELETE(req: NextRequest) {
+  const session = await auth();
+  const role = (session?.user as { role?: string })?.role;
+  if (!session || (role !== "admin" && role !== "teacher")) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const id = req.nextUrl.searchParams.get("id");
+  if (!id) return NextResponse.json({ error: "id is required" }, { status: 400 });
+
+  const cat = await db.blogCategory.findUnique({ where: { id } });
+  if (!cat) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (!cat.parentId) return NextResponse.json({ error: "Cannot delete root categories" }, { status: 400 });
+
+  // Clear from any blog posts that used this sub-category name
+  await db.blogPost.updateMany({ where: { subCategory: cat.name }, data: { subCategory: null } });
+  await db.blogCategory.delete({ where: { id } });
+
+  return NextResponse.json({ ok: true });
 }
 
 export async function POST(req: NextRequest) {

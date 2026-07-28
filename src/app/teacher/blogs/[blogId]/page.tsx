@@ -35,7 +35,7 @@ const addBtn: React.CSSProperties = {
   fontFamily: "inherit",
 };
 
-type CategoryNode = { id: string; name: string; parentId: string | null; children: CategoryNode[] };
+type CategoryNode = { id: string; name: string; parentId: string | null; createdAt: string; children: CategoryNode[] };
 type Form = {
   slug: string; title: string; excerpt: string; body: string;
   category: string; subCategory: string;
@@ -50,13 +50,12 @@ function InlineAdd({ label, onSave, onCancel }: { label: string; onSave: (name: 
 
   useEffect(() => { ref.current?.focus(); }, []);
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
+  async function submit() {
     if (!val.trim()) return;
     setSaving(true); setErr("");
     try {
       await onSave(val.trim());
-      onCancel(); // close after save — onSave is responsible for updating parent state first
+      onCancel();
     } catch (ex: unknown) {
       setErr(ex instanceof Error ? ex.message : "Failed");
       setSaving(false);
@@ -64,22 +63,23 @@ function InlineAdd({ label, onSave, onCancel }: { label: string; onSave: (name: 
   }
 
   return (
-    <form onSubmit={submit} style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6 }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6 }}>
       <input
         ref={ref}
         value={val}
         onChange={e => setVal(e.target.value)}
+        onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); submit(); } }}
         placeholder={`New ${label} name`}
         style={{ ...inp, padding: "7px 10px", fontSize: 13, flex: 1 }}
       />
-      <button type="submit" disabled={saving || !val.trim()} style={{ background: "var(--primary)", color: "white", border: "none", borderRadius: 6, padding: "7px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", opacity: (!val.trim() || saving) ? 0.6 : 1 }}>
+      <button type="button" onClick={submit} disabled={saving || !val.trim()} style={{ background: "var(--primary)", color: "white", border: "none", borderRadius: 6, padding: "7px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", opacity: (!val.trim() || saving) ? 0.6 : 1 }}>
         {saving ? "…" : "Add"}
       </button>
       <button type="button" onClick={onCancel} style={{ background: "none", border: "1px solid var(--border)", borderRadius: 6, padding: "7px 10px", fontSize: 12, cursor: "pointer", color: "var(--text-muted)", fontFamily: "inherit" }}>
         ✕
       </button>
       {err && <span style={{ fontSize: 11, color: "#ef4444" }}>{err}</span>}
-    </form>
+    </div>
   );
 }
 
@@ -104,6 +104,8 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
   const [categories, setCategories] = useState<CategoryNode[]>([]);
   const [showAddCat, setShowAddCat] = useState(false);
   const [showAddSub, setShowAddSub] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState<CategoryNode | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const previewDebounce = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -203,6 +205,17 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
     // InlineAdd calls onCancel() after this resolves to close the form
   }
 
+  async function deleteSub(node: CategoryNode) {
+    setDeleting(true);
+    const res = await fetch(`/api/blog-categories?id=${node.id}`, { method: "DELETE" });
+    if (res.ok) {
+      if (form.subCategory === node.name) setForm(f => ({ ...f, subCategory: "" }));
+      await loadCategories();
+    }
+    setDeleting(false);
+    setDeleteConfirm(null);
+  }
+
   async function addSubCategory(name: string) {
     const parent = categories.find(c => c.name === form.category);
     if (!parent) throw new Error("Select a category first");
@@ -237,6 +250,7 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
 
   const selectedCatNode = categories.find(c => c.name === form.category);
   const subOptions = selectedCatNode?.children ?? [];
+  const recentSubs = [...subOptions].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
 
   return (
     <div style={{ maxWidth: "100%" }}>
@@ -283,37 +297,38 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
             {/* Sub-category */}
             <div>
               <label style={lbl}>Sub-category <span style={{ color: "var(--text-muted)", fontWeight: 400, textTransform: "none", letterSpacing: 0 }}>(optional)</span></label>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, minHeight: 38, alignItems: "center" }}>
-                <button
-                  type="button"
-                  onClick={() => setForm(f => ({ ...f, subCategory: "" }))}
-                  style={{
-                    padding: "5px 12px", borderRadius: 100, fontSize: 12, fontWeight: 500,
-                    cursor: "pointer", border: "1px solid", fontFamily: "inherit",
-                    borderColor: !form.subCategory ? "var(--primary)" : "var(--border)",
-                    background: !form.subCategory ? "rgba(91,124,250,0.12)" : "var(--surface-2)",
-                    color: !form.subCategory ? "var(--primary)" : "var(--text-dim)",
-                  }}
-                >
-                  None
-                </button>
-                {subOptions.map(s => (
-                  <button
-                    key={s.id}
-                    type="button"
-                    onClick={() => setForm(f => ({ ...f, subCategory: s.name }))}
-                    style={{
-                      padding: "5px 12px", borderRadius: 100, fontSize: 12, fontWeight: 500,
-                      cursor: "pointer", border: "1px solid", fontFamily: "inherit",
-                      borderColor: form.subCategory === s.name ? "var(--primary)" : "var(--border)",
-                      background: form.subCategory === s.name ? "rgba(91,124,250,0.12)" : "var(--surface-2)",
-                      color: form.subCategory === s.name ? "var(--primary)" : "var(--text-dim)",
-                    }}
-                  >
-                    {s.name}
-                  </button>
-                ))}
-              </div>
+              <select style={inp} value={form.subCategory} onChange={set("subCategory")}>
+                <option value="">— None —</option>
+                {subOptions.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
+              </select>
+              {recentSubs.length > 0 && (
+                <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 6 }}>
+                  {recentSubs.map(s => {
+                    const selected = form.subCategory === s.name;
+                    return (
+                      <span
+                        key={s.id}
+                        onClick={() => setForm(f => ({ ...f, subCategory: selected ? "" : s.name }))}
+                        style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "3px 6px 3px 10px", borderRadius: 100, fontSize: 11, cursor: "pointer", userSelect: "none",
+                          background: selected ? "rgba(91,124,250,0.12)" : "var(--surface-2)",
+                          border: `1px solid ${selected ? "var(--primary)" : "var(--border)"}`,
+                          color: selected ? "var(--primary)" : "var(--text-dim)",
+                        }}
+                      >
+                        {s.name}
+                        <button
+                          type="button"
+                          onClick={e => { e.stopPropagation(); setDeleteConfirm(s); }}
+                          style={{ background: "none", border: "none", cursor: "pointer", color: selected ? "var(--primary)" : "var(--text-muted)", padding: "0 2px", fontSize: 14, lineHeight: 1, display: "flex", alignItems: "center", opacity: 0.7 }}
+                          title={`Remove ${s.name}`}
+                        >
+                          ×
+                        </button>
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
               {!showAddSub ? (
                 <button
                   type="button"
@@ -422,6 +437,36 @@ export default function TeacherEditBlogPage({ params }: { params: Promise<{ blog
           />
         </div>
       </div>
+
+      {/* Sub-category delete confirmation modal */}
+      {deleteConfirm && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
+          <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: 28, maxWidth: 360, width: "90%" }}>
+            <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 10 }}>Remove sub-category?</h3>
+            <p style={{ fontSize: 14, color: "var(--text-muted)", lineHeight: 1.6, marginBottom: 22 }}>
+              Remove <strong style={{ color: "var(--foreground)" }}>{deleteConfirm.name}</strong> from <strong style={{ color: "var(--foreground)" }}>{form.category}</strong>? Any blog posts using this sub-category will have it cleared.
+            </p>
+            <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
+              <button
+                type="button"
+                onClick={() => setDeleteConfirm(null)}
+                disabled={deleting}
+                style={{ background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "8px 16px", fontSize: 13, cursor: "pointer", color: "var(--text-dim)", fontFamily: "inherit" }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => deleteSub(deleteConfirm)}
+                disabled={deleting}
+                style={{ background: "#ef4444", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 13, fontWeight: 600, cursor: deleting ? "not-allowed" : "pointer", color: "white", fontFamily: "inherit", opacity: deleting ? 0.6 : 1 }}
+              >
+                {deleting ? "Removing…" : "Remove"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
