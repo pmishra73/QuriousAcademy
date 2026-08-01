@@ -63,10 +63,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <section style={{ padding: "64px 24px 48px", background: "var(--surface)", borderBottom: "1px solid var(--border)" }} className="grid-bg">
         <div style={{ maxWidth: 720, margin: "0 auto" }}>
           <Link href="/blog" style={{ fontSize: 13, color: "var(--text-muted)", display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 28 }}>
-            ← Back to Resources
+            ← Back to All Blogs
           </Link>
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, flexWrap: "wrap" }}>
             <span style={{ fontSize: 12, padding: "4px 12px", borderRadius: 100, background: bg, color, fontWeight: 600 }}>{post.category}</span>
+            {post.subCategory && (
+              <span style={{ fontSize: 12, padding: "4px 12px", borderRadius: 100, background: "rgba(255,255,255,0.06)", color: "var(--text-dim)", fontWeight: 500, border: "1px solid var(--border)" }}>{post.subCategory}</span>
+            )}
             {post.videoUrl && <span style={{ fontSize: 12, color: "#34d399" }}>▶ Includes video</span>}
           </div>
 
