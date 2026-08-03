@@ -2,6 +2,7 @@
 
 **Category:** RAG & Evaluation
 **Read time:** 10 min
+**Description:** Why aggregate RAG faithfulness scores hide the root cause of failures, and how character-level span evaluation pinpoints which pipeline stage broke.
 
 Your RAG pipeline scores 0.82 on faithfulness. Your users still complain. These two facts are not contradictory—they point to the same underlying problem: aggregate metrics measure answer quality but cannot diagnose retrieval failure.
 

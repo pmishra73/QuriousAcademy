@@ -28,8 +28,10 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const color = catText[post.category] ?? "var(--primary)";
   const bg = catBg[post.category] ?? "rgba(91,124,250,0.1)";
 
-  const prasant = await db.user.findFirst({ where: { role: "admin" }, select: { id: true } });
-  const ownerId = post.authorId || prasant?.id || "";
+  const authorUser = post.authorId
+    ? await db.user.findUnique({ where: { id: post.authorId }, select: { id: true, name: true, photo: true, bio: true } })
+    : await db.user.findFirst({ where: { role: "admin" }, select: { id: true, name: true, photo: true, bio: true } });
+  const ownerId = post.authorId || authorUser?.id || "";
   const embed = post.videoUrl ? parseVideo(post.videoUrl) : null;
   const hasBoth = !!(post.imageUrl && embed);
   const postUrl = `https://quriousacademy.com/blog/${post.slug}`;
@@ -108,13 +110,26 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           <p style={{ fontSize: 16, color: "var(--text-dim)", lineHeight: 1.7, marginBottom: 28 }}>{post.excerpt}</p>
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, paddingTop: 20, borderTop: "1px solid var(--border)", flexWrap: "wrap" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,var(--primary),var(--violet))", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: "white", flexShrink: 0 }}>
-                {post.author[0]}
-              </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              {authorUser?.photo ? (
+                <img
+                  src={authorUser.photo}
+                  alt={authorUser.name ?? post.author}
+                  style={{ width: 44, height: 44, borderRadius: "50%", objectFit: "cover", flexShrink: 0, border: "1px solid var(--border)" }}
+                />
+              ) : (
+                <div style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,var(--primary),var(--violet))", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, fontWeight: 700, color: "white", flexShrink: 0 }}>
+                  {post.author[0]}
+                </div>
+              )}
               <div>
-                <div style={{ fontSize: 14, fontWeight: 500 }}>by {post.author}</div>
-                <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
+                <div style={{ fontSize: 14, fontWeight: 600 }}>{authorUser?.name ?? post.author}</div>
+                {authorUser?.bio && (
+                  <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 1, maxWidth: 320 }}>
+                    {authorUser.bio.split(".")[0].trim()}.
+                  </div>
+                )}
+                <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>
                   {new Date(post.createdAt).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}
                 </div>
               </div>
