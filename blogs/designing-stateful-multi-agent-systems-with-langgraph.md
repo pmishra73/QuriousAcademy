@@ -2,6 +2,7 @@
 
 **Category:** Agentic Workflows
 **Read time:** 12 min
+**Description:** How LangGraph's graph-based state model solves the hardest problem in multi-agent pipelines: shared mutable state that survives failures and human-in-the-loop pauses.
 
 State is the hardest problem in multi-agent systems. Not reasoning quality, not tool selection—state. When an agent hands work to another, when a pipeline loops back on validation failure, when a human needs to approve before execution continues—all of that complexity lives in shared mutable state that must survive across steps, survive failures, and survive the arbitrary pauses that human-in-the-loop systems require.
 

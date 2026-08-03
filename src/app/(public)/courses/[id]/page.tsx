@@ -41,6 +41,14 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ i
       (p) => p.category === subjectToCategory[variant.subject] && p.published
     ).slice(0, 3);
 
+    // Instructor: assigned teacher → admin fallback
+    const assignment = await db.courseAssignment.findFirst({
+      where: { courseId: id },
+      include: { teacher: { select: { name: true, photo: true, bio: true } } },
+    }).catch(() => null);
+    const instructor = assignment?.teacher
+      ?? await db.user.findFirst({ where: { role: "admin" }, select: { name: true, photo: true, bio: true } }).catch(() => null);
+
     return (
       <div>
         {/* Hero */}
@@ -172,23 +180,32 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ i
             {/* Sidebar */}
             <div>
               {/* Instructor */}
-              <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: 22, marginBottom: 20 }}>
-                <div style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 14, textTransform: "uppercase", letterSpacing: "0.07em" }}>Your instructor</div>
-                <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 12 }}>
-                  <img src="/founder.png" alt={variant.instructor} style={{ width: 44, height: 44, borderRadius: "50%", objectFit: "cover", objectPosition: "center top", flexShrink: 0 }} />
-                  <div>
-                    <div style={{ fontSize: 14, fontWeight: 600 }}>{variant.instructor}</div>
-                    <div style={{ fontSize: 12, color: "var(--text-muted)" }}>GenAI Solutions Architect</div>
+              {instructor && (
+                <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: 22, marginBottom: 20 }}>
+                  <div style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 14, textTransform: "uppercase", letterSpacing: "0.07em" }}>Your instructor</div>
+                  <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 12 }}>
+                    {instructor.photo ? (
+                      <img
+                        src={instructor.photo}
+                        alt={instructor.name}
+                        style={{ width: 48, height: 48, borderRadius: "50%", objectFit: "cover", objectPosition: "center top", flexShrink: 0, border: "1px solid var(--border)" }}
+                      />
+                    ) : (
+                      <div style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg,var(--primary),var(--violet))", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 700, color: "white", flexShrink: 0 }}>
+                        {instructor.name[0]}
+                      </div>
+                    )}
+                    <div>
+                      <div style={{ fontSize: 14, fontWeight: 600 }}>{instructor.name}</div>
+                    </div>
                   </div>
+                  {instructor.bio && (
+                    <p style={{ fontSize: 12, color: "var(--text-dim)", lineHeight: 1.65 }}>
+                      {instructor.bio}
+                    </p>
+                  )}
                 </div>
-                <p style={{ fontSize: 12, color: "var(--text-dim)", lineHeight: 1.65 }}>
-                  15+ years teaching experience · 2500+ students · Programmer, Systems Architect, and GenAI specialist.
-                </p>
-                <a href="https://pmishra73.github.io" target="_blank" rel="noopener noreferrer"
-                  style={{ fontSize: 12, color: "var(--primary)", display: "inline-flex", alignItems: "center", gap: 4, marginTop: 10 }}>
-                  View profile ↗
-                </a>
-              </div>
+              )}
 
               {/* Related articles */}
               {relatedPosts.length > 0 && (

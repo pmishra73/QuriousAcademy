@@ -2,6 +2,7 @@
 
 **Category:** Core Systems
 **Read time:** 11 min
+**Description:** Concurrency pitfalls and performance techniques for FastAPI (ML/Python) and Go (high-volume data plane) services at scale.
 
 FastAPI and Go fill different slots in the enterprise backend. FastAPI handles the ML-adjacent services—embedding calls, model inference, RAG orchestration—where Python's ecosystem matters more than raw throughput. Go handles the high-volume data plane—ingestion pipelines, notification fans, API gateways—where goroutine-per-connection concurrency and sub-millisecond latency are the requirements. Getting both to perform at scale requires understanding each runtime's concurrency model precisely.
 

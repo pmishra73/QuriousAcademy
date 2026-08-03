@@ -2,6 +2,7 @@
 
 **Category:** Agentic Workflows
 **Read time:** 10 min
+**Description:** How to expose enterprise data and tools to LLMs via typed MCP server primitives instead of prompt-stuffing.
 
 MCP turns an LLM into a first-class client for your enterprise systems. Where the old approach was prompt-stuffing—serializing database records into context and hoping the model could navigate them—MCP gives the model a structured interface: typed tool calls with JSON Schema definitions, read-only resource access, and reusable prompt templates. The LLM doesn't need to know your schema; it just needs to know what tools are available and what they return.
 

@@ -2,6 +2,7 @@
 
 **Category:** RAG & Evaluation
 **Read time:** 11 min
+**Description:** Why neither vector search nor graph traversal alone is sufficient for enterprise retrieval, and how to combine them correctly.
 
 Ask "Who approved the vendor contract with Acme Corp in Q3?" against a pure vector store: you'll retrieve chunks mentioning "vendor contract" and "Acme Corp." You'll miss the approval chain—the relationship between the contract, the approver, their role, and the approval timestamp—because that relationship lives in structure, not in semantic proximity. The answer isn't near the question in embedding space; it's connected to it through a graph.
 
